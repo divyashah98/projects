@@ -1,0 +1,122 @@
+
+**** 02/23/14 20:27:44 ************** PSpice Lite (Mar 2000) *****************
+
+ Schmitt Trigger Circuit
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+.LIB EVAL.LIB
+Xa 3 2 7 4 6 UA741
+R1 6 3 150K
+R2 3 5 39K
+Vref 5 0 0
+Vin 1 0 pwl(0m 10 1m -10 2m 10)
+Ron 2 1 31K
+*Vin 1 0 AC 5 SIN(0 5 1K)
+Rl 6 0 10K
+Vp 7 0 15
+Vn 0 4 15
+.TRAN 100u 5M
+.PROBE(V(6) V(3) V(1) V(5))
+.END
+
+**** 02/23/14 20:27:44 ************** PSpice Lite (Mar 2000) *****************
+
+ Schmitt Trigger Circuit
+
+
+ ****     Diode MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               Xa.dx           
+          IS  800.000000E-18 
+          RS    1            
+
+
+**** 02/23/14 20:27:44 ************** PSpice Lite (Mar 2000) *****************
+
+ Schmitt Trigger Circuit
+
+
+ ****     BJT MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               Xa.qx           
+               NPN             
+          IS  800.000000E-18 
+          BF   93.75         
+          NF    1            
+          BR    1            
+          NR    1            
+          CN    2.42         
+           D     .87         
+
+
+**** 02/23/14 20:27:44 ************** PSpice Lite (Mar 2000) *****************
+
+ Schmitt Trigger Circuit
+
+
+ ****     INITIAL TRANSIENT SOLUTION       TEMPERATURE =   27.000 DEG C
+
+
+******************************************************************************
+
+
+
+ NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE
+
+
+(    1)   10.0000  (    2)    9.9948  (    3)   -3.0157  (    4)  -15.0000      
+
+(    5)    0.0000  (    6)  -14.6150  (    7)   15.0000  ( Xa.6)    1.5757      
+
+( Xa.7)  -14.7900  ( Xa.8)  -14.7900  ( Xa.9)    0.0000  (Xa.10)    9.3527      
+
+(Xa.11)   14.9170  (Xa.12)   15.0000  (Xa.13)    9.3818  (Xa.14)    9.3527      
+
+(Xa.53)   14.0000  (Xa.54)  -14.0000  (Xa.90)   -3.5075  (Xa.91)   40.0000      
+
+(Xa.92)  -40.0000  (Xa.99)    0.0000  
+
+
+
+
+    VOLTAGE SOURCE CURRENTS
+    NAME         CURRENT
+
+    Vref        -7.733E-05
+    Vin         -1.675E-07
+    Vp          -1.668E-03
+    Vn          -1.650E-03
+    Xa.vb        1.576E-05
+    Xa.vc        2.861E-11
+    Xa.ve       -1.670E-05
+    Xa.vlim     -3.508E-03
+    Xa.vlp      -4.351E-11
+    Xa.vln      -3.650E-11
+
+    TOTAL POWER DISSIPATION   4.98E-02  WATTS
+
+
+
+          JOB CONCLUDED
+
+          TOTAL JOB TIME             .02
+

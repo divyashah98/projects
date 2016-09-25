@@ -1,0 +1,17 @@
+* source SCR_SUBCKT
+*$
+.SUBCKT SCR_SUBCKT A G K params: state=0
+H_H1         0 N00261 VH_H1 1
+VH_H1        N00111 K 0V
+d_D1         N000032, N00111, mod_D1 
+.model        mod_D1 d (rs=1m)
+s_S1         A,N000032,N00096,0, mod_S1 
+.model      mod_S1 vswitch (ron=1m]
+R_Rg         G N00073  1.0  
+R_R1         N00076 N00261  1.0  
+C_C3         N00076 0  1uF  
+C_Cg         N00073 0  1uF IC={state} 
+E_E1         N00096 0 TABLE { V(N00073, N00076) } 
++ ( (-1.0,0) (0,0) (0.1,1) (1,1) )
+.ENDS   SCR_SUBCKT
+*$

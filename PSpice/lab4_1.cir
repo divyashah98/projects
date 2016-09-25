@@ -1,0 +1,21 @@
+*PFA
+.LIB EVAL.LIB
+
+Xa 3 2 7 4 6 UA741
+Vp 7 0 15
+Vn 0 4 15
+Vin 3 0 1
+Rf 6 2 100K
+*Node 1 Drain Node 8 Gate Node 9 Source
+Jfet1 1 8 0 J2N3819
+Jfet2 10 11 0 J2N3819
+Jfet3 13 14 0 J2N3819
+Rs1 2 1 100k
+Rs2 2 10 50K
+Rs3 2 13 25K
+V1 8 0 pwl(1ms 0 2ms -15 3ms -15 4ms -15 5ms 0)
+V2 11 0 pwl(1ms -15 2ms 0 3ms -15 4ms -15 5ms 0) 
+V3 14 0 pwl(1ms -15 2ms -15 3ms 0 4ms -15 5ms 0)
+.TRAN 100u 6m
+.PROBE
+.END

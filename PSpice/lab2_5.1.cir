@@ -1,0 +1,14 @@
+Differentiator
+
+.LIB EVAL.LIB
+Xa 0 2 7 4 6 UA741
+Ca 3 2 0.05U
+Rs 3 1 1K
+Rb 2 6 10K
+Rl 6 0 10K
+Vpulse 1 0 PULSE(0.1 -0.1 0 0.1M 0.1M 0.1f 0.2M)
+V1 7 0 DC 15
+V2 0 4 DC 15
+.TRAN 500U 0.5M 0s 500U 
+.PROBE
+.END

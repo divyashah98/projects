@@ -1,0 +1,57 @@
+
+**** 03/22/14 01:37:31 ************** PSpice Lite (Mar 2000) *****************
+
+ Astable Multivibrator
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+.lib nom.lib
+XA 0 6 3 8 5 6 7 8 555D
+Vcc 8 0 5
+Ca 5 0 .01U
+Ra 8 7 22K
+Rb 7 6 22K
+Cb 2 0 .01U
+.TRAN 100U 5M
+.PROBE
+.END
+
+
+**** Generated AtoD and DtoA Interfaces ****
+
+*
+* Analog/Digital interface for node 8
+*
+* Moving XA.u1:CLRBAR from analog node 8 to new digital node 8$AtoD
+X$8_AtoD1
++ 8
++ 8$AtoD
++ 8
++ 0
++ atod_555
++       PARAMS: CAPACITANCE=   0     
+*
+* Analog/Digital interface for node XA.qb
+*
+* Moving XA.u1:QBAR1 from analog node XA.qb to new digital node XA.qb$DtoA
+X$XA.qb_DtoA1
++ XA.qb$DtoA
++ XA.qb
++ 8
++ 0
++ dtoa_555
++       PARAMS: DRVH=  96.4   DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface power supply subcircuits
+*
+
+X$DIGIFPWR 0 DIGIFPWR
+
+ERROR -- Less than 2 connections at node 2
+ERROR -- Node 2 is floating

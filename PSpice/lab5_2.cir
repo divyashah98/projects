@@ -1,0 +1,14 @@
+Zero Level Detector
+.LIB EVAL.LIB
+Xa 0 2 7 4 6 UA741
+Vp 7 0 15
+Vn 0 4 15
+Rl 6 0 10K
+R2 2 5 1K
+Vin 5 0 SIN(0 5 1K)
+D1 2 3 D1N4002
+D2 3 2 D1N4002
+.TRAN 100U 5M
+.PROBE(V(6) V(5))
+.END
+

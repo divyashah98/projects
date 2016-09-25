@@ -1,0 +1,155 @@
+
+**** 02/13/14 16:07:45 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+
+.LIB EVAL.LIB
+.MODEL 1N4002 D
+Xa 3 2 7 4 6 UA741
+va 0 4 15
+vb 7 0 15
+VreF 3 0 130
+Ra 2 9 100
+Da 6 9 D1N4002
+*.MODEL D1N4001 D (IS=18.8n RS=0 BV=400 IBV=5.00u CJO=30 M=0.333 N=2)
+Rl 9 0 10K
+Ca 9 1 100U IC 185
+Vin 1 0 SIN(0 120 2k)
+.TRAN 0.1m 10M 
+.PROBE
+.END
+
+**** 02/13/14 16:07:45 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     Diode MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               1N4002          D1N4002         Xa.dx           
+          IS   10.000000E-15   14.110000E-09  800.000000E-18 
+           N                    1.984                        
+         ISR                  100.000000E-12                 
+         IKF                   94.81                         
+          BV                  100.1                          
+         IBV                   10                            
+          RS                     .03389         1            
+          TT                    4.761000E-06                 
+         CJO                   51.170000E-12                 
+          VJ                     .3905                       
+           M                     .2762                       
+
+
+**** 02/13/14 16:07:45 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     BJT MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               Xa.qx           
+               NPN             
+          IS  800.000000E-18 
+          BF   93.75         
+          NF    1            
+          BR    1            
+          NR    1            
+          CN    2.42         
+           D     .87         
+
+
+**** 02/13/14 16:07:45 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     INITIAL TRANSIENT SOLUTION       TEMPERATURE =   27.000 DEG C
+
+
+******************************************************************************
+
+
+
+ NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE
+
+
+(    1)    0.0000  (    2)  180.6800  (    3)  130.0000  (    4)  -15.0000      
+
+(    6)   82.4270  (    7)   15.0000  (    9)  184.8600  ( Xa.6) -954.5300      
+
+( Xa.7)   77.0060  ( Xa.8)   77.0060  ( Xa.9)    0.0000  (Xa.10)  160.0400      
+
+(Xa.11)  179.8600  (Xa.12)  129.2200  (Xa.13)  179.8600  (Xa.14)  140.2800      
+
+(Xa.53)   14.0000  (Xa.54)  -14.0000  (Xa.90) -108.4200  (Xa.91)   40.0000      
+
+(Xa.92)  -40.0000  (Xa.99)    0.0000  
+
+
+
+
+    VOLTAGE SOURCE CURRENTS
+    NAME         CURRENT
+
+    va          -1.667E-03
+    vb           6.747E+01
+    VreF        -1.077E-02
+    Vin         -6.759E+01
+    Xa.vb       -9.545E-03
+    Xa.vc       -6.742E+01
+    Xa.ve        9.643E-11
+    Xa.vlim     -1.084E-01
+    Xa.vlp      -1.484E-10
+    Xa.vln       6.741E+01
+
+    TOTAL POWER DISSIPATION  -3.64E+03  WATTS
+
+
+ERROR -- Convergence problem in transient analysis at Time =  450.7E-06
+         Time step =  1.776E-15, minimum allowable step size =  10.00E-15
+
+  These supply currents failed to converge:
+
+    I(Vin)                    =   -38.48mA  \   -42.15mA
+    I(Xa.ve)                  =  -270.51uA  \  -271.83uA
+
+
+
+  Last node voltages tried were:
+
+ NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE
+
+
+(    1)  -69.6260  (    2)    8.1925  (    3)  130.0000  (    4)  -15.0000      
+
+(    6)  -14.6870  (    7)   15.0000  (    9)    8.1925  ( Xa.6) 2132.8000      
+
+( Xa.7)  -16.7280  ( Xa.8)  -16.7280  ( Xa.9)    0.0000  (Xa.10)  129.1500      
+
+(Xa.11)   15.0000  (Xa.12)  129.2000  (Xa.13)  129.1500  (Xa.14)  129.2000      
+
+(Xa.53)   14.0000  (Xa.54)  -14.0000  (Xa.90)  -40.8230  (Xa.91)   40.0000      
+
+(Xa.92)  -40.0000  (Xa.99)    0.0000  
+

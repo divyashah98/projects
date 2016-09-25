@@ -1,0 +1,2 @@
+armasm -static file_name.s -o file_name
+./file_name; echo $?

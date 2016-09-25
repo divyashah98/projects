@@ -1,0 +1,51 @@
+(ExpressProject "Rect_Concepts"
+  (ProjectVersion "19981106")
+  (ProjectType "Analog or A/D Mixed Mode")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (NoModify)
+    (File ".\dbrect1.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (PSPICE_Regenerate_Netlist_Flag "FALSE"))
+  (Folder "Outputs"
+    (File ".\dbrect1-schematic1.net"
+      (Type "Report"))
+    (File ".\dbrect1-schematic1.drc"
+      (Type "Report")))
+  (Folder "PSpice Resources"
+    (Folder "Simulation Profiles"
+      (ActiveProfile ".\dbrect1-schematic1-dbrect1.sim")
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\dbrect1-schematic1-dbrect1.sim"
+        (DisplayName "SCHEMATIC1-DBRECT1")
+        (Type "PSpice Profile")))
+    (Folder "Model Libraries"
+      (Sort User))
+    (Folder "Stimulus Files"
+      (Sort User))
+    (Folder "Include Files"
+      (Sort User)))
+  (DefaultLibraryBrowseDirectory "library\PSpice")
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dbrect1.dsn")
+      (Path "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dbrect1.dsn"
+         "SCHEMATIC1")
+      (Path "Outputs")
+      (Select "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dbrect1.dsn"
+         "SCHEMATIC1" "PAGE1"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -30 0 284 0 313"))
+      (Tab 0)))
+  (LastUsedLibraryBrowseDirectory
+     "C:\Program Files\OrCAD Demo\Capture\library\PSpice")
+  (PartMRUSelector))
