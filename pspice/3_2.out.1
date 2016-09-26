@@ -1,0 +1,30 @@
+
+**** 02/09/14 12:37:06 ************** PSpice Lite (Mar 2000) *****************
+
+ 3_2
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+.LIB EVAL.LIB
+Xa 3 2 7 4 6 UA741
+D1 6 9 D1N4001
+D2 0 6 D1N4001
+Vp 7 0 15
+Vn 0 4 15
+Ra 3 1 300
+Vin 1 0 PULSE(100M -100M 0 0.1F 0.1F 0.1M 0.2M)
+Rb 2 9 1K
+Rl 9 0 10K
+Cl 9 0 0.2U
+.TRAN 0.1M 1M
+.PROBE
+.END
+
+ERROR -- Model D1N4001 used by D1 is undefined
+ERROR -- Model D1N4001 used by D2 is undefined

@@ -1,0 +1,16 @@
+* source THY_TRIG_SUBCKT
+*$
+.SUBCKT THY_TRIG_SUBCKT c p v params: f=60
+E_ABM1         N00062 0 VALUE { IF(V(V)>0,1,-5)    }
+E_ABM2         N00323 0 VALUE { IF(V(V)>0|V(N00073)>0,V(N00062),0)    }
+G_INTEG1         0 $$U_INTEG1 VALUE {V(N00323)} 
+C_INTEG1       $$U_INTEG1 0 {1/{2*f}} 
+R_INTEG1       $$U_INTEG1 0 1G 
+E_INTEG1       N00073 0 VALUE {V($$U_INTEG1)} 
+.IC      V($$U_INTEG1) = 0v
+E_ABM3         N00117 0 VALUE { IF(V(N00073)>V(C),1,0)    }
+E_ABM4         P 0 VALUE { IF(V(N00117)>0 & V(N00129)<0.5 , 1 ,0)    }
+R_R1         N00117 N00129  5k  
+C_C1         N00129 0  100nF  
+.ENDS   THY_TRIG_SUBCKT
+*$

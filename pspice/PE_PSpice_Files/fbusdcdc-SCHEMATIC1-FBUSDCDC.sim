@@ -1,0 +1,123 @@
+@OrCAD Simulation Server Version: 1.0
+
+@Settings: 0 1
+@General:
+ProfileName= "FBUSDCDC" 
+ProfileFile= "fbusdcdc-schematic1-fbusdcdc.sim" 
+DesignFile= "fbusdcdc.dsn" 0 
+ProjectFile= "FBUSDCDC.opj" 
+NetlistFile= "fbusdcdc-schematic1-fbusdcdc.sim.cir" 
+RootSchematics= "SCHEMATIC1" 
+DataFile= "fbusdcdc-SCHEMATIC1-FBUSDCDC.dat" 
+OutFile= "fbusdcdc-SCHEMATIC1-FBUSDCDC.out" 
+Notes=
+@#$BEGINNOTES
+@#$ENDNOTES
+@End General
+@Analysis: 0 1
++1 0 0 
++0 "5ms" 
++1 "" 
++2 "0" 
++3 "0.5us" 
++4 "" 
++5 "" 
++6 "" 
+@End Analysis
+@Analysis: 1 0
++2 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 2 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 3 0
++0 0 0
++0 "" 
++1 "" 
++2 "" 
+@End Analysis
+@Analysis: 4 0
++0 0 0 0 0 0 0 0 
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 5 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 6 0
++1 
++0 "" 
+@End Analysis
+@Analysis: 7 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 8 0
++0 
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 9 0
++0 "" 
+@End Analysis
+@Analysis: 10 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 11 1
++ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
++ ABSTOL "1.0u"
++ GMIN "1u"
++ ITL1 "400"
++ ITL4 "100"
+@End Analysis
+@Analysis: 12 0
++2 0
+@End Analysis
+@Analysis: 13 1
++0 1 1 0
+@End Analysis

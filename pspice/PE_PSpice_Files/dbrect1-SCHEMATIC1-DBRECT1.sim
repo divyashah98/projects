@@ -1,0 +1,123 @@
+@OrCAD Simulation Server Version: 1.0
+
+@Settings: 0 1
+@General:
+ProfileName= "DBRECT1" 
+ProfileFile= "dbrect1-schematic1-dbrect1.sim" 
+DesignFile= "dbrect1.dsn" 0 
+ProjectFile= "DBRECT1.opj" 
+NetlistFile= "dbrect1-schematic1-dbrect1.sim.cir" 
+RootSchematics= "SCHEMATIC1" 
+DataFile= "dbrect1-SCHEMATIC1-DBRECT1.dat" 
+OutFile= "dbrect1-SCHEMATIC1-DBRECT1.out" 
+Notes=
+@#$BEGINNOTES
+@#$ENDNOTES
+@End General
+@Analysis: 0 1
++1 1 0 
++0 "50ms" 
++1 "" 
++2 "0" 
++3 "50us" 
++4 "60" 
++5 "i(Rs)" 
++6 "23" 
+@End Analysis
+@Analysis: 1 0
++2 0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 2 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 3 0
++0 0 0
++0 "" 
++1 "" 
++2 "" 
+@End Analysis
+@Analysis: 4 0
++0 0 0 0 0 0 0 0 
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 5 1
++0 2
++0 "" 
++1 "Ls_Value" 
++2 "" 
++3 "" 
++4 "1mH" 
++5 "3mH" 
++6 "1mH" 
++7 "" 
+@End Analysis
+@Analysis: 6 0
++1 
++0 "" 
+@End Analysis
+@Analysis: 7 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 8 0
++0 
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
+@End Analysis
+@Analysis: 9 0
++0 "" 
+@End Analysis
+@Analysis: 10 0
++0 0
++0 "" 
++1 "" 
++2 "" 
++3 "" 
++4 "" 
++5 "" 
++6 "" 
++7 "" 
+@End Analysis
+@Analysis: 11 1
++ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
++ ABSTOL "1.0u"
++ GMIN "1u"
++ ITL1 "400"
++ ITL4 "100"
+@End Analysis
+@Analysis: 12 0
++1328192 0
+@End Analysis
+@Analysis: 13 1
++0 1 1 0
+@End Analysis

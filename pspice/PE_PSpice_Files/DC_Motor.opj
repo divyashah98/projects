@@ -1,0 +1,51 @@
+(ExpressProject "Buckconv"
+  (ProjectVersion "19981106")
+  (ProjectType "Analog or A/D Mixed Mode")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (NoModify)
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (File ".\dc_motor.dsn"
+      (Type "Schematic Design"))
+    (PSPICE_Regenerate_Netlist_Flag "FALSE"))
+  (Folder "Outputs"
+    (File ".\dc_motor-schematic1.net"
+      (Type "Report"))
+    (File ".\dc_motor-schematic1.drc"
+      (Type "Report")))
+  (Folder "PSpice Resources"
+    (Folder "Simulation Profiles"
+      (ActiveProfile ".\dc_motor-schematic1-dc_motor.sim")
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\dc_motor-schematic1-dc_motor.sim"
+        (DisplayName "SCHEMATIC1-DC_Motor")
+        (Type "PSpice Profile")))
+    (Folder "Model Libraries"
+      (Sort User))
+    (Folder "Stimulus Files"
+      (Sort User))
+    (Folder "Include Files"
+      (Sort User)))
+  (DefaultLibraryBrowseDirectory "library\PSpice")
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dc_motor.dsn")
+      (Path "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dc_motor.dsn"
+         "SCHEMATIC1")
+      (Path "Outputs")
+      (Path "PSpice Resources")
+      (Path "PSpice Resources" "Simulation Profiles")
+      (Select "Design Resources"
+         "C:\Documents and Settings\Ned Mohan\Desktop\PSpiceTesting\dc_motor.dsn"
+         "SCHEMATIC1" "PAGE1"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 0 1 -1 -1 -1 -1 0 395 0 331"))
+      (Tab 0)))
+  (PartMRUSelector))

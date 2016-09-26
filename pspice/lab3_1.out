@@ -1,0 +1,133 @@
+
+**** 02/13/14 16:08:06 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+
+.LIB EVAL.LIB
+.MODEL 1N4002 D
+Xa 3 2 7 4 6 UA741
+va 0 4 15
+vb 7 0 15
+VreF 3 0 30
+Ra 2 9 100
+Da 6 9 D1N4002
+*.MODEL D1N4001 D (IS=18.8n RS=0 BV=400 IBV=5.00u CJO=30 M=0.333 N=2)
+Rl 9 0 10K
+Ca 9 1 100U IC 35
+Vin 1 0 SIN(0 20 2k)
+.TRAN 0.1m 10M 
+.PROBE
+.END
+
+**** 02/13/14 16:08:06 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     Diode MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               1N4002          D1N4002         Xa.dx           
+          IS   10.000000E-15   14.110000E-09  800.000000E-18 
+           N                    1.984                        
+         ISR                  100.000000E-12                 
+         IKF                   94.81                         
+          BV                  100.1                          
+         IBV                   10                            
+          RS                     .03389         1            
+          TT                    4.761000E-06                 
+         CJO                   51.170000E-12                 
+          VJ                     .3905                       
+           M                     .2762                       
+
+
+**** 02/13/14 16:08:06 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     BJT MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               Xa.qx           
+               NPN             
+          IS  800.000000E-18 
+          BF   93.75         
+          NF    1            
+          BR    1            
+          NR    1            
+          CN    2.42         
+           D     .87         
+
+
+**** 02/13/14 16:08:06 ************** PSpice Lite (Mar 2000) *****************
+
+ Positive Clamping Circuit
+
+
+ ****     INITIAL TRANSIENT SOLUTION       TEMPERATURE =   27.000 DEG C
+
+
+******************************************************************************
+
+
+
+ NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE
+
+
+(    1)    0.0000  (    2)   34.5240  (    3)   30.0000  (    4)  -15.0000      
+
+(    6)   14.7190  (    7)   15.0000  (    9)   35.0000  ( Xa.6)  -84.7040      
+
+( Xa.7)   14.7640  ( Xa.8)   14.7640  ( Xa.9)    0.0000  (Xa.10)   31.5190      
+
+(Xa.11)   33.7640  (Xa.12)   29.2690  (Xa.13)   33.7580  (Xa.14)   29.3130      
+
+(Xa.53)   14.0000  (Xa.54)  -14.0000  (Xa.90)     .8987  (Xa.91)   40.0000      
+
+(Xa.92)  -40.0000  (Xa.99)    0.0000  
+
+
+
+
+    VOLTAGE SOURCE CURRENTS
+    NAME         CURRENT
+
+    va          -1.667E-03
+    vb           5.474E-03
+    VreF        -1.488E-03
+    Vin         -8.257E-03
+    Xa.vb       -8.470E-04
+    Xa.vc       -8.987E-04
+    Xa.ve        2.872E-11
+    Xa.vlim      8.987E-04
+    Xa.vlp      -3.910E-11
+    Xa.vln      -4.090E-11
+
+    TOTAL POWER DISSIPATION  -1.16E-02  WATTS
+
+
+
+          JOB CONCLUDED
+
+          TOTAL JOB TIME             .13
+

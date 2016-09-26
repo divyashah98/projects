@@ -1,0 +1,12 @@
+Astable Multivibrator
+.LIB NOM.LIB
+Xa 0 6 3 8 5 6 7 8 555D
+Vcc 8 0 5
+Ca 5 0 .01U
+Ra 8 7 22K
+Rb 7 6 22K
+Cb 6 0 .01U
+Rl 3 0 100K
+.TRAN 100U 4M
+.PROBE
+.END
