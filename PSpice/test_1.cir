@@ -1,9 +1,0 @@
-Test
-.lib nom.lib
-P1 1 2 3 3 IRF150
-P2 1 22 33 33 IRF150
-N1 5 4 3 3 IRF9140
-N2 55 44 33 33 irf9140
-Vin 55 0 pulse(0 3 5m 0 10m 3)
-Vin_bar 5 0 pulse(0 0 5m 3 10m 0)
-Vpc 1 0 pwl(0 0 2m 3 

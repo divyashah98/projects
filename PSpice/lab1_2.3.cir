@@ -1,8 +1,0 @@
-2.3 Bias And Offset Currents
-
-.LIB EVAL.LIB
-X1 0 2 7 4 6 UA741
-R1 2 6 1MEG
-V1 7 0 15
-V2 0 4 15
-.END
