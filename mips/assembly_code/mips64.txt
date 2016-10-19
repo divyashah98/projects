@@ -1,0 +1,78 @@
+i)
+.data
+fp1:    double  12.22
+.text
+    lui     r0, 400
+    lui     r1, 408
+    lui     f0, 416
+    l.d     f2, fp1
+    ld      r0, 0(r0)
+    ld      r1, 0(r1)
+    ld      f0, 0(f0)
+    dadd    r0, r0, r1
+    dmtc1   r0, f1
+    div.d   f1, f1, f2
+    sd      f1, f0
+
+ii)
+.data
+fp1:    double  12.22
+.text
+    lui     f0, 400
+    lui     f1, 408
+    lui     f2, 416
+    l.s     f3, fp1
+    lw      f0, 0(f0)
+    lw      f1, 0(f1)
+    add.s   f0, f0, f1
+    div.s   f0, f0, f3
+    sd      f0, f2
+
+iii)
+.text
+    lui     r0, 400
+    lui     r1, 408
+    lui     r2, 416
+    lw      r0, 0(r0)
+    lw      r1, 0(r1)
+    bne     r0, r1, clr_res
+    bgt     r0, 100, clr_res
+    addi    r3, r3, 1
+    j       end
+clr_res:
+    addi    r3, r3, 0
+end:
+
+iv)
+.text
+    lui     f0, 400
+    lui     f1, 408
+    lui     f2, 416
+    lui     f5, 100
+    lw      f0, 0(f0)
+    lw      f1, 0(f1)
+    c.ne.s  f0, f1, clr_res
+    c.gt.s  f0, f5, clr_res
+    lui     f4, 1
+    add.s   f3, f3, f4
+    j       end
+clr_res:
+    lui     f4, 0
+    add.s   f3, f3, f4
+end:
+
+v)
+.text
+    lui     r31, 0
+    lui     r1, 1
+    lui     r1, 100
+loop:
+    beq     r1, r2, exit
+    lw      f1, 0(r0)
+    c.le.s  f1, f0, next
+    addi    r31, r31, 1
+next:
+    addi    r0, r0, 8
+    addi    r1, r1, 1
+    j loop
+exit:
