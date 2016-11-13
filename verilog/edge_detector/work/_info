@@ -1,0 +1,43 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/rahul/verilog/edge_detector
+vedge_detector_mealy
+!i10b 1
+!s100 :bRO]0HC4_kBA5zQzdeeT3
+IXdGl_;e93b2jOD19FQ=LW3
+VS0I8Ge=Iz=bXTX=fXc_eW3
+Z1 d/home/rahul/verilog/edge_detector
+w1474717103
+8verilog/edge_detector_mealy.v
+Fverilog/edge_detector_mealy.v
+L0 1
+Z2 OV;L;10.1e;51
+r1
+!s85 0
+31
+!s108 1474717104.231091
+!s107 verilog/edge_detector_mealy.v|
+!s90 verilog/edge_detector_mealy.v|
+!s101 -O0
+o-O0
+vedge_detector_moore
+Z3 I>?bI^m^ceE@3J@]0]KMCZ1
+Z4 VL:f41n8L8=h@Ch<>fE5n=2
+R1
+Z5 w1474717044
+Z6 8verilog/edge_detector_moore.v
+Z7 Fverilog/edge_detector_moore.v
+L0 1
+R2
+r1
+31
+Z8 !s90 verilog/edge_detector_moore.v|
+o-O0
+!i10b 1
+Z9 !s100 UF;9AhC3K[M[B_Jl[5fcb3
+!s85 0
+Z10 !s108 1474717059.349733
+Z11 !s107 verilog/edge_detector_moore.v|
+!s101 -O0

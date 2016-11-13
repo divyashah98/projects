@@ -1,0 +1,972 @@
+    1  update
+    2  sudo apt-get update
+    3  exit
+    4  cd Desktop/
+    5  ls
+    6  chmod 777 ModelSimSetup-13.1.0.162.run 
+    7  ./ModelSimSetup-13.1.0.162.run 
+    8  chmod 777 ModelSimSetup-14.0.0.200-linux.run 
+    9  ./ModelSimSetup-14.0.0.200-linux.run 
+   10  which vsim
+   11  ls
+   12  cd ../
+   13  cd altera/
+   14  ls
+   15  cd 14.0/
+   16  ls
+   17  cd modelsim_ase/
+   18  ls
+   19  cd linuxaloem/
+   20  ls
+   21  vsim
+   22  ls vsim
+   23  cd vsim
+   24  gvim vsim
+   25  vi vsim
+   26  ls
+   27  ./vsim
+   28  ls
+   29  ./vrun 
+   30  cd ../
+   31  ls
+   32  cd linux
+   33  ls
+   34  ./vsim
+   35  vstp 
+   36  vsim
+   37  which v-sim
+   38  cd ../
+   39  ls
+   40  cd linuxaloem/
+   41  ls
+   42  sudo dpkg --add-architecture i386
+   43  sudo apt-get update
+   44  sudo apt-get install build-essential
+   45  ls
+   46  exit
+   47  cd ../../
+   48  cd Dowm
+   49  cd Downloads/
+   50  ls
+   51  cd ../
+   52  ls
+   53  tar -xvf Downloads/freetype-2.4.12.tar.bz2 
+   54  ls
+   55  cd freetype-2.4.12/
+   56  ./configure --build=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
+   57  make
+   58  cd 
+   59  vlib work
+   60  exit
+   61  sudo apt-get update
+   62  sudo apt-get upgrade
+   63  exit
+   64  cd altera/14.0/modelsim_ase/linuxaloem/
+   65  ls
+   66  ./vsim
+   67  sudo apt-get install gcc-multilib g++-multilib lib32z1 lib32stdc++6 lib32gcc1 expat:i386 fontconfig:i386 libfreetype6:i386 libexpat1:i386 libc6:i386 libgtk-3-0:i386 libcanberra0:i386 libpng12-0:i386 libice6:i386 libsm6:i386 libncurses5:i386 zlib1g:i386 libx11-6:i386 libxau6:i386 libxdmcp6:i386 libxext6:i386 libxft2:i386 libxrender1:i386 libxt6:i386 libxtst6:i386
+   68  ./vsim
+   69  update
+   70  sudo apt-get update
+   71  sudo apt-get build-dep -a i386 libfreetype6
+   72  cd ../
+   73  ls
+   74  sudo mkdir lib32
+   75  sudo cp ~/freetype-2.4.12/objs/.libs/libfreetype.so* ./lib32
+   76  sudo vim bin/vsim
+   77  sudo vi bin/vsim
+   78  cd bin
+   79  ./vsim 
+   80  which vsim
+   81  whereis vsim
+   82  finger vsim
+   83  which vlib
+   84  ls
+   85  vcom /home/rahul/Downloads/mips_vga/ALU.sv 
+   86  ./vcom /home/rahul/Downloads/mips_vga/ALU.sv 
+   87  exit
+   88  df -h
+   89  update
+   90  sudo apt-get update
+   91  e
+   92  sudo apt-get update
+   93  which vsim
+   94  cd altera/
+   95  ls
+   96  cd 14.0/
+   97  ls
+   98  cd modelsim_ase/
+   99  ls
+  100  grep "vsim" *
+  101  ls
+  102  cd bin
+  103  ls
+  104  gvim vlib 
+  105  ls
+  106  df -h .
+  107  ls
+  108  eCHO $PATH
+  109  echo $PATH
+  110  ls
+  111  pwd
+  112  setenv MODELSIM /home/rahul/altera/14.0/modelsim_ase/modelsim.ini 
+  113  export MODELSIM=/home/rahul/altera/14.0/modelsim_ase/modelsim.ini 
+  114  export PATH=/home/rahul/altera/14.0/modelsim_ase/bin:${PATH}
+  115  echo $PATH
+  116  which vsim
+  117  which vlib
+  118  cd ../../
+  119  ls
+  120  cd Downloads/
+  121  ls
+  122  cd mo
+  123  cd mips_vga/
+  124  ls
+  125  vlib work
+  126  vsim top.sv 
+  127  ls
+  128  vlog *.sv
+  129  cd ./
+  130  cd ../
+  131  ls
+  132  tar -xvf install_flash_player_11_linux.x86_64.tar.gz 
+  133  ls
+  134  cd LGPL/
+  135  ls
+  136  cd ../
+  137  ls
+  138  rm -rf install_flash_player_11_linux.x86_64.tar.gz 
+  139  ls
+  140  vi readme.txt 
+  141  which vsim
+  142  sudo apt-get install gvim
+  143  sudo apt-get install vim-gnome
+  144  gvim ~/.profile 
+  145  ls
+  146  gvim ~/.profile 
+  147  e
+  148  exit
+  149  which vsim
+  150  vlog
+  151  vlib work
+  152  echo $PATH
+  153  gvim ~/.profile 
+  154  gvim /etc/environment 
+  155  sudo gvim /etc/environment 
+  156  exit
+  157  which vsim
+  158  echo $PATH
+  159  source /etc/environment 
+  160  which vsim
+  161  cd Downloads/
+  162  ls
+  163  cd mips_vga/
+  164  ls
+  165  vlog *.sv
+  166  export MODELSIM=/home/rahul/altera/14.0/modelsim_ase/modelsim.ini 
+  167  vlog *.sv
+  168  vlib work
+  169  sudo gvim /etc/environment 
+  170  source /etc/environment 
+  171  vlog *.sv
+  172  echo $PATH
+  173  which vsim
+  174  which vlog
+  175  /home/rahul/altera/14.0/modelsim_ase/bin/vlog *.sv
+  176  sudo gvim /etc/environment 
+  177  source /etc/environment 
+  178  ls\
+  179  vlog *.sv
+  180  vlog *.sv | tee compile.log
+  181  gvim compile.log 
+  182  sudo apt-get -y remove vim-gnome
+  183  sudo apt-get install vim-gtk
+  184  vlog *.sv | tee compile.log
+  185  gvim compile.log 
+  186  vlog *.sv | tee compile.log
+  187  ls
+  188  cd work/
+  189  ls
+  190  rm -rf top/
+  191  cd ../
+  192  vlog *.sv | tee compile.log
+  193  ls
+  194  cd work/
+  195  ls
+  196  cd ../
+  197  rm -rf work/
+  198  ls
+  199  vlog *.sv | tee compile.log
+  200  ls
+  201  vlib work
+  202  vlog *.sv | tee compile.log
+  203  which vsim
+  204  e
+  205  cd Doww
+  206  cd Downloads/
+  207  ls
+  208  cd mips_vga/
+  209  ls
+  210  vlog *.sv
+  211  vlog *.sv | tee compile.log 
+  212  gvim compile.log 
+  213  vlog *.sv | tee compile.log 
+  214  grep "top" *
+  215  gvim top_10.sv 
+  216  vlog -h
+  217  vlog -help
+  218  ls | tee ls.out
+  219  gvim ls.out 
+  220  vlog -f ls.out 
+  221  gvim ls.out 
+  222  vlog -f ls.out 
+  223  gvim ls.out 
+  224  vlog -f ls.out 
+  225  grep project_screentest *
+  226  ls
+  227  mv /home/rahul/Downloads/ATT94972.vimrc ~/
+  228  mv /home/rahul/Downloads/matchit.vim ~/
+  229  cd ~/
+  230  mv ATT94972.vimrc .vimrc
+  231  ls
+  232  cd -
+  233  gvim compile.log 
+  234  source ~/.vimrc 
+  235  gvim ~/.vimrc 
+  236  source ~/.vimrc 
+  237  gvim ~/.vimrc 
+  238  gvim compile.log 
+  239  vlog -f ls.out 
+  240  vlog -f ls.out | tee compile.log
+  241  ls
+  242  cat screenmem.sv 
+  243  vlog -f ls.out | tee compile.log
+  244  ls
+  245  gvim top_10.sv 
+  246  cd ../
+  247  ls
+  248  cd zips/
+  249  ls
+  250  gunzip -h
+  251  gzip lab11.zip 
+  252  ls
+  253  unzip lab8.zip 
+  254  ls
+  255  gunzip lab11.zip.gz 
+  256  ls
+  257  rm -rf *.sv
+  258  ls
+  259  rm -rf vgadisplaydriver.xdc.txt 
+  260  ls
+  261  unzip lab11.zip
+  262  ls
+  263  rm -rf *.rtf
+  264  ls
+  265  rm -rf rtf 
+  266  ls
+  267  cd ../
+  268  ls
+  269  cd mips_vga/
+  270  vlog -f ls.out 
+  271  vsim -f ls.out 
+  272  vsim adder.sv 
+  273  vsim
+  274  which vsim
+  275  cd /home/rahul/altera/14.0/modelsim_ase/linux/vsim
+  276  cd /home/rahul/altera/14.0/modelsim_ase/linux/
+  277  cd ../
+  278  ls
+  279  cd bin/
+  280  ./vsim 
+  281  ls
+  282  cd ../
+  283  ls
+  284  ls lib32/
+  285  gvim bin/vsim 
+  286  cd bin
+  287  ./vsim 
+  288  sudo gvim vsim 
+  289  ./vsim 
+  290  cd ../../
+  291  cd ../
+  292  cd Downloads/
+  293  ls
+  294  cd mips_vga/
+  295  ls
+  296  vlib work
+  297  vlog -f ls.out 
+  298  ls
+  299  vsim -f ls.out 
+  300  vsim -help
+  301  vsim
+  302  which vsim
+  303  sudo gvim /etc/environment 
+  304  source /etc/environment 
+  305  which vsim
+  306  vsim -f ls.out 
+  307  vsim -h
+  308  vsim -f ls.out -c 
+  309  vsim -c tester.sv 
+  310  ls work/
+  311  vsim -c project_screentest
+  312  ls
+  313  vlog -f ls.out 
+  314  vsim -c project_screentest
+  315  vlog -f ls.out 
+  316  vsim -c project_screentest
+  317  vlog -f ls.out 
+  318  vsim -c project_screentest
+  319  vlog -f ls.out 
+  320  vsim -c project_screentest
+  321  vlog -f ls.out 
+  322  vsim -c project_screentest
+  323  vlog -f ls.out 
+  324  vsim -c project_screentest
+  325  vlog -f ls.out 
+  326  vsim -c project_screentest
+  327  vlog -f ls.out 
+  328  vsim -c project_screentest
+  329  vlog -f ls.out 
+  330  vsim -c project_screentest
+  331  vlog -f ls.out 
+  332  vsim -c project_screentest
+  333  vlog -f ls.out 
+  334  vsim -c project_screentest
+  335  vlog -f ls.out 
+  336  vsim -c project_screentest
+  337  ls
+  338  ls *.txt
+  339  mv instr_memory.txt imem.txt
+  340  mv data_memory.txt dmem.txt
+  341  mv screen_memory.txt smem.txt
+  342  mv bitmap_memory.txt bmem.txt
+  343  cp *.txt work/
+  344  vlog -f ls.out 
+  345  vsim -c project_screentest
+  346  vlog -f ls.out 
+  347  vsim -c project_screentest
+  348  vlog -f ls.out 
+  349  vsim -c project_screentest
+  350  vlog -f ls.out 
+  351  vsim -c project_screentest
+  352  ls
+  353  gvim imem.
+  354  gvim imem.txt 
+  355  vlog -f ls.out 
+  356  vsim -c project_screentest
+  357  vsim 
+  358  grep "memIo" *
+  359  vsim &
+  360  vlog -f ls.out 
+  361  vsim &
+  362  vlog -f ls.out 
+  363  vsim &
+  364  ls
+  365  gvim controller.sv 
+  366  vlog -f ls.out 
+  367  vsim &
+  368  vsim project_screentest &
+  369  vlog -f ls.out 
+  370  vsim project_screentest &
+  371  vlog -f ls.out 
+  372  vsim project_screentest &
+  373  vlog -f ls.out 
+  374  vsim project_screentest &
+  375  vlog -f ls.out 
+  376  vsim project_screentest &
+  377  vlog -f ls.out 
+  378  vsim project_screentest &
+  379  vlog -f ls.out 
+  380  vsim project_screentest &
+  381  vlog -f ls.out 
+  382  vsim project_screentest &
+  383  vlog -f ls.out 
+  384  vsim project_screentest &
+  385  vlog -f ls.out 
+  386  vsim project_screentest &
+  387  vlog -f ls.out 
+  388  vsim project_screentest &
+  389  vlog -f ls.out 
+  390  vsim project_screentest &
+  391  vlog -f ls.out 
+  392  vsim project_screentest &
+  393  vlog -f ls.out 
+  394  vsim project_screentest &
+  395  grep "char.*code" *
+  396  vlog -f ls.out 
+  397  vsim project_screentest &
+  398  vlog -f ls.out 
+  399  vsim project_screentest &
+  400  grep "b.*addr" *
+  401  vlog -f ls.out 
+  402  vsim project_screentest &
+  403  vlog -f ls.out 
+  404  vsim project_screentest &
+  405  vlog -f ls.out 
+  406  vsim project_screentest &
+  407  exit
+  408  cd Downloads/
+  409  ls
+  410  cd mips_vga/
+  411  ls
+  412  gnu-open .
+  413  gnome-open .
+  414  exit
+  415  sudo apt-get update
+  416  exit
+  417  sudo apt-get update
+  418  cd Downloads/
+  419  ls
+  420  cd mips_vga/
+  421  ls
+  422  vlog -f ls.out 
+  423  vsim project_screentest &
+  424  ls
+  425  grep "some" *
+  426  gvim ALU.sv 
+  427  vlog -f ls.out 
+  428  vsim project_screentest &
+  429  vlog -f ls.out 
+  430  vsim project_screentest &
+  431  gvim comparator.sv 
+  432  gvim ALU.sv 
+  433  gvim comparator.sv 
+  434  gvim dmem.
+  435  gvim dmem.sv 
+  436  sudo apt-get update
+  437  exit 
+  438  sudo apt-get update
+  439  exit
+  440  sudo apt-get update
+  441  exit
+  442  sudo apt-get update
+  443  exit
+  444  sudo apt-get update
+  445  ls
+  446  cd Downloads/
+  447  ls
+  448  cd mips_vga/
+  449  ls
+  450  rm -rf mips_vga.zip 
+  451  ls
+  452  gvim keyboard.sv
+  453  gvim keyboard_test.sv
+  454  gvim display8digit.sv
+  455  ls
+  456  gvim ls.out 
+  457  vlog -f ls.out | tee compile.log 
+  458  grep "hexto7seg" *
+  459  gvim hexto7seg.sv
+  460  gvim ls.out 
+  461  vlog -f ls.out | tee compile.log 
+  462  gvim keyboard_test.sv 
+  463  cd Downloads/mips_vga/
+  464  ls
+  465  gvim memIo.sv 
+  466  vlog -f ls.out | tee compile.log 
+  467  vsim project_screentest -run a
+  468  vsim project_screentest 
+  469  vlog -f ls.out | tee compile.log 
+  470  vsim project_screentest 
+  471  vsim -c project_screentest 
+  472  vlog -f ls.out | tee compile.log 
+  473  vsim -c project_screentest 
+  474  vsim -project_screentest 
+  475  vsim project_screentest 
+  476  e
+  477  exit
+  478  ls
+  479  screen ls
+  480  ps 
+  481  ps -aux
+  482  exit
+  483  screen
+  484  exit
+  485  screen
+  486  sudo apt-get install screen
+  487  screen
+  488  ps -aux
+  489  sudo apt-get update
+  490  ls
+  491  cd Downloads/
+  492  l
+  493  ls
+  494  gun-open FPGA\ Prototyping\ By\ Verilog\ Examples.pdf 
+  495  gnome-open FPGA\ Prototyping\ By\ Verilog\ Examples.pdf 
+  496  ls
+  497  mkdir PLP
+  498  cd PLP/
+  499  mv ../progressive-learning-platform-5.2.tar.gz .
+  500  tar -xvf progressive-learning-platform-5.2.tar.gz 
+  501  ls
+  502  cd progressive-learning-platform-5.2/
+  503  ls
+  504  sudo apt-get install librxtx-java
+  505  ls
+  506  cd ../
+  507  ls
+  508  cd progressive-learning-platform-5.2/
+  509  ls
+  510  gvim README.md 
+  511  ls
+  512  cd misc/
+  513  ls
+  514  cd ../
+  515  ls
+  516  cd ../
+  517  ls
+  518  rm -rf progressive-learning-platform-5.2
+  519  tar -xvf progressive-learning-platform-5.2.tar.gz 
+  520  ls
+  521  cd progressive-learning-platform-5.2/
+  522  ls
+  523  cd reference/
+  524  ls
+  525  cd sw/
+  526  ls
+  527  cd PLPTool
+  528  java -jar PLPToolStatic.jar
+  529  sudo apt-get install openjdk-6-jre-headless
+  530  java -jar PLPToolStatic.jar
+  531  ls
+  532  cd src/
+  533  ls
+  534  cd plptool/
+  535  ls
+  536  java -jar PLPToolStatic.jar
+  537  cd mips/
+  538  ls
+  539  cd ../
+  540  ls
+  541  cd ../../
+  542  find . -name "PLPToolStatic.jar" -print
+  543  cd ../../
+  544  ls
+  545  find . -name "PLPToolStatic.jar" -print
+  546  cd ../
+  547  find . -name "PLPToolStatic.jar" -print
+  548  cd web/plp/
+  549  java -jar PLPToolStatic.jar
+  550  cd ../../../
+  551  ls 
+  552  cd progressive-learning-platform-5.2/
+  553  ls\
+  554  ls
+  555  cd reference/
+  556  ls
+  557  cd sw/
+  558  ls
+  559  cd PLPTool
+  560  ls
+  561  cd src/
+  562  cd ../
+  563  java -jar PLPToolStatic.jar
+  564  cd -
+  565  ls
+  566  cd plptool/
+  567  ls
+  568  java -jar 
+  569  ls
+  570  java -jar PLPSimCoreGUI.java
+  571  cd web/
+  572  ls
+  573  cd resources/
+  574  ls
+  575  cd ../..
+  576  cd ../../
+  577  cd ../
+  578  cd ..
+  579  cd
+  580  cd -
+  581  cd ..
+  582  ls
+  583  find . -name "resources" -print
+  584  cd ./reference/sw/PLPTool/src/plptool/gui/resources
+  585  ks
+  586  ls
+  587  cd ../
+  588  cd ../../../
+  589  cd ../../
+  590  sl
+  591  ks
+  592  ls
+  593  cd hw/
+  594  ls
+  595  cd verilog/r
+  596  cd verilog/
+  597  ls
+  598  gvim mod_uart.v 
+  599  ls
+  600  cd ../../
+  601  ls
+  602  cd sw/
+  603  ls
+  604  cd c/
+  605  ls
+  606  cd ../
+  607  ls
+  608  cd examples/
+  609  ls
+  610  cd ../
+  611  ls
+  612  cd -
+  613  gvim leds_test.plp 
+  614  ls
+  615  cd ../
+  616  ls
+  617  cd PLPTool-Distrib/
+  618  ls
+  619  cd deb/
+  620  ls
+  621  cd DEBIAN/
+  622  ls
+  623  cd ../../
+  624  ls
+  625  source build.sh 
+  626  sl
+  627  ls
+  628  cd Downloads/
+  629  ks
+  630  ls
+  631  cd p
+  632  cd PLP/
+  633  l
+  634  ls
+  635  cd progressive-learning-platform-5.2/
+  636  ls
+  637  cd reference/
+  638  lss
+  639  ls
+  640  cd sw/
+  641  ks
+  642  ls
+  643  cd PLPTool
+  644  ls
+  645  java -jar PLPToolStatic.jar 
+  646  ls
+  647  tar -xvf PLPToolStatic.jar
+  648  cd
+  649  file /sbin/init
+  650  java -version
+  651  sudo apt-get purge openjdk-\* 
+  652  sudo mkdir -p /usr/local/java 
+  653  sudo cp Downloads/jre-8u101-linux-i586.tar.gz /usr/local/java/
+  654  cd /usr/local/java/
+  655  ls
+  656  sudo chmod a+x jre-8u101-linux-i586.tar.gz 
+  657  sudo tar xzcf jre-8u101-linux-i586.tar.gz 
+  658  sudo tar -xzcf jre-8u101-linux-i586.tar.gz 
+  659  sudo tar -xzf jre-8u101-linux-i586.tar.gz 
+  660  ls
+  661  ls -a
+  662  sudo vi /etc/profile
+  663  ls 
+  664  sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/java/jre1.8.0_101/bin/javaws" 1 
+  665  sudo update-alternatives --set java /usr/local/java/jre1.8.0_101/bin/java 
+  666  sudo update-alternatives --set javaws /usr/local/java/jre1.8.0_101/bin/javaws 
+  667  cd ../../
+  668  cd ../
+  669  ./etc/profile.d/
+  670  ./etc/profile
+  671  sudo ./etc/profile
+  672  java -version
+  673  exit
+  674  ls
+  675  sudo apt-get update
+  676  cd Downloads/
+  677  ls
+  678  rm -rf jre-8u101-linux-i586.tar.gz 
+  679  ls
+  680  cd PLP/
+  681  ls
+  682  cd progressive-learning-platform-5.2/
+  683  ls
+  684  cd reference/
+  685  ls
+  686  cd sw/
+  687  ls
+  688  cd PLPTool
+  689  cd ../
+  690  cd PLPToolE
+  691  cd PLPTool-Extensions/
+  692  ls
+  693  cd ../PLPTool
+  694  java -jar PLPToolStatic.jar 
+  695  sudo apt-get update
+  696  ls
+  697  cd Downloads/
+  698  ls
+  699  cd PLP/
+  700  l
+  701  cd progressive-learning-platform-5.2
+  702  ls
+  703  cd reference/sw/PLPTool
+  704  gvim test.plp
+  705  java -jar PLPToolStatic.jar -plp test.plp 
+  706  mv test.plp test.asm
+  707  java -jar PLPToolStatic.jar -plp test.asm 
+  708  java -jar PLPToolStatic.jar  
+  709  ls
+  710  cd ../../
+  711  ls
+  712  cd ../.../
+  713  ls
+  714  cd ../../
+  715  ls
+  716  cd ./
+  717  ls
+  718  cd ../
+  719  ls
+  720  which librxtx-java
+  721  sudo apt-get install librxtx-java
+  722  cd ../
+  723  cd -
+  724  cd PLP/progressive-learning-platform-5.2/reference/sw/PLPTool
+  725  ls
+  726  java -jar PLPToolStatic.jar 
+  727  ls
+  728  pushd .
+  729  cd ../../
+  730  cd sw/
+  731  grep '
+  732  grep "librxtx" * -irl
+  733  vi PLPTool-Distrib/deb/DEBIAN/control
+  734  sudo apt-get install librxtx-java
+  735  sudo apt-get autoremove
+  736  vi /usr/local/lib/
+  737  vi /etc/environment 
+  738  ls /usr/share/java/
+  739  pwd
+  740  exit
+  741  cd /home/rahul/Downloads/PLP/progressive-learning-platform-5.2/reference/sw
+  742  l
+  743  ls
+  744  cd PLPTool
+  745  ls
+  746  java -jar PLPToolStatic.jar 
+  747  sudo cp /usr/lib/jni/librxtxParallel.so /usr/bin/java/
+  748  gvim final.asm
+  749  mv final.asm ~rahul/Desktop/
+  750  exit
+  751  sudo apt-get update
+  752  e
+  753  exit
+  754  sudo apt-get update
+  755  exit
+  756  cd Downloads/PLP/progressive-learning-platform-5.2/
+  757  cd reference/sw/
+  758  java -jar PLPTool/PLPToolStatic.jar examples/uart_loopback.plp 
+  759  java -jar PLPTool/PLPToolStatic.jar -plp examples/uart_loopback.plp 
+  760  gvim examples/uart_loopback.plp 
+  761  java -jar PLPTool/PLPToolStatic.jar -h
+  762  java -jar PLPTool/PLPToolStatic.jar -a /home/rahul/Desktop/final.asm 
+  763  java -jar PLPTool/PLPToolStatic.jar -a /home/rahul/Desktop/final.asm out
+  764  cd ../
+  765  cd hw/
+  766  ls
+  767  cd verilog/
+  768  ls
+  769  grep mult *
+  770  gvim cpu_ex.v 
+  771  exit
+  772  sudo apt-get update
+  773  exit
+  774  cd Downloads/PLP/progressive-learning-platform-5.2/reference/sw/PLPTool
+  775  java -jar PLPToolStatic.jar -a ~rahul/Desktop/final.asm out
+  776  sudo aptitude purge librxtx-java
+  777  sudo apt-get purge librxtx-java
+  778  sudo apt-get install librxtx-java
+  779  java -jar PLPToolStatic.jar 
+  780  exit
+  781  cd -
+  782  cd Downloads/PLP/progressive-learning-platform-5.2/reference/sw/PLPTool
+  783  java -jar PLPToolStatic.jar 
+  784  java --v
+  785  java -version
+  786  exit
+  787  sudo apt-get update
+  788  ls
+  789  exit
+  790  ls
+  791  cd spimsimulator-code-690/
+  792  ls
+  793  cd spim/
+  794  ls
+  795  make
+  796  exit
+  797  sudo apt-get update
+  798  e
+  799  cd Downloads/
+  800  ls
+  801  cd mips_vga/
+  802  ls
+  803  gvim cpu.txt
+  804  gvim controller.sv 
+  805  gvim memIo.sv 
+  806  gvim bmem.txt 
+  807  gvim bitmapmem.sv 
+  808  cp cpu.txt ~rahul/Desktop/
+  809  exit
+  810  cd Downloads/
+  811  ls
+  812  cd mips_vga/
+  813  ls
+  814  gnome-open .
+  815  cd ../.../
+  816  exit
+  817  cd Downloads/PLP/progressive-learning-platform-5.2/
+  818  ls
+  819  cd reference/sw/
+  820  ls
+  821  cd PLPTool
+  822  java -jar PLPToolStatic.jar -a ~rahul/Desktop/final.asm out
+  823  sudo apt-get update
+  824  java -jar PLPToolStatic.jar -a ~rahul/Desktop/final.asm out
+  825  cd ../../hw/
+  826  ls
+  827  cd verilog/
+  828  ls
+  829  gvim cpu_ex.v 
+  830  cd -
+  831  cd ../sw/PLPTool
+  832  java -jar PLPToolStatic.jar -a ~rahul/Desktop/final.asm out
+  833  ls
+  834  java -jar PLPToolStatic.jar -a ~rahul/Desktop/final.asm out
+  835  exit
+  836  cd ../../
+  837  ls
+  838  cd ../
+  839  ls
+  840  cd misc/
+  841  ls
+  842  gnome-open quick_reference.pdf 
+  843  cd ../
+  844  exit
+  845  sudo apt-get update
+  846  exit
+  847  sudo apt-get update
+  848  e
+  849  sudo apt-get update
+  850  exit
+  851  sudo apt-get update
+  852  exit
+  853  sudo apt-get update
+  854  exit
+  855  sudo apt-get install vlc
+  856  exit
+  857  sudo apt-add-repository ppa:strukturag/libde265 
+  858  sudo apt-get update
+  859  sudo apt-get install vlc-plugin-libde265
+  860  exit
+  861  ls
+  862  which vsim
+  863  mkdir verilog
+  864  cd verilog/
+  865  ls
+  866  mkdir simple_fp_adder
+  867  cd simple_fp_adder/
+  868  gvim simple_fp_adder.v
+  869  ls
+  870  mkdir verilog
+  871  mv simple_fp_adder.v verilog/
+  872  ls
+  873  mkdir tb
+  874  ls
+  875  cd ../
+  876  ls
+  877  mkdir simple_floating_int_converter
+  878  ls
+  879  cd simple_floating_int_converter/
+  880  ls
+  881  cd ../
+  882  mv simple_floating_int_converter simple_fp_int_converter
+  883  ls
+  884  cd simple_fp_int_converter/
+  885  ls
+  886  mkdir verilog
+  887  mkdir tb
+  888  cd verilog/
+  889  gvim simple_fp_int_conv.v
+  890  cd ../../simple_fp_adder/
+  891  cd verilog/
+  892  vlog work
+  893  vlib work
+  894  ls
+  895  vlib simple_fp_adder.v 
+  896  vlib -f simple_fp_adder.v 
+  897  vlib -help
+  898  vcom simple_fp_adder.v 
+  899  gvim simple_fp_adder.v 
+  900  vcom simple_fp_adder.v 
+  901  cd ../../
+  902  ls
+  903  cd ..
+  904  ls
+  905  cd Downloads/
+  906  ls
+  907  cd mips_vga/
+  908  ls
+  909  gvim compile.log 
+  910  gvim keyboard.sv 
+  911  vlog -f ls.out 
+  912  vlog keyboard.sv 
+  913  cd ../
+  914  ls
+  915  cd verilog/
+  916  ls
+  917  cd simple_fp_adder/
+  918  ls
+  919  cd verilog/
+  920  ls
+  921  vlog simple_fp_adder.v 
+  922  cd ../../simple_fp_int_converter/
+  923  cd verilog/
+  924  ls
+  925  vlib work
+  926  ls
+  927  vlog simple_fp_int_conv.v 
+  928  vism -c 
+  929  vsim -c
+  930  vsim -c fp_int_conv
+  931  exit
+  932  sudo apt-get update
+  933  exit
+  934  ls
+  935  cd iverilog
+  936  mkdir iverilog
+  937  cd iverilog/
+  938  git clone https://github.com/steveicarus/iverilog.git
+  939  sudo apt-get install git
+  940  git config --global user.name raulbehl
+  941  git config --global user.email raulbehl@gmail.com
+  942  git clone https://github.com/steveicarus/iverilog.git
+  943  ls
+  944  cd iverilog/
+  945  git checkout --track -b v10-branch origin/v10-branch
+  946  git pull
+  947  sh autoconf.sh 
+  948  sudo apt-get install gperf
+  949  sh autoconf.sh 
+  950  which iverilof
+  951  which iverilog
+  952  iverilog
+  953  ./configure 
+  954  sudo apt-get install bison
+  955  sudo apt-get install flex
+  956  ./configure 
+  957  make 
+  958  sudo make install
+  959  which iverilog
+  960  cd ../../
+  961  cd verilog/
+  962  ls
+  963  cd simple_fp_adder/
+  964  ls
+  965  cd verilog/
+  966  ls
+  967  iverilog simple_fp_adder.v 
+  968  ls
+  969  gvim a.out 
+  970  ./a.out 
+  971  rm -rf ./a.out 
+  972  history | tee h.out

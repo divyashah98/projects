@@ -1,0 +1,14 @@
+# ERROR: No extended dataflow license exists
+# vsim pwm_tb 
+# Loading work.pwm_tb
+# Loading work.pwm
+# Loading work.prog_sqr_wav_gen
+add wave -position insertpoint  \
+sim:/pwm_tb/f1/clk \
+sim:/pwm_tb/f1/n \
+sim:/pwm_tb/f1/off \
+sim:/pwm_tb/f1/on \
+sim:/pwm_tb/f1/pwm \
+sim:/pwm_tb/f1/reset
+run -all
+# Break in Module pwm_tb at tb/pwm_tb.v line 59

@@ -1,0 +1,44 @@
+# vsim -c fifo_tb 
+# Loading work.fifo_tb
+# Loading work.fifo
+# Time:                   0	CLK:1	reset:1	Read:0	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  10	CLK:0	reset:0	Read:0	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  20	CLK:1	reset:0	Read:0	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  30	CLK:0	reset:0	Read:0	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  40	CLK:1	reset:0	Read:0	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  50	CLK:0	reset:0	Read:1	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  60	CLK:1	reset:0	Read:1	Write:0	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                  70	CLK:0	reset:0	Read:0	Write:1	WriteData:deadbeef	ReadData:xxxxxxxx
+# Time:                  80	CLK:1	reset:0	Read:0	Write:1	WriteData:deadbeef	ReadData:deadbeef
+# Time:                  90	CLK:0	reset:0	Read:1	Write:1	WriteData:12345678	ReadData:deadbeef
+# Time:                 100	CLK:1	reset:0	Read:1	Write:1	WriteData:12345678	ReadData:12345678
+# Time:                 110	CLK:0	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:12345678
+# Time:                 120	CLK:1	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 130	CLK:0	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 140	CLK:1	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 150	CLK:0	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 160	CLK:1	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 170	CLK:0	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 180	CLK:1	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 190	CLK:0	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 200	CLK:1	reset:0	Read:1	Write:0	WriteData:edcba987	ReadData:xxxxxxxx
+# Time:                 210	CLK:0	reset:0	Read:0	Write:1	WriteData:00000000	ReadData:xxxxxxxx
+# Time:                 220	CLK:1	reset:0	Read:0	Write:1	WriteData:00000000	ReadData:00000000
+# Time:                 230	CLK:0	reset:0	Read:0	Write:1	WriteData:00000001	ReadData:00000000
+# Time:                 240	CLK:1	reset:0	Read:0	Write:1	WriteData:00000001	ReadData:00000000
+# Time:                 250	CLK:0	reset:0	Read:0	Write:1	WriteData:00000002	ReadData:00000000
+# Time:                 260	CLK:1	reset:0	Read:0	Write:1	WriteData:00000002	ReadData:00000000
+# Time:                 270	CLK:0	reset:0	Read:0	Write:1	WriteData:00000003	ReadData:00000000
+# Time:                 280	CLK:1	reset:0	Read:0	Write:1	WriteData:00000003	ReadData:00000000
+# Time:                 290	CLK:0	reset:0	Read:0	Write:1	WriteData:00000004	ReadData:00000000
+# Time:                 300	CLK:1	reset:0	Read:0	Write:1	WriteData:00000004	ReadData:00000000
+# Time:                 310	CLK:0	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000000
+# Time:                 320	CLK:1	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000001
+# Time:                 330	CLK:0	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000001
+# Time:                 340	CLK:1	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000002
+# Time:                 350	CLK:0	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000002
+# Time:                 360	CLK:1	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000003
+# Time:                 370	CLK:0	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000003
+# Time:                 380	CLK:1	reset:0	Read:1	Write:0	WriteData:00000004	ReadData:00000004
+# Break in Module fifo_tb at tb/fifo_tb.v line 72
+# Stopped at tb/fifo_tb.v line 72 

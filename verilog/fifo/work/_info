@@ -1,0 +1,43 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/rahul/verilog/fifo
+vfifo
+!i10b 1
+!s100 Azf`K:bHV5fhH^c6DS6@C3
+IDzBn9C4>U;cQm`Z5f2FbU2
+Z1 VQC43380ZH1lla;>]CA[oJ3
+Z2 d/home/rahul/verilog/fifo
+w1474480945
+Z3 8verilog/fifo.v
+Z4 Fverilog/fifo.v
+L0 1
+Z5 OV;L;10.1e;51
+r1
+!s85 0
+31
+Z6 !s108 1474480958.946222
+Z7 !s107 tb/fifo_tb.v|verilog/fifo.v|
+Z8 !s90 verilog/fifo.v|tb/fifo_tb.v|
+!s101 -O0
+o-O0
+vfifo_tb
+!i10b 1
+Z9 !s100 dc:_gEH>R5@O=d=BK]FzD1
+Z10 Icz]fPLQSQi[V2JRfE5P`B2
+Z11 VE6FzO6X^BSHbEP>3A9AN]2
+R2
+Z12 w1474480703
+Z13 8tb/fifo_tb.v
+Z14 Ftb/fifo_tb.v
+L0 1
+R5
+r1
+!s85 0
+31
+R6
+R7
+R8
+!s101 -O0
+o-O0
