@@ -1,0 +1,145 @@
+The following C-code (gnome_sort.c) was taken as an example code and converted into MIPS assembly.
+The main logic behind the gnome-sort is given below - 
+// A function to sort the algorithm using gnome sort
+
+void gnome_sort(int arr[], int n) {
+    int i = 0;
+    while (i < n)
+    {
+        if (i == 0)
+            i++;
+        if (arr[i] >= arr[i-1])
+            i++;
+        else
+        {
+            swap(arr[i], arr[i-1]);
+            i--;
+        }
+    }
+    return;
+}
+
+The below text does an analysis of the above algorithm with respect to the 32-bit MIPS pipeline and 
+the data hazard/forwarding logic which might be used. Note, that the analysis is only for the algorithm
+and not for additional syscalls/print logic present in the code to test the functionality.
+The MIPS code of the above C implementation of the gnome sort is shown below - 
+gnome_sort:
+    addiu   $sp,    $sp,    -4
+    sw      $ra,    0($sp)          # store $ra into the stack
+	sll     $t1,    $t1,    2
+	li      $v0,    0    		    # int i = 0
+loop:
+	slt     $t3,    $v0,    $t1	    # if (i < n) => $t0 = 1
+	beq     $t3,    $zero,  end	    # while (i < n) {
+	bne     $v0,    $zero,  check	# if (i == 0)
+	addiu   $v0,    $v0,    4
+check:
+	addu    $t2,    $t0,    $v0     # $s2 = &arr[i]
+	lw      $t4,    -4($t2)	        # $t1 = arr[i-1]
+	lw      $t5,    0($t2)		    # $t2 = arr[i]
+	slt     $t3,	$t4,    $t5	    # if (arr[i-1] < arr[i]) => $t0 = 1
+    beq     $t3,    $zero,  swap
+	addiu   $v0,    $v0,    4	    # i = i++
+	j       loop
+swap:      	
+	sw      $t4,    0($t2)		    # swap (arr[i], arr[i-1])
+	sw      $t5,    -4($t2)
+	addiu   $v0,    $v0,    -4	    # i = i - 1
+	j       loop
+end:
+	srl     $t1,    $t1,    2
+    lw      $ra,    ($sp)           # copy from stack to $ra
+    addi    $sp,    $sp,    4       # increment stack pointer by 4
+    jr      $ra
+
+Analysis - 
+
+addiu   $sp,    $sp,    -4
+sw      $ra,    0($sp)          # store $ra into the stack
+sll     $t1,    $t1,    2
+
+The above three instructions (used to initialise the algorithm) won't stress the 
+pipeline much as there aren't any hazards involved therefore there won't be
+any forwarding as well.
+
+
+li      $v0,    0    		    # int i = 0
+slt     $t3,    $v0,    $t1	    # if (i < n) => $t0 = 1
+
+The above two instruction, we can notice the register dependence of $v0.
+The load immediate instruction loads 0 to $v0 which is then used as one of
+the source registers for the set if less than instruction. Thus, the pipeline
+forwarding logic would kick in for this scenario. The data would be avialable 
+to be forwarded in the execute stage only. Thus, the slt instruction would get
+the data forwarded from the execute stage to its decode stage and then proceed
+further. The above is an example of RAW (read after write) hazard.
+Pipeline diagram for those two instructions could be - 
+
+        
+------|-------|-------|-------|-------|-------|-----|
+li    |  IF   |  ID   |   EX  |  MEM  |  WR   |     |
+      |       |       |      \|       |       |     |
+slt   |  --   |  IF   |   ID  |\  EX   |   MEM |  WR | 
+------|-------|-------|-------|-------|-------|-----|
+
+There are not stalls seen as the data is forwarded from the
+EX stage of one instruction to the slt instruction ($v0)
+
+beq     $t3,    $zero,  end	    # while (i < n) {
+bne     $v0,    $zero,  check	# if (i == 0)
+
+
+
+Branches are quite important and should be handled carefully in the design. 
+The reason for this is that a taken branch breaks the sequential flow of the
+program and thus there might be some need for flushing the pipeline registers
+or even stalling the next generated program counter. In the above code we have
+two back to back branches with different end results. In the traditional MIPS
+pipeline a branch is resolved in the decode stage itself - and usually till then
+the instruction fetch is stalled for a cycle (in order to fetch from the correct
+PC target). Therefore the back to back branches in this case would stress the 
+stalling logic implemented in the piepline. There isn't any forwarding involved
+but if the branch is taken, there would be an updated PC which would then
+fetch instructions from the branch target. The below mentioned pipeline
+diagram could be used to give a better picture - 
+
+------|-------|-------|-------|-------|-------|-----|
+beq   |  IF   |  ID   |   --  |  ---  |  --   |     |
+      |       |       |       |       |       |     |
+bne   |  --   |stall  |   IF  |   ID  |   --  |  -- | 
+      |       |       |       |       |       |     |
+nxtPC |  --   |  --   |stall  |   ID  |   --  |  -- | 
+
+
+addu    $t2,    $t0,    $v0     # $s2 = &arr[i]
+lw      $t4,    -4($t2)	        # $t1 = arr[i-1]
+lw      $t5,    0($t2)		    # $t2 = arr[i]
+slt     $t3,	$t4,    $t5	    # if (arr[i-1] < arr[i]) => $t0 = 1
+
+------|-------|-------|-------|-------|-------|-----|-----|-----|
+addu  |  IF   |  ID   |   EX  |  MEM  |  WR   |     |     |     |-------|  Hazard logic detection and data forwarding allows no stalls
+      |       |       |       |       |       |     |     |     |       |  Data is forwarded from EX stage of ADDU to EX stage of LW
+lw    |  --   |  IF   |   ID  |   EX  |   MEM |  WR |     |     |-------| 
+      |       |       |       |       |       |     |     |     |
+lw    |  --   |  --   |   IF  |   ID  |   EX  | MEM | WR  |     |-------| Similar kind of forwarding is observed here. 
+      |       |       |       |       |       |     |     |     |       |
+slt   |  --   |  --   |   --  |   IF  |   ID  |  EX | MEM |  WR |-------|
+
+The above four instructions again involve the presence of RAW hazard but this time
+the hazard is seen for the next two instructions instead of one. The value in $t2
+register would be available in the EX stage of the pipeline and then it would needed
+to be forwarded to the decode stage for the first load instruction. The second instruction
+which would then be in Fetch stage would then proceed to the decode stage and get the data
+forwarded from the addu instruction now in the MEM stage to the decode stage for the second
+load. Clearly, if the forwarding logic isn't implemented for the instruction in MEM stage
+this would have lead to some stalls. Again the stl instruction following the second load
+involves a dependency on one of the source registers ($t5). There would again be a RAW hazard
+which would lead to a a forwarding of the value from EX stage to the decode stage of the pipeline.
+This would help the slt instruction make forward progres without any stalls. 
+Hence the above 4 instructions would stress 4 pipeline stages as well as the forwarding and hazard 
+detection logic for these stages.
+
+Those were the main forwarding paths and data hazards stressed by the pipeline. All the units 
+of the pipeline are stressed as well as the corresponding forwarding paths along with the 
+hazard detection logic for those paths.
+
