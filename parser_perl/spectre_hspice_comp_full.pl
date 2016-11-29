@@ -187,6 +187,7 @@ DONE:
     my $prev_output;
     my $prev_relx;
     if ($age_file_spectre and $age_file_hspice) {
+      print OUTPUT_H "\n\nComparing files adexl_spectre_ageing_eos.csv and adexl_hspice_ageing_eos.csv\n";
       foreach my $output (@output_spectre_0) {
           if ($i == 0) {
               $prev_output = $output;
@@ -216,6 +217,7 @@ DONE:
     $i = 0;
     my $prev_test;
     if ($out_file_spectre and $out_file_hspice) {
+      print OUTPUT_H "\n\nComparing files adexl_spectre.csv and adexl_hspice.csv\n";
       foreach my $test (@test_spectre_1) {
           if ($i == 0) {
               $prev_test = $test;
@@ -242,6 +244,7 @@ DONE:
     }
     $i = 0;
     if ($age_file_spectre and !$age_file_hspice) {
+      print OUTPUT_H "\n\nResults from adexl_spectre_ageing_eos.csv file, adexl_hspice_ageing_eos.csv does not exist\n";
       foreach my $output (@output_spectre_0) {
           if ($i == 0) {
               $prev_output = $output;
@@ -270,6 +273,7 @@ DONE:
     }
     $i = 0;
     if ($out_file_spectre and !$out_file_hspice) {
+      print OUTPUT_H "\n\nResults from adexl_spectre.csv file, adexl_hspice.csv does not exist\n";
       foreach my $test (@test_spectre_1) {
           if ($i == 0) {
               $prev_test = $test;
@@ -296,6 +300,7 @@ DONE:
     }
     $i = 0;
     if (!$age_file_spectre and $age_file_hspice) {
+      print OUTPUT_H "\n\nResults from adexl_hspice_ageing_eos.csv file, adexl_spectre_ageing_eos.csv does not exist\n";
       foreach my $output (@output_hspice_0) {
           if ($i == 0) {
               $prev_output = $output;
@@ -324,6 +329,7 @@ DONE:
     }
     $i = 0;
     if (!$out_file_spectre and $out_file_hspice) {
+      print OUTPUT_H "\n\nResults from adexl_hspice.csv file, adexl_spectre.csv does not exist\n";
       foreach my $test (@test_hspice_1) {
           if ($i == 0) {
               $prev_test = $test;

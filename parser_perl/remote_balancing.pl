@@ -112,14 +112,14 @@ STD_DEV:
         my $agents_to_move = int ($agents_count[0] - $agents_count[$num_rtems - 1])/2;
         my $i = 0;
         for ($i = 0; $i < $agents_to_move; $i++) {
-            &reconfig_win ($ip_rtems[0][$i], $ip_rtems[$num_rtems-1][$i]) if ($os_rtems[0][$i] =~ /WIN/);
-            &reconfig_aix ($ip_rtems[0][$i], $ip_rtems[$num_rtems-1][$i]) if ($os_rtems[0][$i] =~ /AIX/ or $os_rtems[0][$i] =~ /Linux/);
+            &reconfig_win ($ip_rtems[0][$i], $label_rtems[0][$i]) if ($os_rtems[0][$i] =~ /WIN/);
+            &reconfig_aix ($ip_rtems[0][$i], $label_rtems[0][$i]) if ($os_rtems[0][$i] =~ /AIX/ or $os_rtems[0][$i] =~ /Linux/);
             $agents_count[0]--;
             $agents_count[$num_rtems - 1]++;
             push (@{$label_rtems[$num_rtems-1]},$label_rtems[0][$i]); 
-            push (@{$ip_rtems[$num_rtems - 1]}, $ip_rtems[0][$j]); 
-            push (@{$os_rtems[$num_rtems - 1]}, $os_rtems[0][$j]); 
-            push (@{$status_rtems[$num_rtems - 1]}, $status_rtems[0][$j]); 
+            push (@{$ip_rtems[$num_rtems - 1]}, $ip_rtems[0][$i]); 
+            push (@{$os_rtems[$num_rtems - 1]}, $os_rtems[0][$i]); 
+            push (@{$status_rtems[$num_rtems - 1]}, $status_rtems[0][$i]); 
             sleep (60);
         }
         @agents_count = &bubble_sort (@agents_count);
@@ -163,12 +163,16 @@ sub bubble_sort {
 
 sub reconfig_win {
     my $rtems_ip = $_[0];
-    my $backup_rtems_ip = $_[1];
-    system ("tacmd setagentconnection -n agentlabel:NT -a -p PROTOCOL1=IP.SPIPE IP_SPIPE_PORT=3660 SERVER=rtems_ip BPROTOCOL1=IP.SPIPE BIP_SPIPE_PORT=3660 BSERVER=backup_rtems_ip");
+    my $rtems_label = $_[1];
+    my @tmp_arr = split /_/, $rtems_label;
+    $rtems_label = $tmp_arr[1];
+    system ("tacmd setagentconnection -n $rtems_ip:NT -a -p PROTOCOL1=IP.SPIPE IP_SPIPE_PORT=3660 SERVER=$rtems_label BPROTOCOL1=IP.SPIPE BIP_SPIPE_PORT=3660 BSERVER=NO");
 }
 
 sub reconfig_aix {
     my $rtems_ip = $_[0];
-    my $backup_rtems_ip = $_[1];
-    system ("tacmd setagentconnection -n agentlabel:LZ -a -p SERVER=rtems_ip  BSERVER=backup_rtems_ip");
+    my $rtems_label = $_[1];
+    my @tmp_arr = split /_/, $rtems_label;
+    $rtems_label = $tmp_arr[1];
+    system ("tacmd setagentconnection -n $rtems_ip:LZ -a -p SERVER=$rtems_label BSERVER=NO");
 }
