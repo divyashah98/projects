@@ -4,6 +4,17 @@ use warnings;
 
 my $report_mode = 0; # 0 - Comparison mode 1 - Full log copy mode
 $report_mode = $ARGV[0] if (defined($ARGV[0]));
+
+# Any parameters not the compared
+# Set the corresponding variable to 0
+# NOTE:This works only when 
+# $report_mode = 0 not when full copy
+# mode is selected
+my $compare_delay       = 1;
+my $compare_fall_time   = 1;
+my $compare_rise_time   = 1;
+
+# Variables used by the script
 my $simulation_complete = 0;
 my $spectre_res = 0;    # 0 - terminated 1 - completed
 my $hspice_res = 0;     # 0 - terminated 1 - completed
@@ -105,10 +116,21 @@ DONE:
                 while (my $line=<SPECTRE_H>) {
                     if ($line =~ /,/ and $i != 0 and $line !~ /out_b/ and $line !~ /enable_b/) {
                         my @tmp_arr = split /,/, $line;
-                        $test_spectre_1[$j]     = $tmp_arr[0];
-                        $output_spectre_1[$j]   = $tmp_arr[1];
-                        $nominal_spectre[$j]  = $tmp_arr[2];
-                        $j++;
+                        if (($compare_delay     and ($line =~ /Delay/i))      or 
+                            ($compare_fall_time and ($line =~ /FallTime/i))   or 
+                            ($compare_rise_time and ($line =~ /RiseTime/i))
+                        ) {
+                            $test_spectre_1[$j]     = $tmp_arr[0];
+                            $output_spectre_1[$j]   = $tmp_arr[1];
+                            $nominal_spectre[$j]    = $tmp_arr[2];
+                            $j++;
+                        }
+                        else {
+                            $test_spectre_1[$j]     = $tmp_arr[0];
+                            $output_spectre_1[$j]   = $tmp_arr[1];
+                            $nominal_spectre[$j]    = "------";
+                            $j++;
+                        }
                     }
                     $i++;
                 }
@@ -163,17 +185,28 @@ DONE:
                 while (my $line=<HSPICE_H>) {
                     if ($line =~ /,/ and $i != 0 and $line !~ /out_b/ and $line !~ /enable_b/) {
                         my @tmp_arr = split /,/, $line;
-                        $test_hspice_1[$j]     = $tmp_arr[0];
-                        $output_hspice_1[$j]   = $tmp_arr[1];
-                        $nominal_hspice[$j]    = $tmp_arr[2];
-                        $j++;
+                        if (($compare_delay     and ($line =~ /Delay/i))      or 
+                            ($compare_fall_time and ($line =~ /FallTime/i))   or 
+                            ($compare_rise_time and ($line =~ /RiseTime/i))
+                        ) {
+                            $test_hspice_1[$j]     = $tmp_arr[0];
+                            $output_hspice_1[$j]   = $tmp_arr[1];
+                            $nominal_hspice[$j]    = $tmp_arr[2];
+                            $j++;
+                        }
+                        else {
+                            $test_hspice_1[$j]     = $tmp_arr[0];
+                            $output_hspice_1[$j]   = $tmp_arr[1];
+                            $nominal_hspice[$j]    = "------";
+                            $j++;
+                        }
                     }
                     $i++;
                 }
             }
             else {
                 print OUTPUT_H "\n\nadexl_hspice.csv file -\n";
-                while (my $line=<SPECTRE_H>) {
+                while (my $line=<HSPICE_H>) {
                     print OUTPUT_H "$line";
                 }
             }
@@ -182,179 +215,211 @@ DONE:
             print OUTPUT_H "\n\nadexl_hspice.csv file not found @ $ENV{'WARD'}/adexl_hspice.csv\n";
         }
     }
-    print OUTPUT_H "\nComparison of different output values - \n";
-    my $i = 0;
-    my $prev_output;
-    my $prev_relx;
-    if ($age_file_spectre and $age_file_hspice) {
-      print OUTPUT_H "\n\nComparing files adexl_spectre_ageing_eos.csv and adexl_hspice_ageing_eos.csv\n";
-      foreach my $output (@output_spectre_0) {
-          if ($i == 0) {
+    if ($report_mode == 0) {
+        print OUTPUT_H "\nComparison of different output values:\n";
+        my $i = 0;
+        my $prev_output;
+        my $prev_relx;
+        if ($age_file_spectre and $age_file_hspice) {
+          print OUTPUT_H "\n\nComparing files adexl_spectre_ageing_eos.csv and adexl_hspice_ageing_eos.csv:\n";
+          foreach my $output (@output_spectre_0) {
+              if ($i == 0) {
+                  $prev_output = $output;
+                  $prev_relx = $relx_spectre[$i];
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                    print OUTPUT_H "\n\n";
+                    &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
+                    &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
+                                  $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
+                                  $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
+                                  $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+                  }
+              }
+              elsif (($prev_output eq $output) and ($prev_relx eq $relx_spectre[$i])) {
+              }
+              else {
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                    print OUTPUT_H "\n\n";
+                    &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
+                    &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
+                                  $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
+                                  $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
+                                  $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+                  }
+              }
               $prev_output = $output;
               $prev_relx = $relx_spectre[$i];
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
-              &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
-                            $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
-                            $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
-                            $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+              $i++;
           }
-          elsif (($prev_output eq $output) and ($prev_relx eq $relx_spectre[$i])) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
-              &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
-                            $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
-                            $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
-                            $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
-          }
-          $prev_output = $output;
-          $prev_relx = $relx_spectre[$i];
-          $i++;
-      }
-    }
-    $i = 0;
-    my $prev_test;
-    if ($out_file_spectre and $out_file_hspice) {
-      print OUTPUT_H "\n\nComparing files adexl_spectre.csv and adexl_hspice.csv\n";
-      foreach my $test (@test_spectre_1) {
-          if ($i == 0) {
+        }
+        $i = 0;
+        my $prev_test;
+        if ($out_file_spectre and $out_file_hspice) {
+          print OUTPUT_H "\n\nComparing files adexl_spectre.csv and adexl_hspice.csv:\n";
+          foreach my $test (@test_spectre_1) {
+              if ($i == 0) {
+                  $prev_test = $test;
+                  print OUTPUT_H "\n\n";
+                  &print_table ($test_spectre_1[$i], "OUTPUT", 1);
+                  &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
+                                $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
+                                $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
+                                $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]);
+              }
+              elsif (($prev_test eq $test)) {
+              }
+              else {
+                  print OUTPUT_H "\n\n";
+                  &print_table ($output_spectre_1[$i], "OUTPUT", 1);
+                  &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
+                                $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
+                                $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
+                                $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]);
+              }
               $prev_test = $test;
-              print OUTPUT_H "\n\n";
-              &print_table ($test_spectre_1[$i], "OUTPUT", 1);
-              &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
-                            $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
-                            $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
-                            $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]) if (($output_spectre_1[$i] !~ /out_b/));
+              $i++;
           }
-          elsif (($prev_test eq $test)) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_1[$i], "OUTPUT", 1);
-              &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
-                            $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
-                            $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
-                            $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]);
-          }
-          $prev_test = $test;
-          $i++;
-      }
-    }
-    $i = 0;
-    if ($age_file_spectre and !$age_file_hspice) {
-      print OUTPUT_H "\n\nResults from adexl_spectre_ageing_eos.csv file, adexl_hspice_ageing_eos.csv does not exist\n";
-      foreach my $output (@output_spectre_0) {
-          if ($i == 0) {
+        }
+        $i = 0;
+        if ($age_file_spectre and !$age_file_hspice) {
+          print OUTPUT_H "\n\nResults from adexl_spectre_ageing_eos.csv file, adexl_hspice_ageing_eos.csv does not exist.\n";
+          foreach my $output (@output_spectre_0) {
+              if ($i == 0) {
+                  $prev_output = $output;
+                  $prev_relx = $relx_spectre[$i];
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                    print OUTPUT_H "\n\n";
+                    &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
+                    &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
+                                  "----", "----", "----",
+                                  $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
+                                  "----", "----", "----");
+                  }
+              }
+              elsif (($prev_output eq $output) and ($prev_relx eq $relx_spectre[$i])) {
+              }
+              else {
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                      print OUTPUT_H "\n\n";
+                      &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
+                      &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
+                                    "----", "----", "----",
+                                    $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
+                                    "----", "----", "----");
+                  }
+              }
               $prev_output = $output;
               $prev_relx = $relx_spectre[$i];
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
-              &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
-                            "----", "----", "----",
-                            $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
-                            "----", "----", "----");
+              $i++;
           }
-          elsif (($prev_output eq $output) and ($prev_relx eq $relx_spectre[$i])) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_0[$i], $relx_spectre[$i], 1);
-              &print_table ($age_spectre[$i], $age_spectre[$i+1], 0, $age_spectre[$i + 2], 
-                            "----", "----", "----",
-                            $std_dev_spectre[$i],  $std_dev_spectre[$i+1],  $std_dev_spectre[$i + 2],
-                            "----", "----", "----");
-          }
-          $prev_output = $output;
-          $prev_relx = $relx_spectre[$i];
-          $i++;
-      }
-    }
-    $i = 0;
-    if ($out_file_spectre and !$out_file_hspice) {
-      print OUTPUT_H "\n\nResults from adexl_spectre.csv file, adexl_hspice.csv does not exist\n";
-      foreach my $test (@test_spectre_1) {
-          if ($i == 0) {
+        }
+        $i = 0;
+        if ($out_file_spectre and !$out_file_hspice) {
+          print OUTPUT_H "\n\nResults from adexl_spectre.csv file, adexl_hspice.csv does not exist\n";
+          foreach my $test (@test_spectre_1) {
+              if ($i == 0) {
+                  $prev_test = $test;
+                  print OUTPUT_H "\n\n";
+                  &print_table ($test_spectre_1[$i], "OUTPUT", 1);
+                  &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
+                                "----", "----", "----",
+                                $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
+                                "----", "----", "----");
+              }
+              elsif (($prev_test eq $test)) {
+              }
+              else {
+                  print OUTPUT_H "\n\n";
+                  &print_table ($output_spectre_1[$i], "OUTPUT", 1);
+                  &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
+                                "----", "----", "----",
+                                $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
+                                "----", "----", "----");
+              }
               $prev_test = $test;
-              print OUTPUT_H "\n\n";
-              &print_table ($test_spectre_1[$i], "OUTPUT", 1);
-              &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
-                            "----", "----", "----",
-                            $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
-                            "----", "----", "----");
+              $i++;
           }
-          elsif (($prev_test eq $test)) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_spectre_1[$i], "OUTPUT", 1);
-              &print_table ($output_spectre_1[$i], $output_spectre_1[$i+1], 2, $output_spectre_1[$i + 2], 
-                            "----", "----", "----",
-                            $nominal_spectre[$i], $nominal_spectre[$i+1], $nominal_spectre[$i + 2],
-                            "----", "----", "----");
-          }
-          $prev_test = $test;
-          $i++;
-      }
-    }
-    $i = 0;
-    if (!$age_file_spectre and $age_file_hspice) {
-      print OUTPUT_H "\n\nResults from adexl_hspice_ageing_eos.csv file, adexl_spectre_ageing_eos.csv does not exist\n";
-      foreach my $output (@output_hspice_0) {
-          if ($i == 0) {
+        }
+        $i = 0;
+        if (!$age_file_spectre and $age_file_hspice) {
+          print OUTPUT_H "\n\nResults from adexl_hspice_ageing_eos.csv file, adexl_spectre_ageing_eos.csv does not exist\n";
+          foreach my $output (@output_hspice_0) {
+              if ($i == 0) {
+                  $prev_output = $output;
+                  $prev_relx = $relx_hspice[$i];
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                      print OUTPUT_H "\n\n";
+                      &print_table ($output_hspice_0[$i], $relx_hspice[$i], 1);
+                      &print_table ("----", "----", 0, "----", 
+                                    $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
+                                    "----", "----", "----",
+                                    $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+                  }
+              }
+              elsif (($prev_output eq $output) and ($prev_relx eq $relx_hspice[$i])) {
+              }
+              else {
+                  if (($compare_delay     and ($output =~ /Delay/i))      or 
+                      ($compare_fall_time and ($output =~ /FallTime/i))   or 
+                      ($compare_rise_time and ($output =~ /RiseTime/i))
+                  ) {
+                      print OUTPUT_H "\n\n";
+                      &print_table ($output_hspice_0[$i], $relx_hspice[$i], 1);
+                      &print_table ("----", "----", 0, "----", 
+                                    $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
+                                    "----", "----", "----",
+                                    $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+                  }
+              }
               $prev_output = $output;
               $prev_relx = $relx_hspice[$i];
-              print OUTPUT_H "\n\n";
-              &print_table ($output_hspice_0[$i], $relx_hspice[$i], 1);
-              &print_table ("----", "----", 0, "----", 
-                            $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
-                            "----", "----", "----",
-                            $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
+              $i++;
           }
-          elsif (($prev_output eq $output) and ($prev_relx eq $relx_hspice[$i])) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_hspice_0[$i], $relx_hspice[$i], 1);
-              &print_table ("----", "----", 0, "----", 
-                            $age_hspice[$i],  $age_hspice[$i+1],  $age_hspice[$i + 2],
-                            "----", "----", "----",
-                            $std_dev_hspice[$i],  $std_dev_hspice[$i+1],  $std_dev_hspice[$i + 2]);
-          }
-          $prev_output = $output;
-          $prev_relx = $relx_hspice[$i];
-          $i++;
-      }
-    }
-    $i = 0;
-    if (!$out_file_spectre and $out_file_hspice) {
-      print OUTPUT_H "\n\nResults from adexl_hspice.csv file, adexl_spectre.csv does not exist\n";
-      foreach my $test (@test_hspice_1) {
-          if ($i == 0) {
+        }
+        $i = 0;
+        if (!$out_file_spectre and $out_file_hspice) {
+          print OUTPUT_H "\n\nResults from adexl_hspice.csv file, adexl_spectre.csv does not exist\n";
+          foreach my $test (@test_hspice_1) {
+              if ($i == 0) {
+                  $prev_test = $test;
+                  print OUTPUT_H "\n\n";
+                  &print_table ($test_hspice_1[$i], "OUTPUT", 1);
+                  &print_table (
+                                "----", "----", 2, "----",
+                                $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
+                                "----", "----", "----",
+                                $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]) if (($output_hspice_1[$i] !~ /out_b/));
+              }
+              elsif (($prev_test eq $test)) {
+              }
+              else {
+                  print OUTPUT_H "\n\n";
+                  &print_table ($output_hspice_1[$i], "OUTPUT", 1);
+                  &print_table (
+                                "----", "----", 2, "----",
+                                $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
+                                "----", "----", "----",
+                                $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]);
+              }
               $prev_test = $test;
-              print OUTPUT_H "\n\n";
-              &print_table ($test_hspice_1[$i], "OUTPUT", 1);
-              &print_table (
-                            "----", "----", 2, "----",
-                            $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
-                            "----", "----", "----",
-                            $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]) if (($output_hspice_1[$i] !~ /out_b/));
+              $i++;
           }
-          elsif (($prev_test eq $test)) {
-          }
-          else {
-              print OUTPUT_H "\n\n";
-              &print_table ($output_hspice_1[$i], "OUTPUT", 1);
-              &print_table (
-                            "----", "----", 2, "----",
-                            $output_hspice_1[$i],  $output_hspice_1[$i+1],  $output_hspice_1[$i + 2],
-                            "----", "----", "----",
-                            $nominal_hspice[$i],  $nominal_hspice[$i+1],  $nominal_hspice[$i + 2]);
-          }
-          $prev_test = $test;
-          $i++;
-      }
+        }
     }
 }
 
