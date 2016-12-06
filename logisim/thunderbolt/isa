@@ -1,0 +1,149 @@
+ The ISA:
+
+Memory is 4096 16-bit words and is word addressed (i.e., each 16-bit word has an address, not each 8-bit byte). 
+There is a 16-bit register named ACCUM, a 12-bit register named INDEX, a 2-bit register named CC, and a 12-bit register named PC (the program counter). 
+ACCUM, INDEX, and PC are initially 0. CC is initially 2. All instructions are 16 bits in one of the two formats:
+
+A format
+
+Bits 15-13 = op code
+
+Bits 12 = index bit
+
+Bits 11-0 = an immediate value
+
+3 1 12
+
++---+-+------------+
+
+| op|i| imm |
+
++---+-+------------+
+
+B format
+
+Bits 15-13 = op code
+
+Bits 12-10 = a condition
+
+Bits 9-0 = a distance
+
+3 3 10
+
++---+---+---------+
+
+| op|cnd| dist |
+
++---+---+---------+
+
+In the descriptions below for A format instructions, "EA" refers to an unsigned 12-bit effective (memory) address, computed as follows: 
+if i=0, the EA is "imm"; if i=1, the EA is the sum of "imm" (2's complement) and the contents of the INDEX register (2's complement). 
+The EA, although computed as a 2's complement number, is treated as unsigned when accessing memory (i.e., a negative value will be interpreted to be a large positive value).
+
+In the descriptions below for the B format instructions, "TA" refers to an unsigned 12-bit branch target address, computed by sign extending "dist" to 12 bits 
+and adding it to the contents of the PC register (after the PC has been incremented). The TA, although computed as a 2's complement number, is treated as 
+unsigned when put into the PC.
+
+All A-format instructions except "st" set the CC register based on the value being put into either the ACCUM or INDEX register. If the value, 
+interpreted as a 2's complement value, is <0, CC is set to 1. If the value, interpreted as a 2's complement value, is =0, CC is set to 2. 
+If the value, interpreted as a 2's complement value, is >0, CC is set to 3.
+
+The instructions are:
+
+A format
+
+ld i,imm
+
+opcode = 0
+
+ACCUM = M[EA] , set CC as described above.
+
+ldi i,imm
+
+opcode = 1
+
+INDEX = lower 12 bits of M[EA] , set CC as described above.
+
+st i,imm
+
+opcode = 2
+
+M[EA] = ACCUM
+
+add i,imm
+
+opcode = 3
+
+ACCUM += M[EA] , set CC as described above.
+
+addi i,imm
+
+opcode = 4
+
+INDEX += lower 12 bits of M[EA] , set CC as described above.
+
+sub i,imm
+
+opcode = 5
+
+ACCUM -= M[EA] , set CC as described above.
+
+subi i,imm
+
+opcode = 6
+
+INDEX -= lower 12 bits of M[EA] , set CC as described above.
+
+B format
+
+halt
+
+opcode = 7, cnd = 0
+
+Stop execution (i.e., terminate the fetch/execute cycle).
+
+b dist (branch always)
+
+opcode = 7, cnd = 7
+
+If CC = 1, 2 or 3, PC = TA
+
+bz dist (branch zero)
+
+opcode = 7, cnd = 2
+
+If CC = 2, PC = TA
+
+bnz dist (branch not zero)
+
+opcode = 7, cnd = 5
+
+If CC = 1 or 3, PC = TA
+
+bn dist (branch negative, i.e., <0)
+
+opcode = 7, cnd = 4
+
+If CC = 1 , PC = TA
+
+bp dist (branch positive - i.e., >0)
+
+opcode = 7, cnd = 1
+
+If CC = 3 , PC = TA
+
+bnp dist (branch not positive - i.e, <=0)
+
+opcode = 7, cnd = 6
+
+If CC = 1 or 2 , PC = TA
+
+bnn dist (branch not negative - i.e., >=0)
+
+opcode = 7, cnd = 3
+
+If CC = 2 or 3 , PC = TA
+
+Based off the given information, the circuit should look something like the attached photo to start. You're welcome to build the circuit in any program you'd like, 
+but the final circuit should use pipe-lining to improve the cycle time. What I need from you is a picture of the circuit, the original file, and proof it'll properly 
+execute each instruction. If you have any questions let me know and I'll do my best to answer them. 
