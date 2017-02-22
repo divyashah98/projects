@@ -1,0 +1,7 @@
+ssh-add -D
+ssh-add ~/.ssh/id_rsa_rb
+ssh-add -l
+git config --global user.name "raulbehl"
+git config --global user.email raulbehl@gmail.com
+git config --global user.name
+git config --global user.email
