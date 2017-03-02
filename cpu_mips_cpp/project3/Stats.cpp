@@ -30,11 +30,18 @@ void Stats::clock(PIPESTAGE stage) {
 }
 
 void Stats::registerSrc(int rs, int rt) {
+  // Variable to maintain the count of
+  // bubbles to insert in the pipe
   int bubbles_to_insert;
   for(int i = EXE1; i < WB; i++) {
+    // Check if any of the current reg
+    // matches dest reg of the instr in flight
     if (((resultReg[i] == rs) && (rs != 0)) || 
         ((resultReg[i] == rt) && (rt != 0))
     ) {
+      // the number of bubbles would be equal
+      // to the value of WB - i where i gives
+      // us the current pipe stage
       bubbles_to_insert = WB - i;
       while (bubbles_to_insert>0) {
         bubble();
@@ -52,11 +59,15 @@ void Stats::registerDest(int r) {
 void Stats::flush(int count) { // count == how many ops to flush
   for (int i = 0; i < count; i++) {
     flushes++;
+    // Need to clock till IF1 stage
     clock(IF1);
   }
 }
 
 void Stats::bubble() {
   ++bubbles;
+  // Clock from EXE1 stage
+  // since the bubbles are resolved
+  // in the ID stage only
   clock (EXE1);
 }
