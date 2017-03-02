@@ -22,25 +22,20 @@ void CPU::run() {
   while(!stop) {
     instructions++;
 
-    fetch1();
-    fetch2();
+    stats.clock(IF1);
+    fetch();
     decode();
-    execute1();
-    execute2();
-    mem1();
-    mem2();
+    execute();
+    mem();
     writeback();
 
     D(printRegFile());
   }
 }
 
-void CPU::fetch1() {
+void CPU::fetch() {
   instr = iMem.loadWord(pc);
   pc = pc + 4;
-}
-
-void CPU::fetch2() {
 }
 
 /////////////////////////////////////////
@@ -145,39 +140,52 @@ void CPU::decode() {
         case 0x00: D(cout << "sll " << regNames[rd] << ", " << regNames[rs] << ", " << dec << shamt);
                    writeDest=true; // indicates that the alu result must be saved
                    aluOp = SHF_L; // set the shift left operation on the ALU
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (rs, REG_ZERO);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=shamt;  // set second operand on the alu to shift value
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x03: D(cout << "sra " << regNames[rd] << ", " << regNames[rs] << ", " << dec << shamt);
                    writeDest=true; // indicates that the alu result must be saved
                    aluOp = SHF_R; // set the shift right operation on the ALU
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (rs, REG_ZERO);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=shamt;  // set second operand on the alu to shift value
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x08: D(cout << "jr " << regNames[rs]);
                    writeDest = false;   // do not write alu result to a register
+                   stats.registerDest (REG_ZERO);
+                   stats.registerSrc (rs, REG_ZERO);
                    pc = regFile[rs];    // set the next pc location to the address in rs
+                   stats.flush(2);
                    break;
         case 0x10: D(cout << "mfhi " << regNames[rd]);
                    writeDest=true; // indicates that the alu result must be saved in a register
                    aluOp = ADD; // set the ADD operation on the ALU
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (REG_HILO, REG_ZERO);
                    aluSrc1=hi;  // set first operand on the alu to hi
                    aluSrc2=regFile[REG_ZERO]; // set second operand on the alu to zero
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x12: D(cout << "mflo " << regNames[rd]);
                    writeDest=true; // indicates that the alu result must be saved in a register
                    aluOp = ADD; // set the ADD operation on the ALU
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (REG_HILO, REG_ZERO);
                    aluSrc1=lo;  // set first operand on the alu to lo
                    aluSrc2=regFile[REG_ZERO]; // set second operand on the alu to zero
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x18: D(cout << "mult " << regNames[rs] << ", " << regNames[rt]);
                    writeDest=false; // indicates that the alu result should not be saved (it will be saved in lo,hi)
                    opIsMultDiv=true;    // set the flag to indicate that the operation will be a multiplication
                    aluOp = MUL; // set the ADD operation on the ALU
+                   stats.registerDest (REG_HILO);
+                   stats.registerSrc (rs, rt);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=regFile[rt];  // set second operand on the alu to rt
                    break;
@@ -185,81 +193,127 @@ void CPU::decode() {
                    writeDest=false; // indicates that the alu result should not be saved (it will be saved in lo,hi)
                    opIsMultDiv=true;    // set the flag to indicate that the operation will be a multiplication
                    aluOp = DIV; // set the ADD operation on the ALU
+                   stats.registerDest (REG_HILO);
+                   stats.registerSrc (rs, rt);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=regFile[rt];  // set second operand on the alu to rt
                    break;
         case 0x21: D(cout << "addu " << regNames[rd] << ", " << regNames[rs] << ", " << regNames[rt]);
                    writeDest=true; // indicates that the alu result must be saved in a register
                    aluOp = ADD; // set the ADD operation on the ALU
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (rs, rt);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=regFile[rt];  // set second operand on the alu to rt
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x23: D(cout << "subu " << regNames[rd] << ", " << regNames[rs] << ", " << regNames[rt]);
                    writeDest=true; // indicates that the alu result must be saved
                    aluOp = ADD; // use the ADD operation on the ALU since there is no sub
+                   destReg=rd;  // set destination register as rd
+                   stats.registerDest (destReg);
+                   stats.registerSrc (rs, rt);
                    aluSrc1=regFile[rs];  // set first operand on the alu to rs
                    aluSrc2=-regFile[rt];  // set second operand on the alu to -rt to make a substraction
-                   destReg=rd;  // set destination register as rd
                    break;
         case 0x2a: D(cout << "slt " << regNames[rd] << ", " << regNames[rs] << ", " << regNames[rt]);
                    writeDest=true; // indicates that the alu result must be saved in a register
                    aluOp = CMP_LT; // set the comparison operation on the ALU, the result is either 0 or 1
+                   destReg=rd;  // set destination register as rd so the comparison result is saved in it
+                   stats.registerDest (destReg);
+                   stats.registerSrc (rs, rt);
                    aluSrc1=regFile[rd];  // set first operand on the alu to rd
                    aluSrc2=regFile[rt];  // set second operand on the alu to rt
-                   destReg=rd;  // set destination register as rd so the comparison result is saved in it
                    break;
         default: cerr << "unimplemented instruction: pc = 0x" << hex << pc - 4 << endl;
       }
       break;
     case 0x02: D(cout << "j " << hex << ((pc & 0xf0000000) | addr << 2)); // P1: pc + 4
                writeDest = false;   // do not write registers
+               stats.registerDest (REG_ZERO);
+               stats.registerSrc (REG_ZERO, REG_ZERO);
                pc = (pc & 0xf0000000) | addr << 2; // save address field in pc to jump to the location
+               stats.flush(2);
                break;
     case 0x03: D(cout << "jal " << hex << ((pc & 0xf0000000) | addr << 2)); // P1: pc + 4
                writeDest = true; destReg = REG_RA; // writes PC+4 to $ra
                aluOp = ADD; // ALU should pass pc thru unchanged
                aluSrc1 = pc;
+               stats.registerDest (destReg);
+               stats.registerSrc (REG_ZERO, REG_ZERO);
                aluSrc2 = regFile[REG_ZERO]; // always reads zero
                pc = (pc & 0xf0000000) | addr << 2;
+               stats.flush(2);
                break;
     case 0x04: D(cout << "beq " << regNames[rs] << ", " << regNames[rt] << ", " << pc + (simm << 2));
-               if(regFile[rs]==regFile[rt]) // compare both register values for equality
+               stats.registerDest (REG_ZERO);
+               stats.registerSrc (rs, rt);
+               if(regFile[rs]==regFile[rt]) {// compare both register values for equality
                  pc=pc + (simm << 2);   // if the register contents are equal, jump to the immediate offset address
                                         // relative to the current value of pc
+                 stats.flush(2);
+                 stats.countTaken();
+               }
+               stats.countBranch();
                break;
     case 0x05: D(cout << "bne " << regNames[rs] << ", " << regNames[rt] << ", " << pc + (simm << 2));
-               if(regFile[rs]!=regFile[rt]) // compare both register values for inequality
+               stats.registerDest (REG_ZERO);
+               stats.registerSrc (rs, rt);
+               if(regFile[rs]!=regFile[rt]) {// compare both register values for inequality
                  pc=pc + (simm << 2);   // if the register contents are different, jump to the immediate offset address
                                         // relative to the current value of pc
+                 stats.flush(2);
+                 stats.countTaken();
+               }
+               stats.countBranch();
+               break;
+    case 0x08: D(cout << "addi " << regNames[rt] << ", " << regNames[rs] << ", " << dec << simm);
+               writeDest=true; // indicates that the alu result must be saved
+               aluOp = ADD; // set the ADD operation on the ALU
+               destReg=rt;  // set destination register as rt
+               stats.registerDest (destReg);
+               stats.registerSrc (rs, REG_ZERO);
+               aluSrc1=regFile[rs];  // set first operand on the alu to rs
+               aluSrc2=simm;  // set second operand on the alu to zero extended immediate
                break;
     case 0x09: D(cout << "addiu " << regNames[rt] << ", " << regNames[rs] << ", " << dec << simm);
                writeDest=true; // indicates that the alu result must be saved
                aluOp = ADD; // set the ADD operation on the ALU
+               destReg=rt;  // set destination register as rt
+               stats.registerDest (destReg);
+               stats.registerSrc (rs, REG_ZERO);
                aluSrc1=regFile[rs];  // set first operand on the alu to rs
                aluSrc2=simm;  // set second operand on the alu to zero extended immediate
-               destReg=rt;  // set destination register as rt
                break;
     case 0x0c: D(cout << "andi " << regNames[rt] << ", " << regNames[rs] << ", " << dec << uimm);
                writeDest=true; // indicates that the alu result must be saved
                aluOp = AND; // set the AND operation on the ALU
+               destReg=rt;  // set destination register as rd
+               stats.registerDest (destReg);
+               stats.registerSrc (rs, REG_ZERO);
                aluSrc1=regFile[rs];  // set first operand on the alu to rs
                aluSrc2=uimm;  // set second operand on the alu to zero extended immediate
-               destReg=rt;  // set destination register as rd
                break;
     case 0x0f: D(cout << "lui " << regNames[rt] << ", " << dec << simm);
                writeDest=true; // indicates that the alu result must be saved
                aluOp = SHF_L; // set the shift left operation on the ALU
+               destReg=rt;  // set destination register as rd
+               stats.registerDest (destReg);
+               stats.registerSrc (REG_ZERO, REG_ZERO);
                aluSrc1=simm;  // set first operand on the alu to simm
                aluSrc2=16;  // set second operand to 16 in order to shift the immediate value 16 times left
-               destReg=rt;  // set destination register as rd
                break;
     case 0x1a: D(cout << "trap " << hex << addr);
                switch(addr & 0xf) {
-                 case 0x0: cout << endl; break;
-                 case 0x1: cout << " " << (signed)regFile[rs];
+                 case 0x0: 
+                           cout << endl; 
+                           break;
+                 case 0x1: 
+                           cout << " " << (signed)regFile[rs];
+                           stats.registerSrc (rs, REG_ZERO);
                            break;
                  case 0x5: cout << endl << "? "; cin >> regFile[rt];
+                           stats.registerDest(rt);
                            break;
                  case 0xa: stop = true; break;
                  default: cerr << "unimplemented trap: pc = 0x" << hex << pc - 4 << endl;
@@ -270,17 +324,23 @@ void CPU::decode() {
                writeDest=true; // indicates that the alu result must be saved
                opIsLoad=true; // it's a load instruction so we set the flag to true
                aluOp = ADD; // set the ADD operation on the ALU to calculate the address
+               destReg=rt;  // set destination register as rt
+               stats.registerDest (destReg);
+               stats.registerSrc (rs, REG_ZERO);
                aluSrc1=regFile[rs];  // set first operand on the alu to rs
                aluSrc2=simm;  // set second operand on the alu to sign extended immediate
-               destReg=rt;  // set destination register as rt
+               stats.countMemOp();
                break;
     case 0x2b: D(cout << "sw " << regNames[rt] << ", " << dec << simm << "(" << regNames[rs] << ")");
                writeDest=false; // indicates that the alu result should not be saved
                opIsStore=true; // it's a store instruction so we set the flag to true
+               stats.registerDest (REG_ZERO);
+               stats.registerSrc (rs, rt);
                storeData = regFile[rt]; // data to store on memory will be the value in the register rt
                aluOp = ADD; // set the ADD operation on the ALU to calculate the address
                aluSrc1=regFile[rs];  // set first operand on the alu to rs
                aluSrc2=simm;  // set second operand on the alu to sign extended immediate
+               stats.countMemOp();
                break;
     default: cerr << "unimplemented instruction: pc = 0x" << hex << pc - 4 << endl;
                destReg=rt;  // set destination register as rd
@@ -289,14 +349,11 @@ void CPU::decode() {
   D(cout << endl);
 }
 
-void CPU::execute1() {
+void CPU::execute() {
   aluOut = alu.op(aluOp, aluSrc1, aluSrc2);
 }
 
-void CPU::execute2() {
-}
-
-void CPU::mem1() {
+void CPU::mem() {
   if(opIsLoad)
     writeData = dMem.loadWord(aluOut);
   else
@@ -304,9 +361,6 @@ void CPU::mem1() {
 
   if(opIsStore)
     dMem.storeWord(storeData, aluOut);
-}
-
-void CPU::mem2() {
 }
 
 void CPU::writeback() {
@@ -336,4 +390,17 @@ void CPU::printRegFile() {
 void CPU::printFinalStats() {
   cout << "Program finished at pc = 0x" << hex << pc << "  ("
        << dec << instructions << " instructions executed)" << endl;
+  cout << endl;
+  cout << "Cycles: "<< stats.getCycles()<<endl;
+  cout << "CPI: " << dec << (stats.getCycles()/instructions) << endl;
+  cout << endl;
+  cout << "Bubbles: " << stats.getBubbles() << endl;
+  cout << "Flushes: " << stats.getFlushes() << endl;
+  cout << endl;
+  cout << "Mem ops: "<< fixed << setprecision(1) << 
+           100.0 *  stats.getMemOps()/instructions << "%" << " of instructions"<< endl;
+  cout << "Branches: "<< fixed << setprecision(1) << 
+           100.0 *  stats.getBranches()/instructions << "%" << " of instructions"<< endl;
+  cout << " %" << " Taken: " << fixed << setprecision(1) << 
+           100.0 *  stats.getTaken()/stats.getBranches() << endl;
 }

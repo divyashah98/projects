@@ -22,11 +22,11 @@ class Stats {
   public:
     Stats();
 
-    void clock();
+    void clock(PIPESTAGE stage);
 
     void flush(int count);
 
-    void registerSrc(int r);
+    void registerSrc(int rs, int rt);
     void registerDest(int r);
 
     void countMemOp() { memops++; }

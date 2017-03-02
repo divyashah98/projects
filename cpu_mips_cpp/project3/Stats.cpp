@@ -18,25 +18,45 @@ Stats::Stats() {
   }
 }
 
-void Stats::clock() {
+void Stats::clock(PIPESTAGE stage) {
   cycles++;
 
   // run all pipeline flops
-  for(int i = WB; i > IF1; i--) {
+  for(int i = WB; i > stage; i--) {
     resultReg[i] = resultReg[i-1];
   }
   // inject no-op into IF1
-  resultReg[IF1] = -1;
+  resultReg[stage] = -1;
 }
 
-void Stats::registerSrc(int r) {
+void Stats::registerSrc(int rs, int rt) {
+  int bubbles_to_insert;
+  for(int i = EXE1; i < WB; i++) {
+    if (((resultReg[i] == rs) && (rs != 0)) || 
+        ((resultReg[i] == rt) && (rt != 0))
+    ) {
+      bubbles_to_insert = WB - i;
+      while (bubbles_to_insert>0) {
+        bubble();
+        bubbles_to_insert--;
+      }
+      break;
+    }
+  }
 }
 
 void Stats::registerDest(int r) {
+  resultReg[ID] = r;
 }
 
 void Stats::flush(int count) { // count == how many ops to flush
+  for (int i = 0; i < count; i++) {
+    flushes++;
+    clock(IF1);
+  }
 }
 
 void Stats::bubble() {
+  ++bubbles;
+  clock (EXE1);
 }
