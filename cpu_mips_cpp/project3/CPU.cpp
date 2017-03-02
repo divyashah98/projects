@@ -392,7 +392,7 @@ void CPU::printFinalStats() {
        << dec << instructions << " instructions executed)" << endl;
   cout << endl;
   cout << "Cycles: "<< stats.getCycles()<<endl;
-  cout << "CPI: " << dec << (stats.getCycles()/instructions) << endl;
+  cout << "CPI: " << fixed << setprecision(2) << (stats.getCycles()/static_cast<double>(instructions)) << endl;
   cout << endl;
   cout << "Bubbles: " << stats.getBubbles() << endl;
   cout << "Flushes: " << stats.getFlushes() << endl;
