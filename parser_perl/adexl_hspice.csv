@@ -1,0 +1,6 @@
+Test,Output,Nominal,Spec,Weight,Pass/Fail
+da_test_f756_sim_raj2:tb_ringosc:1,/out_b,,,,
+da_test_f756_sim_raj2:tb_ringosc:1,/enable_b,,,,
+da_test_f756_sim_raj2:tb_ringosc:1,Delay,34.48e-12,,,
+da_test_f756_sim_raj2:tb_ringosc:1,FallTime,2.013e-12,,,
+da_test_f756_sim_raj2:tb_ringosc:1,RiseTime,,,,

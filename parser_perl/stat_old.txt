@@ -1,0 +1,5 @@
+HOSTNAME: ABC
+Number of agents connected to REMOTE_usitmdl8101 -> 4
+Number of agents connected to REMOTE_usitmda801 -> 12
+Number of agents connected to REMOTE_usitmtl8098-itm2 -> 0
+Number of agents connected to REMOTE_usitmtl8098 -> 0

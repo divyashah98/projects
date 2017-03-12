@@ -1,0 +1,7 @@
+article.pdf,8,jordan
+Assignment S2016.docx,12,ebfox
+tutorial.ps,125,jordan
+article.pdf,9,jordan
+slides.pdf,35,Erik.S
+SMC In Practice,610,doucet
+review.pdf,89,jordan

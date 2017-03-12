@@ -1,0 +1,22 @@
+Hey, Sorry, I have one question there is command for reconfiguration: 
+system ("tacmd setagentconnection -n agentlabel:NT -a -p PROTOCOL1=IP.SPIPE IP_SPIPE_PORT=3660 SERVER=rtems_ip BPROTOCOL1=IP.SPIPE BIP_SPIPE_PORT=3660 BSERVER=backup_rtems_ip"); 
+in reconfig_win function we pass variables for both SERVER and BSERVER. 
+my $rtems_ip = $_[0]; 
+my $backup_rtems_ip = $_[1]; 
+But we need variable for agentlabel as well. agentlable should be an ipaddress of the agent from 
+the eplist file. it's the second column in the line. In fact, when you parse the eplist file you save that ipaddress of the agent for 
+push (@{$ip_rtems[$i]}, $ip_arr[$j]); 
+we need to put for agentlabel that ip of the agent. 
+in the meantime it's $rtems_ip in reconfig_win function. 
+for SERVER in reconfiguration command we need to put just the name of RTEMS from 5th column in line from eplist file. 
+
+Seems I explained in a bad manner the meaning of each column in eplist file. 
+for Backup RTEMS in reconfiguration command we can skip it. 
+it look like 
+system ("tacmd setagentconnection -n agentlabel:NT -a -p PROTOCOL1=IP.SPIPE IP_SPIPE_PORT=3660 SERVER=rtems_ip BPROTOCOL1=IP.SPIPE BIP_SPIPE_PORT=3660 BSERVER=NO");
+
+if we get variable for RTEMS from 5th row, we need to put in reconfiguration command for SERVER 
+variable the hostname of RTEMS without "RTEMS" e.g. we have a line in eplist file 
+uuc_ushpmqwss1g:IS;10.58.143.9;ushpmqwss1g;Win2008~6.1-SP1;REMOTE_usitmdl8101;IS;07.40.01;Y 
+not REMOTE_usitmdl8101. we need to split this and get usitmdl8101. also can be ip address, 
+but there is no sense to do it because all DNS resolves by HUBTEMS 
