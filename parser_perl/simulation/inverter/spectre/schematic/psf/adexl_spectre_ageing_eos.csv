@@ -1,0 +1,23 @@
+Output,History,Relx,Age,Test,Conditions,Std Dev,Spec,Pass/Fail
+
+Delay,Interactive.0,age,stress,ageing,,34.48p,,
+Delay,Interactive.0,age,fresh,ageing,,34.50p,,
+Delay,Interactive.0,age,10 yr,ageing,,34.51p,,
+Delay,Interactive.0,eos,stress,eos,,30.5p,,
+Delay,Interactive.0,eos,fresh,eos,,30.6p,,
+Delay,Interactive.0,eos,10 yr,eos,,30.7p,,
+
+FallTime,Interactive.0,age,stress,ageing,,25.1n,,
+FallTime,Interactive.0,age,fresh,ageing,,25.2n,,
+FallTime,Interactive.0,age,10 yr,ageing,,25.3n,,
+FallTime,Interactive.0,eos,stress,eos,,20.2n,,
+FallTime,Interactive.0,eos,fresh,eos,,20.3n,,
+FallTime,Interactive.0,eos,10 yr,eos,,20.3n,,
+
+RiseTime,Interactive.0,age,stress,ageing,,15.1p,,
+RiseTime,Interactive.0,age,fresh,ageing,,15.2p,,
+RiseTime,Interactive.0,age,10 yr,ageing,,15.3p,,
+RiseTime,Interactive.0,eos,stress,eos,,14.2p,,
+RiseTime,Interactive.0,eos,fresh,eos,,14.3p,,
+RiseTime,Interactive.0,eos,10 yr,eos,,15.4p,,
+

@@ -1,0 +1,78 @@
+Hello,
+1). I ran the script without 0 or 1. It created output as I wanted except ":" is missing at the end.
+=> FIXED
+
+2). When I ran with option 1, I got an error message:
+
+readline() on closed filehandle SPECTRE_H at ./perl/spectre_hspice_QA/spectre_hspice_comp_full_113016_2.pl line 177.
+
+Your line numer might be different as I changed the paths to files. But it is complaining about;
+
+else {
+print OUTPUT_H "\n\nadexl_hspice.csv file -\n";
+while (my $line=<SPECTRE_H>) {
+print OUTPUT_H "$line";
+}
+}
+=> Fixed
+
+Also, report didn't look right. It listed contents of first two csv files only and the last part of report file looked like this:
+
+adexl_hspice.csv file -
+
+Comparison of different output values -
+
+
+Comparing files adexl_spectre_ageing_eos.csv and adexl_hspice_ageing_eos.csv
+
+
+Comparing files adexl_spectre.csv and adexl_hspice.csv
+=> First part is not true. I tried the same script and it 
+reported all the four values. The additional input thing
+is fixed now. 
+
+3). Please add a ":" at end of each statement like:
+Comparison of different output values:
+Comparing files adexl_spectre_ageing_eos.csv and adexl_hspice_ageing_eos.csv:
+=> Fixed
+
+4). When a simulations didn't produce values of riseTime/fallTime/Delay in csv files, the perl script produced below error:
+Use of uninitialized value $param_3 in sprintf at spectre_hspice_comp_full_113016_2.pl line 394, <HSPICE_H> line 5.
+And the report files tables got messed up. The tables shouldn't have any values instead. I am attaching the csv file with no values of riseTime/fallTime/delay. The perl script should be looking for the numeric number next to riseTime/fallTime/Delay. This needs to be corrected.
+=> Input .csv file is not in the correct format. If the 
+format is changed the script won't work. Either the 
+file should be in correct format or the script needs to
+be updated (if this is the case then you need to tell me
+ALL the format at once). I haven't added this format yet
+as with the previous format if the values aren't produced
+script gives the expected output.
+
+
+5). Please run/test the perl script before providing me.
+=> I always do that. Since the first time I have sent 
+you the script. :)
+
+6) Please note that #4 also is an example of what I told you
+in the criteria..... "parameter values can easily be changed"
+. That means if I'm going to output FinalTime instead of rise
+Time, I can easily change the riseTime to FinalTime in the 
+script and it should compare the FinalTime parameter values 
+in the csv files and create the report file with table 
+comparing values of the FinalTime. I hope I made it clear.
+=> I have added the support in the script to control the 
+kind of output required. The required variables are added
+at the start of the script. Set any of them to zero to 
+disable comparison - 
+my $compare_delay       = 1;
+my $compare_fall_time   = 1;
+my $compare_rise_time   = 1;
+
+For the adexl_spectre_ageing_eos.csv/hspice files
+    The tables only for the selected (i.e falltime, risetime, delay)
+    would be printed. 
+For the adexl_spectre.csv/hspice files
+    The tables would remain the same.
+    But if the value is not to be compared it would contain
+    "----" instead of the actual value.
+
+I have tested the script and it seems to be working. 

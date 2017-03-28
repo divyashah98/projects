@@ -1,0 +1,82 @@
+Here is the final spec.
+Attached are 4 .csv output files. The .mt0 files are replaced by .csv files.
+
+1. Now using .csv files instead of .mt0
+(Note: for better viewing, you can use "gnumeric filename.csv" linux command)
+2. Perl script should have capability to change parameter names and parameter numbers easily in the script. 
+for example: Delay, riseTime, fallTime, etc
+3. Perl script should have 2 options for comparison (can be easily changed in the script):
+a. report file contains the complete contents of .csv files for both spectre and csv
+b. report file contains values for parameters (Delay, riseTime, fallTime, etc) for spectre and hspice
+4. More level of comparison is needed. You can see "adexl_spectre_ageing_eos.csv" and adexl_hspice_ageing_eos.csv. 
+For better viewing you can use "gnumeric" unix command. Think like an engineer and see how would you report 
+differences between the two files. You will notice that there are six lines of "Delay": three of them for "age" 
+and three of them for "eos". And both "age" and "eos" has one more level which can be "stress", "fresh" "10 yr". 
+Same way six lines for "FallTime" and "RiseTime" with similar format. So the report should clearly report all these 
+differences. One way to report these would be like:
+
+Pass/Fail report first, then comparison.....
+
+Spectre "Delay" values for "age":
+Delay,Interactive.0,age,stress,ageing,,34.48p,,
+Delay,Interactive.0,age,fresh,ageing,,34.50p,,
+Delay,Interactive.0,age,10 yr,ageing,,34.51p,,
+
+Hspice "Delay" values for "age":
+Delay,Interactive.0,age,stress,ageing,,44.48p,,
+Delay,Interactive.0,age,fresh,ageing,,34.50p,,
+Delay,Interactive.0,age,10 yr,ageing,,44.51p,,
+
+Spectre "Delay" values for "eos":
+Delay,Interactive.0,eos,stress,eos,,30.5p,,
+Delay,Interactive.0,eos,fresh,eos,,30.6p,,
+Delay,Interactive.0,eos,10 yr,eos,,30.7p,,
+
+Hspice "Delay" values for "eos":
+Delay,Interactive.0,eos,stress,eos,,35.5p,,
+Delay,Interactive.0,eos,fresh,eos,,30.6p,,
+Delay,Interactive.0,eos,10 yr,eos,,33.7p,,
+
+
+Spectre "FallTime" values for "age":
+FallTime,Interactive.0,age,stress,ageing,,25.1n,,
+FallTime,Interactive.0,age,fresh,ageing,,25.2n,,
+FallTime,Interactive.0,age,10 yr,ageing,,25.3n,,
+
+Hspice "FallTime" values for "age":
+FallTime,Interactive.0,age,stress,ageing,,25.1n,,
+FallTime,Interactive.0,age,fresh,ageing,,35.2n,,
+FallTime,Interactive.0,age,10 yr,ageing,,25.3n,,
+
+Spectre "FallTime" values for "eos":
+FallTime,Interactive.0,eos,stress,eos,,20.2n,,
+FallTime,Interactive.0,eos,fresh,eos,,20.3n,,
+FallTime,Interactive.0,eos,10 yr,eos,,20.3n,,
+
+Hspice "FallTime" values for "eos":
+FallTime,Interactive.0,eos,stress,eos,,22.2n,,
+FallTime,Interactive.0,eos,fresh,eos,,20.3n,,
+FallTime,Interactive.0,eos,10 yr,eos,,22.3n,,
+
+
+Spectre "RiseTime" values for "age":
+RiseTime,Interactive.0,age,stress,ageing,,15.1p,,
+RiseTime,Interactive.0,age,fresh,ageing,,15.2p,,
+RiseTime,Interactive.0,age,10 yr,ageing,,15.3p,,
+
+Hspice "RiseTime" values for "age":
+RiseTime,Interactive.0,age,stress,ageing,,17.1p,,
+RiseTime,Interactive.0,age,fresh,ageing,,15.2p,,
+RiseTime,Interactive.0,age,10 yr,ageing,,17.3p,,
+
+Spectre "RiseTime" values for "eos":
+RiseTime,Interactive.0,eos,stress,eos,,14.2p,,
+RiseTime,Interactive.0,eos,fresh,eos,,14.3p,,
+RiseTime,Interactive.0,eos,10 yr,eos,,15.4p,,
+
+Hspice "RiseTime" values for "eos":
+RiseTime,Interactive.0,eos,stress,eos,,14.2p,,
+RiseTime,Interactive.0,eos,fresh,eos,,15.3p,,
+RiseTime,Interactive.0,eos,10 yr,eos,,16.4p,,
+
+Note: All numerical values must be reported. Some values might be same for spectre and hspice.

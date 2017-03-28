@@ -1,7 +1,8 @@
 .data
 
-arr:    .word   4, 50, 200, 1, 5
-space:  .asciiz   " "
+arr:        .word   4, 50, 200, 1, 4
+space:      .asciiz " "
+new_line:   .asciiz "\n"
 
 .text
 
@@ -23,6 +24,9 @@ print:
     addiu   $t2,    $t2,    1
     j       print
 exit:
+    la      $a0,    new_line
+    ori     $v0,    $0, 4
+    syscall
     ori     $v0,    $0, 10          # set command to stop program,
     syscall
 
@@ -40,8 +44,7 @@ check:
 	addu    $t2,    $t0,    $v0     # $s2 = &arr[i]
 	lw      $t4,    -4($t2)	        # $t1 = arr[i-1]
 	lw      $t5,    0($t2)		    # $t2 = arr[i]
-	slt     $t3,	$t4,    $t5	    # if (arr[i-1] < arr[i]) => $t0 = 1
-    beq     $t3,    $zero,  swap
+    blt     $t5,    $t4,  swap      # swap if (arr[i] < arr[i-1])
 	addiu   $v0,    $v0,    4	    # i = i++
 	j       loop
 swap:      	
