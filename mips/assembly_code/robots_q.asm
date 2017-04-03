@@ -30,7 +30,7 @@ main:
     la      $a0, prompt_1       # get the addr of prompt_1 in $a0
     li      $v0, 4              # put 4 in $v0 for printing string
     syscall
-    ori     $v0, $0, 5          # opcode to read user i/p
+    li      $v0, 5          # opcode to read user i/p
     syscall
     move    $s0, $v0            # move the user i/p in $s0
     li      $t0, -1
