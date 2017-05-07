@@ -1,11 +1,12 @@
 module top ();
+    import Packet_pkg::*;
+    import IPPacket_pkg::*;
 
-    import simple_pkg::*;
-    my_class C1;
-    my_class C2;
+    PacketGen C1;
+    IPPacket C2;
     initial
     begin
-        C1 = new("default");
-        C2 = new("C2");
+        C1 = new ;
+        C2 = new ('h4, 'h11, 'h10, 'h10, 'h12, 'h0 ) ;
     end
 endmodule
