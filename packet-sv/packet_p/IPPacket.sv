@@ -73,6 +73,9 @@ package IPPacket_pkg;
         // Hence bits[10:0] should be sufficient
         // for any type of data payload
         bit [7:0]  data [bit [10:0]];
+        // Instantiate an instance of the Data Payload 
+        // class to hold the Data related information
+        DataPayload D_IP;
 
         // Class Methods:
         // Method new () - overridden to get various
@@ -83,6 +86,7 @@ package IPPacket_pkg;
             this.protocol       = protocol;
             this.source_addr    = source_addr;
             this.dest_addr      = dest_addr;
+            D_IP                = new (data_len, data);
             create_packet ();
         endfunction
 
@@ -121,6 +125,7 @@ package IPPacket_pkg;
                                    this.header_len, this.version};
             cal_chksum ();
             init_options ();
+            //verify_pkt ();
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -135,6 +140,7 @@ package IPPacket_pkg;
             this.header_chksum = 'h0;
             for (int i = 0; i < 10; i++)
             begin
+                //$display ("0x%4x\n", this.ip_header [i*16+:16]);
                 sum = sum + this.ip_header [i*16+:16];
                 // Check if we have a carry
                 if (sum[16])
@@ -164,6 +170,14 @@ package IPPacket_pkg;
                 this.options[i] = rand_data + i;
                 //$display ("Options field - 0x%08x\n", this.options[i]);
             end
+        endfunction
+
+        // Method verify_pkt (bit[10:0] curr_len) - Verifies that the packet meets the specs
+        // Currently the following is checked
+        //    - Overall MTU doesn't exceed 1500 B
+        function void verify_pkt (bit[10:0] curr_len);
+            // The curr_len variable gives us the current length
+            // of the Packet in all (i.e. IP+TCP/UDP)
         endfunction
 
     endclass
