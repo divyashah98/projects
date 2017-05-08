@@ -6,6 +6,7 @@ package DataPayload_pkg;
         // Data length - 11-bit field vector
         // Length specifies the size in Bytes
         bit [10:0]  data_len;
+        // TODO: Convert this into Dynamic array
         // Data vector - 8-bit of associative
         // array indexed with bit [10:0] to
         // as per the data_len vector

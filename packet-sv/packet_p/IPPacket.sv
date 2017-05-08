@@ -80,14 +80,26 @@ package IPPacket_pkg;
         // Class Methods:
         // Method new () - overridden to get various
         // inputs from the user
-        function new (bit[3:0] header_len, bit [7:0] protocol, bit [31:0] source_addr, bit[31:0] dest_addr, bit[10:0] data_len, bit[7:0] data [bit [10:0]]);
+        function new (bit[3:0] header_len, bit [7:0] protocol, bit [31:0] source_addr, bit[31:0] dest_addr, bit[10:0] data_len, bit[7:0] data [bit [10:0]], bit [10:0] curr_len);
             super.new();
             this.header_len     = header_len;
             this.protocol       = protocol;
             this.source_addr    = source_addr;
             this.dest_addr      = dest_addr;
-            D_IP                = new (data_len, data);
+            if (header_len < 6)
+            begin
+                // No extra options are inserted
+                this.total_len      = header_len + data_len;
+            end
+            else
+            begin
+                // Options are inserted (take up (IHL-5)*4 B of space)
+                this.total_len      = header_len + data_len + (header_len-5)<<2;
+            end
+            curr_len                = curr_len + this.total_len;
             create_packet ();
+            init_options ();
+            //init_data (curr_len);
         endfunction
 
         // Method create_packet () - Completes the packet
@@ -97,16 +109,6 @@ package IPPacket_pkg;
             //$display ("Source ADDR: 0x%8x\n", this.source_addr);
             this.version        = 'h4;
             this.dscp           = 'h0;
-            if (this.header_len <= 5)
-            begin
-                // No extra options are inserted
-                this.total_len      = this.header_len + this.data_len;
-            end
-            else
-            begin
-                // Options are inserted (take up (IHL-5)*4 B of space)
-                this.total_len      = this.header_len + this.data_len + (this.header_len-5)<<2;
-            end
             this.identification = 'h0;
             this.DF             = 'h1;
             this.MF             = 'h1;
@@ -123,9 +125,15 @@ package IPPacket_pkg;
                                    this.DF, 1'h0, this.identification, 
                                    this.total_len, this.dscp, 
                                    this.header_len, this.version};
+            // Calculate the CheckSum and update the IP header                                   
             cal_chksum ();
-            init_options ();
-            //verify_pkt ();
+            // Update the IP header with the new chk_sum field
+            this.ip_header      = {this.dest_addr, this.source_addr, 
+                                   this.header_chksum, this.protocol, 
+                                   this.TTL, this.frag_offset, this.MF, 
+                                   this.DF, 1'h0, this.identification, 
+                                   this.total_len, this.dscp, 
+                                   this.header_len, this.version};
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -163,7 +171,7 @@ package IPPacket_pkg;
             integer    loop_len;
             loop_len  = this.header_len - 5;
             rand_data = $urandom();
-            if (this.header_len <= 'h5)
+            if (this.header_len < 'h6)
                 return;
             for (int i = 0; i < loop_len; i++)
             begin
@@ -172,12 +180,24 @@ package IPPacket_pkg;
             end
         endfunction
 
-        // Method verify_pkt (bit[10:0] curr_len) - Verifies that the packet meets the specs
-        // Currently the following is checked
-        //    - Overall MTU doesn't exceed 1500 B
-        function void verify_pkt (bit[10:0] curr_len);
+        // Method init_data (bit[10:0] curr_len) - Adds data and 
+        // verifies that the packet doesn't exceed max MTU of 1500B
+        function void init_data (bit[10:0] curr_len);
             // The curr_len variable gives us the current length
-            // of the Packet in all (i.e. IP+TCP/UDP)
+            // of the Packet combining all (i.e. IP+TCP/UDP) in B
+            integer     mtu = 1500;
+            for (int i = 0; i < this.data_len; i++)
+            begin
+                if ((curr_len + i) < mtu)
+                begin
+                    // Fill in the dynamic array with the data
+                end
+                else
+                begin
+                    $warning ("Can't fill in the packet with complete Data! Few Data bytes will be dropped\n");
+                    return;
+                end
+            end
         endfunction
 
     endclass
