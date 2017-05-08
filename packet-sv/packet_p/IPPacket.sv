@@ -93,7 +93,16 @@ package IPPacket_pkg;
             //$display ("Source ADDR: 0x%8x\n", this.source_addr);
             this.version        = 'h4;
             this.dscp           = 'h0;
-            this.total_len      = this.header_len + this.data_len;
+            if (this.header_len < 5)
+            begin
+                // No extra options are inserted
+                this.total_len      = this.header_len + this.data_len;
+            end
+            else
+            begin
+                // Options are inserted (take up (IHL-5)*4 B of space)
+                this.total_len      = this.header_len + this.data_len + (this.header_len-5)<<2;
+            end
             this.identification = 'h0;
             this.DF             = 'h1;
             this.MF             = 'h1;
@@ -110,7 +119,8 @@ package IPPacket_pkg;
                                    this.DF, 1'h0, this.identification, 
                                    this.total_len, this.dscp, 
                                    this.header_len, this.version};
-            this.options        = init_options ();
+            cal_chksum ();
+            init_options ();
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -121,21 +131,39 @@ package IPPacket_pkg;
             // 2. Add each 16-bit value together.
             // 3. Add in any carry
             // 4. Inverse the bits and put that in the checksum field.
-            this.header_chksum = 'h0;
             bit [16:0]  sum = 'h0;
+            this.header_chksum = 'h0;
             for (int i = 0; i < 10; i++)
             begin
                 sum = sum + this.ip_header [i*16+:16];
                 // Check if we have a carry
-                if (sum[17])
+                if (sum[16])
                 begin
                     // Add the carry back to sum
-                    sum = sum + {16'h0, sum[17]};
+                    sum = sum + {16'h0, sum[16]};
                 end
             end
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
+        endfunction
+
+        // Method init_options () - Initialises the packet with options
+        // The specifications define the following for the options field:
+        // To be filled with IHL-5 32-bit words of incremental data
+        // only if IHL is greater than 5
+        function void init_options ();
+            bit [31:0] rand_data;
+            integer    loop_len;
+            loop_len  = this.header_len - 5;
+            rand_data = $urandom();
+            if (this.header_len < 'h5)
+                return;
+            for (int i = 0; i < loop_len; i++)
+            begin
+                this.options[i] = rand_data + i;
+                //$display ("Options field - 0x%08x\n", this.options[i]);
+            end
         endfunction
 
     endclass
