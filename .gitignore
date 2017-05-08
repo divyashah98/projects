@@ -4,15 +4,6 @@
 *.swn
 *.v.swp
 *.c.swp
-*.log
 *.wlf
-hex_gen
-iss.so
-sim
-sim.dSYM
 work
-instr_hex
-pc_values_hex
-dumpsim
 transcript
-.DS_Store
