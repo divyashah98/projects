@@ -26,7 +26,6 @@ use warnings;
       # Look for variable declaration
       while ($line =~ m/int\s+(\S+)\s+=\s+(\S+)/) {
         if ($count == 0) {
-      print "makin";
           print OUTPUT_H "\t.data\n";
         }
         $count++;
