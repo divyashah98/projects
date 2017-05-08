@@ -93,7 +93,7 @@ package IPPacket_pkg;
             //$display ("Source ADDR: 0x%8x\n", this.source_addr);
             this.version        = 'h4;
             this.dscp           = 'h0;
-            if (this.header_len < 5)
+            if (this.header_len <= 5)
             begin
                 // No extra options are inserted
                 this.total_len      = this.header_len + this.data_len;
@@ -157,7 +157,7 @@ package IPPacket_pkg;
             integer    loop_len;
             loop_len  = this.header_len - 5;
             rand_data = $urandom();
-            if (this.header_len < 'h5)
+            if (this.header_len <= 'h5)
                 return;
             for (int i = 0; i < loop_len; i++)
             begin
