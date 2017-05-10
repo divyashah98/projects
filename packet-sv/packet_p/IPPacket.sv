@@ -99,7 +99,7 @@ package IPPacket_pkg;
             curr_len                = curr_len + this.total_len;
             create_packet ();
             init_options ();
-            //init_data (curr_len);
+            init_data (curr_len, data_len, data);
         endfunction
 
         // Method create_packet () - Completes the packet
@@ -182,15 +182,18 @@ package IPPacket_pkg;
 
         // Method init_data (bit[10:0] curr_len) - Adds data and 
         // verifies that the packet doesn't exceed max MTU of 1500B
-        function void init_data (bit[10:0] curr_len);
+        function void init_data (bit[10:0] curr_len, bit[10:0] data_len, bit[7:0] data [bit[10:0]]);
             // The curr_len variable gives us the current length
             // of the Packet combining all (i.e. IP+TCP/UDP) in B
             integer     mtu = 1500;
-            for (int i = 0; i < this.data_len; i++)
+            for (int i = 0; i < data_len; i++)
             begin
-                if ((curr_len + i) < mtu)
+                if ((curr_len) < mtu)
                 begin
                     // Fill in the dynamic array with the data
+                    D_IP.data    = new[i];
+                    D_IP.data[i] = data[i];
+                    curr_len     = curr_len + i;
                 end
                 else
                 begin
@@ -198,6 +201,11 @@ package IPPacket_pkg;
                     return;
                 end
             end
+        endfunction
+
+        // Method print_pkt () - Prints the packet in a structured way
+        function void print_pkt ();
+            
         endfunction
 
     endclass
