@@ -65,7 +65,7 @@ package IPPacket_pkg;
         // To be filled with IHL-5 32-bit words of 
         // incremental data only if IHL is greater than 5
         bit [31:0]  options [];
-        // Instantiate an instance of the Data Payload 
+        // Create an instance of the Data Payload 
         // class to hold the Data related information
         DataPayload D_IP;
 
