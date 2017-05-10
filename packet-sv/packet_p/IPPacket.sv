@@ -65,14 +65,6 @@ package IPPacket_pkg;
         // To be filled with IHL-5 32-bit words of 
         // incremental data only if IHL is greater than 5
         bit [31:0]  options [];
-        // Data length - 11-bit vector field
-        bit [10:0]  data_len;
-        // 8-bit data field - Implemented as an
-        // associative array indexed with bit[10:0]
-        // The max MTU (IP+TCP/UDP+Data) = 1500 B
-        // Hence bits[10:0] should be sufficient
-        // for any type of data payload
-        bit [7:0]  data [bit [10:0]];
         // Instantiate an instance of the Data Payload 
         // class to hold the Data related information
         DataPayload D_IP;
