@@ -187,9 +187,13 @@ package IPPacket_pkg;
             // The curr_len variable gives us the current length
             // of the Packet combining all (i.e. IP+TCP/UDP) in B
             integer     mtu = 1500;
+            integer     i;
+            // Create an instance of the Data Packet class
             D_IP      = new ();
+            // Allocate maximum memory assuming the size
+            // doesn't exceed the specified MTU
             D_IP.data = new[data_len];
-            for (int i = 0; i < data_len; i++)
+            for (i = 0; i < data_len; i++)
             begin
                 if ((curr_len) < mtu)
                 begin
@@ -207,7 +211,7 @@ package IPPacket_pkg;
 
         // Method print_pkt () - Prints the packet in a structured way
         function void print_pkt ();
-            $display ("\n\t*******IP-Packet*****\n");
+            $display ("\n********************IP-Packet********************\n");
             $display ("Version:0x%08x\n", this.version);
             $display ("IHL:0x%08x\n", this.header_len);
             $display ("DSCP:0x%08x\n", this.dscp);

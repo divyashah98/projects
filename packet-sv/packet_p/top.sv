@@ -8,6 +8,6 @@ module top ();
     initial
     begin
         C1 = new ;
-        C2 = new ('ha, 'h11, 'h10, 'h10, 'h12, data_tb, 'h1024) ;
+        C2 = new ('ha, 'h11, 'h10, 'h10, 'h12, data_tb, 'd1498) ;
     end
 endmodule
