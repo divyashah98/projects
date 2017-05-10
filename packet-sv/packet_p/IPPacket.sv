@@ -55,16 +55,16 @@ package IPPacket_pkg;
         // 32-bit destination IP address
         // Value set as per the given input during instantiation
         bit [31:0]  dest_addr;
-        // 32-bit options field - Implemented as an
-        // associative array indexed with bit[3:0] 
-        // as the maximum value could be max(IHL)-5
+        // 32-bit options field - Implemented as a
+        // dynamic array indexed with bit[3:0] as
+        // the maximum value could be max(IHL)-5
         // where:
         // max(IHL) = 15
         // Hence max length of array would be
         // 15 -5 = 10
         // To be filled with IHL-5 32-bit words of 
         // incremental data only if IHL is greater than 5
-        bit [31:0]  options [bit [3:0]];
+        bit [31:0]  options [];
         // Data length - 11-bit vector field
         bit [10:0]  data_len;
         // 8-bit data field - Implemented as an
@@ -100,6 +100,7 @@ package IPPacket_pkg;
             create_packet ();
             init_options ();
             init_data (curr_len, data_len, data);
+            print_pkt ();
         endfunction
 
         // Method create_packet () - Completes the packet
@@ -169,14 +170,14 @@ package IPPacket_pkg;
         function void init_options ();
             bit [31:0] rand_data;
             integer    loop_len;
-            loop_len  = this.header_len - 5;
-            rand_data = $urandom();
+            loop_len     = this.header_len - 5;
+            rand_data    = $urandom();
             if (this.header_len < 'h6)
                 return;
+            this.options = new [loop_len];
             for (int i = 0; i < loop_len; i++)
             begin
                 this.options[i] = rand_data + i;
-                //$display ("Options field - 0x%08x\n", this.options[i]);
             end
         endfunction
 
@@ -186,12 +187,13 @@ package IPPacket_pkg;
             // The curr_len variable gives us the current length
             // of the Packet combining all (i.e. IP+TCP/UDP) in B
             integer     mtu = 1500;
+            D_IP      = new ();
+            D_IP.data = new[data_len];
             for (int i = 0; i < data_len; i++)
             begin
                 if ((curr_len) < mtu)
                 begin
                     // Fill in the dynamic array with the data
-                    D_IP.data    = new[i];
                     D_IP.data[i] = data[i];
                     curr_len     = curr_len + i;
                 end
@@ -205,7 +207,28 @@ package IPPacket_pkg;
 
         // Method print_pkt () - Prints the packet in a structured way
         function void print_pkt ();
-            
+            $display ("\n\t*******IP-Packet*****\n");
+            $display ("Version:0x%08x\n", this.version);
+            $display ("IHL:0x%08x\n", this.header_len);
+            $display ("DSCP:0x%08x\n", this.dscp);
+            $display ("Total Length:0x%08x\n", this.total_len);
+            $display ("Identification:0x%08x\n", this.identification);
+            $display ("DF:0x%08x\n", this.DF);
+            $display ("MF:0x%08x\n", this.MF);
+            $display ("Fragment Offset:0x%08x\n", this.frag_offset);
+            $display ("Checksum:0x%08x\n", this.header_chksum);
+            $display ("Source Address:0x%08x\n", this.source_addr);
+            $display ("Destination Address:0x%08x\n", this.dest_addr);
+            $display ("Options:\n");
+            for (int i = 0; i < (this.options.size()); i++)
+            begin
+                $display ("\t0x%08x\n",this.options[i]);
+            end
+            $display ("Data:\n");
+            for (int i = 0; i < (D_IP.data.size()); i++)
+            begin
+                $display ("\t0x%08x\n",D_IP.data[i]);
+            end
         endfunction
 
     endclass
