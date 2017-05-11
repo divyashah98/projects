@@ -97,7 +97,7 @@ package IPPacket_pkg;
 
         // Method create_packet () - Completes the packet
         // Fills in all the fields of an IP packet and
-        // completes the field of the packet
+        // completes the packet
         virtual function void create_packet ();
             //$display ("Source ADDR: 0x%8x\n", this.source_addr);
             this.version        = 'h4;
@@ -118,7 +118,7 @@ package IPPacket_pkg;
                                    this.DF, 1'h0, this.identification, 
                                    this.total_len, this.dscp, 
                                    this.header_len, this.version};
-            // Calculate the CheckSum and update the IP header                                   
+            // Calculate the CheckSum and update the IP header
             cal_chksum ();
             // Update the IP header with the new chk_sum field
             this.ip_header      = {this.dest_addr, this.source_addr, 
@@ -190,8 +190,10 @@ package IPPacket_pkg;
                 if ((curr_len) < mtu)
                 begin
                     // Fill in the dynamic array with the data
-                    D_IP.data[i] = data[i];
-                    curr_len     = curr_len + i;
+                    D_IP.data[i]    = data[i];
+                    // Update the current data length
+                    D_IP.data_len   = i;
+                    curr_len        = curr_len + i;
                 end
                 else
                 begin
@@ -218,12 +220,12 @@ package IPPacket_pkg;
             $display ("Options:\n");
             for (int i = 0; i < (this.options.size()); i++)
             begin
-                $display ("\t0x%08x\n",this.options[i]);
+                $display ("\t0x%08x",this.options[i]);
             end
             $display ("Data:\n");
             for (int i = 0; i < (D_IP.data.size()); i++)
             begin
-                $display ("\t0x%08x\n",D_IP.data[i]);
+                $display ("\t0x%08x",D_IP.data[i]);
             end
         endfunction
 
