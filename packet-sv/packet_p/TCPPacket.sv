@@ -14,60 +14,68 @@ package TCPPacket_pkg;
         // 160-bits (20 B)wide TCP-header
         // Contains the final header info
         bit [159:0] tcp_header;
-        // 4-bit Version field
-        // As per the internal specifications - it should be always 4
-        bit [3:0]   version;
-        // 4-bit Header Length (IHL)
+        // 16-bit Source Port number
+        // Value set as per the given input 
+        bit [15:0]  source_port;
+        // 16-bit Destination Port number
+        // Value set as per the given input 
+        bit [15:0]  dest_port;
+        // 32-bit Sequence Number
+        // Value set as per the given input during instantiation
+        bit [31:0]  seq_number;
+        // 32-bit Acknowledge Number
+        // Value set as per the given input during instantiation
+        bit [31:0]  ack_number;
+        // 4-bit Header Length (data offset)
         // Value set as per the given input during instantiation
         // Should be between 5 and 15
         bit [3:0]   header_len;
-        // 8-bit DSCP (TOS)
-        // Should be wired to 0 as per the specs
-        bit [7:0]   dscp;
-        // 16-bit Total length field
-        // To be calculated from data length
-        bit [15:0]  total_len;
-        // 16-bits for Identification field
-        // To be set to 0
-        bit [15:0]  identification;
-        // Single bit DF flag
-        // Should be set to 1 (cannot be fragmented)
-        bit         DF;
-        // Single bit for MF flag
-        // Since DF = 1 the datagram cannot be fragmented
-        // Setting the MF = 1 (to indicate last fragement)
-        bit         MF;
-        // 13-bit fragment offset
-        // To be set to 0
-        bit [12:0]  frag_offset;
-        // 8-bit TTL signal
-        // To be set to 0
-        bit [7:0]   TTL;
-        // 8-bit protocol field
-        // Should be 0x11 - UDP and 0x06 for TCP
-        bit [7:0]   protocol;
-        // 16-bit header checksum
+        // 1-bit URG Flag
+        // Fixed to 0
+        bit         URG;
+        // 1-bit ACK Flag
+        // FIXME: No specifications provided
+        bit         ACK;
+        // 1-bit PSH Flag
+        // FIXME: No specifications provided
+        bit         PSH;
+        // 1-bit RST Flag
+        // FIXME: No specifications provided
+        bit         RST;
+        // 1-bit SYN Flag
+        // FIXME: No specifications provided
+        bit         SYN;
+        // 1-bit FIN Flag
+        // FIXME: No specifications provided
+        bit         FIN;
+        // 16-bit Window Size
+        // Value set as per the given input during instantiation
+        bit[15:0]   window_size;
+        // 16-bit TCP header checksum
         // To be calculated
         bit [15:0]  header_chksum;
-        // 32-bit source IP address
-        // Value set as per the given input during instantiation
-        bit [31:0]  source_addr;
-        // 32-bit destination IP address
-        // Value set as per the given input during instantiation
-        bit [31:0]  dest_addr;
+        // 16-bit Urgent pointer 
+        // Fixed to 0
+        bit [15:0]  urg_pointer;
         // 32-bit options field - Implemented as a
         // dynamic array indexed with bit[3:0] as
-        // the maximum value could be max(IHL)-5
+        // the maximum value could be max(DOff)-5
         // where:
-        // max(IHL) = 15
+        // max(DOff) = 15
         // Hence max length of array would be
         // 15 -5 = 10
-        // To be filled with IHL-5 32-bit words of 
-        // incremental data only if IHL is greater than 5
+        // To be filled with DOff-5 32-bit words of 
+        // incremental data only if DOff is greater than 5
         bit [31:0]  options [];
         // Instantiate an instance of the Data Payload 
         // class to hold the Data related information
         DataPayload D_TCP;
+        // Create an instance of the IP-Packet 
+        // class to hold the IP related info
+        IPPacket IP_TCP;
+        // Define the TCP Protocol used for creating
+        // the IP packet
+        bit [7:0] TCP = 'h06;
 
         // Class Methods:
         // Method new () - overridden to get various
