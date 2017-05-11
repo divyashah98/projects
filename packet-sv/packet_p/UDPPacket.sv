@@ -36,6 +36,9 @@ package UDPPacket_pkg;
         // Create an instance of the IP-Packet 
         // class to hold the IP related info
         IPPacket IP_UDP;
+        // Define the UDP Protocol used for creating
+        // the IP packet
+        bit [7:0] UDP = 'h11;
 
         // Class Methods:
         // Method new () - overridden to get various
@@ -44,54 +47,42 @@ package UDPPacket_pkg;
                       bit[10:0] udp_data_len, bit[7:0] udp_data [bit [10:0]], 
                       bit[3:0] header_len, bit [7:0] protocol, 
                       bit [31:0] source_addr, bit[31:0] dest_addr, 
-                      bit[10:0] ip_data_len, bit[7:0] ip_data [bit [10:0]], 
+                      bit[10:0] ip_data_len, bit[7:0] ip_data [bit [10:0]]
         );
+            bit[10:0] curr_len;
             super.new();
-            bit[10:0] curr_len   = 'h8;
+            curr_len             = 'h8;
             this.source_port     = source_port;
             this.dest_port       = dest_port;
             // UDP packet has a minimum length of 8
             // bytes if no data is passed. Get the 
             // actual length by looking at the current
             // data length.
-            this.udp_len         = udp_data_len + this.udp_len;
+            this.udp_len         = {5'b0, udp_data_len} + {5'b0, curr_len};
             create_packet ();
-            init_data (curr_len, data_len, data);
-            print_pkt ();
+            init_data (udp_data_len, udp_data);
+            // Create the IP packet for the UDP packet
+            IP_UDP               = new (header_len, UDP, source_addr, dest_addr,
+                                        ip_data_len, ip_data, udp_len);
+            //print_pkt ();
         endfunction
 
         // Method create_packet () - Completes the packet
-        // Fills in all the fields of an IP packet and
-        // completes the field of the packet
+        // Fills in all the fields of an UDP packet and
+        // completes the packet.
         virtual function void create_packet ();
-            //$display ("Source ADDR: 0x%8x\n", this.source_addr);
-            this.version        = 'h4;
-            this.dscp           = 'h0;
-            this.identification = 'h0;
-            this.DF             = 'h1;
-            this.MF             = 'h1;
-            this.frag_offset    = 'h0;
-            this.TTL            = 'h0;
             // The header checksum will be updated
             // by the cal_chksum method
-            this.header_chksum  = 'h0;
-            // Create the IP header by concatenating
+            this.udp_chksum  = 'h0;
+            // Create the UDP header by concatenating
             // all the fields together
-            this.ip_header      = {this.dest_addr, this.source_addr, 
-                                   this.header_chksum, this.protocol, 
-                                   this.TTL, this.frag_offset, this.MF, 
-                                   this.DF, 1'h0, this.identification, 
-                                   this.total_len, this.dscp, 
-                                   this.header_len, this.version};
-            // Calculate the CheckSum and update the IP header                                   
+            this.udp_header  = {this.dest_port, this.source_port, 
+                                this.udp_len, this.udp_chksum};
+            // Calculate the CheckSum and update the UDP header
             cal_chksum ();
-            // Update the IP header with the new chk_sum field
-            this.ip_header      = {this.dest_addr, this.source_addr, 
-                                   this.header_chksum, this.protocol, 
-                                   this.TTL, this.frag_offset, this.MF, 
-                                   this.DF, 1'h0, this.identification, 
-                                   this.total_len, this.dscp, 
-                                   this.header_len, this.version};
+            // Update the UDP header with the new chk_sum field
+            this.udp_header  = {this.dest_port, this.source_port, 
+                                this.udp_len, this.udp_chksum};
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -103,11 +94,10 @@ package UDPPacket_pkg;
             // 3. Add in any carry
             // 4. Inverse the bits and put that in the checksum field.
             bit [16:0]  sum = 'h0;
-            this.header_chksum = 'h0;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 4; i++)
             begin
                 //$display ("0x%4x\n", this.ip_header [i*16+:16]);
-                sum = sum + this.ip_header [i*16+:16];
+                sum = sum + this.udp_header [i*16+:16];
                 // Check if we have a carry
                 if (sum[16])
                 begin
@@ -117,19 +107,37 @@ package UDPPacket_pkg;
             end
             // Perform bitwise negation on sum
             // Put the value in check sum field
-            this.header_chksum = ~sum;
+            this.udp_chksum = ~sum;
         endfunction
 
-        // Method print_pkt () - Prints the packet in a structured way
-        function void print_pkt ();
-            $display ("\n********************UDP-Packet********************\n");
-            $display ("Version:0x%08x\n", this.version);
-            $display ("Data:\n");
-            for (int i = 0; i < (D_IP.data.size()); i++)
+        // Method init_data (bit[10:0] curr_len) - Adds data to
+        // the UDP packet. No need to check if it exceeds the 
+        // max MTU allowed.
+        function void init_data (bit[10:0] udp_data_len, bit[7:0] udp_data [bit[10:0]]);
+            integer     i;
+            // Create an instance of the Data Packet class
+            D_UDP           = new ();
+            // Allocate the memory as per Data Len
+            D_UDP.data      = new[udp_data_len];
+            // Assign the data_len as udp_data_len
+            D_UDP.data_len  = udp_data_len;
+            for (i = 0; i < udp_data_len; i++)
             begin
-                $display ("\t0x%08x\n",D_IP.data[i]);
+                // Fill in the dynamic array with the data
+                D_UDP.data[i] = udp_data[i];
             end
         endfunction
+
+        //// Method print_pkt () - Prints the packet in a structured way
+        //function void print_pkt ();
+        //    $display ("\n********************UDP-Packet********************\n");
+        //    $display ("Version:0x%08x\n", this.version);
+        //    $display ("Data:\n");
+        //    for (int i = 0; i < (D_IP.data.size()); i++)
+        //    begin
+        //        $display ("\t0x%08x\n",D_IP.data[i]);
+        //    end
+        //endfunction
 
     endclass
 endpackage
