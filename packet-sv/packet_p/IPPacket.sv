@@ -78,20 +78,16 @@ package IPPacket_pkg;
             this.protocol       = protocol;
             this.source_addr    = source_addr;
             this.dest_addr      = dest_addr;
-            if (header_len < 6)
-            begin
-                // No extra options are inserted
-                this.total_len      = header_len + data_len;
-            end
-            else
-            begin
-                // Options are inserted (take up (IHL-5)*4 B of space)
-                this.total_len      = header_len + data_len + (header_len-5)<<2;
-            end
-            curr_len                = curr_len + this.total_len;
+            this.total_len      = header_len<<2;
+            curr_len            = curr_len + this.total_len;
+            init_data (curr_len, data_len, data);
+            // Update the total len field depending on the 
+            // data length
+            this.total_len    = this.total_len + {5'b0, D_IP.data_len};
             create_packet ();
             init_options ();
-            init_data (curr_len, data_len, data);
+            // Calculate the CheckSum and update the IP header
+            cal_chksum ();
             print_pkt ();
         endfunction
 
@@ -112,15 +108,6 @@ package IPPacket_pkg;
             this.header_chksum  = 'h0;
             // Create the IP header by concatenating
             // all the fields together
-            this.ip_header      = {this.dest_addr, this.source_addr, 
-                                   this.header_chksum, this.protocol, 
-                                   this.TTL, this.frag_offset, this.MF, 
-                                   this.DF, 1'h0, this.identification, 
-                                   this.total_len, this.dscp, 
-                                   this.header_len, this.version};
-            // Calculate the CheckSum and update the IP header
-            cal_chksum ();
-            // Update the IP header with the new chk_sum field
             this.ip_header      = {this.dest_addr, this.source_addr, 
                                    this.header_chksum, this.protocol, 
                                    this.TTL, this.frag_offset, this.MF, 
@@ -153,6 +140,13 @@ package IPPacket_pkg;
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
+            // Update the IP header with the new chk_sum field
+            this.ip_header      = {this.dest_addr, this.source_addr, 
+                                   this.header_chksum, this.protocol, 
+                                   this.TTL, this.frag_offset, this.MF, 
+                                   this.DF, 1'h0, this.identification, 
+                                   this.total_len, this.dscp, 
+                                   this.header_len, this.version};
         endfunction
 
         // Method init_options () - Initialises the packet with options

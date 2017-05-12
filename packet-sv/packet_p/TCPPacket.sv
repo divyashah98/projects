@@ -7,6 +7,10 @@ package TCPPacket_pkg;
     // This is required to create a handle
     // of the Data Payload class
     import DataPayload_pkg::*;
+    // Import the IP Packet package
+    // This is required to create a handle
+    // of the IPPacket class
+    import IPPacket_pkg::*;
 
     class TCPPacket extends PacketGen;
 
@@ -34,19 +38,19 @@ package TCPPacket_pkg;
         // Fixed to 0
         bit         URG;
         // 1-bit ACK Flag
-        // FIXME: No specifications provided
+        // Fixed to 0
         bit         ACK;
         // 1-bit PSH Flag
-        // FIXME: No specifications provided
+        // Fixed to 0
         bit         PSH;
         // 1-bit RST Flag
-        // FIXME: No specifications provided
+        // Fixed to 0
         bit         RST;
         // 1-bit SYN Flag
-        // FIXME: No specifications provided
+        // Fixed to 0
         bit         SYN;
         // 1-bit FIN Flag
-        // FIXME: No specifications provided
+        // Fixed to 0
         bit         FIN;
         // 16-bit Window Size
         // Value set as per the given input during instantiation
@@ -80,27 +84,30 @@ package TCPPacket_pkg;
         // Class Methods:
         // Method new () - overridden to get various
         // inputs from the user
-        function new (bit[3:0] header_len, bit [7:0] protocol, bit [31:0] source_addr, bit[31:0] dest_addr, bit[10:0] data_len, bit[7:0] data [bit [10:0]], bit [10:0] curr_len);
+        function new (bit[15:0] source_port,    bit[15:0] dest_port,
+                      bit[31:0] seq_number,     bit[31:0] ack_number,
+                      bit[3:0]  tcp_header_len, bit[15:0] window_size,
+                      bit[10:0] tcp_data_len,   bit[7:0]  tcp_data [bit [10:0]], 
+                      bit[3:0]  ip_header_len,  bit[7:0]  protocol, 
+                      bit[31:0] source_addr,    bit[31:0] dest_addr, 
+                      bit[10:0] ip_data_len,    bit[7:0]  ip_data [bit [10:0]]
+        );
             super.new();
-            this.header_len     = header_len;
-            this.protocol       = protocol;
-            this.source_addr    = source_addr;
-            this.dest_addr      = dest_addr;
-            if (header_len < 6)
-            begin
-                // No extra options are inserted
-                this.total_len      = header_len + data_len;
-            end
-            else
-            begin
-                // Options are inserted (take up (IHL-5)*4 B of space)
-                this.total_len      = header_len + data_len + (header_len-5)<<2;
-            end
-            curr_len                = curr_len + this.total_len;
+            this.source_port    = source_port;
+            this.dest_port      = dest_port;
+            this.seq_number     = seq_number;
+            this.ack_number     = ack_number;
+            this.header_len     = tcp_header_len;
+            this.window_size    = window_size;
             create_packet ();
             init_options ();
-            init_data (curr_len, data_len, data);
-            print_pkt ();
+            init_data (tcp_header_len, ip_data_len, ip_data);
+            // Calculate the CheckSum and update the TCP header                                   
+            cal_chksum ();
+            // Create the IP packet for the TCP packet
+            IP_TCP               = new (header_len, TCP, source_addr, dest_addr,
+                                        ip_data_len, ip_data, tcp_header_len);
+            //print_pkt ();
         endfunction
 
         // Method create_packet () - Completes the packet
@@ -108,33 +115,24 @@ package TCPPacket_pkg;
         // completes the field of the packet
         virtual function void create_packet ();
             //$display ("Source ADDR: 0x%8x\n", this.source_addr);
-            this.version        = 'h4;
-            this.dscp           = 'h0;
-            this.identification = 'h0;
-            this.DF             = 'h1;
-            this.MF             = 'h1;
-            this.frag_offset    = 'h0;
-            this.TTL            = 'h0;
+            this.URG          = 'h0;
+            this.ACK          = 'h0;
+            this.PSH          = 'h0;
+            this.RST          = 'h0;
+            this.SYN          = 'h0;
+            this.FIN          = 'h0;
+            this.urg_pointer  = 'h0;
             // The header checksum will be updated
             // by the cal_chksum method
-            this.header_chksum  = 'h0;
-            // Create the IP header by concatenating
+            this.header_chksum = 'h0;
+            // Create the TCP header by concatenating
             // all the fields together
-            this.ip_header      = {this.dest_addr, this.source_addr, 
-                                   this.header_chksum, this.protocol, 
-                                   this.TTL, this.frag_offset, this.MF, 
-                                   this.DF, 1'h0, this.identification, 
-                                   this.total_len, this.dscp, 
-                                   this.header_len, this.version};
-            // Calculate the CheckSum and update the IP header                                   
-            cal_chksum ();
-            // Update the IP header with the new chk_sum field
-            this.ip_header      = {this.dest_addr, this.source_addr, 
-                                   this.header_chksum, this.protocol, 
-                                   this.TTL, this.frag_offset, this.MF, 
-                                   this.DF, 1'h0, this.identification, 
-                                   this.total_len, this.dscp, 
-                                   this.header_len, this.version};
+            this.tcp_header    = {this.source_port, this.dest_port, 
+                                  this.seq_number, this.ack_number,
+                                  this.header_len, 6'h0,
+                                  this.URG, this.ACK, this.PSH, this.RST,
+                                  this.SYN, this.FIN, this.window_size,
+                                  this.header_chksum, this.urg_pointer};
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -150,7 +148,7 @@ package TCPPacket_pkg;
             for (int i = 0; i < 10; i++)
             begin
                 //$display ("0x%4x\n", this.ip_header [i*16+:16]);
-                sum = sum + this.ip_header [i*16+:16];
+                sum = sum + this.tcp_header [i*16+:16];
                 // Check if we have a carry
                 if (sum[16])
                 begin
@@ -161,12 +159,19 @@ package TCPPacket_pkg;
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
+            // Update the TCP header with the new chk_sum field
+            this.tcp_header    = {this.source_port, this.dest_port, 
+                                  this.seq_number, this.ack_number,
+                                  this.header_len, 6'h0,
+                                  this.URG, this.ACK, this.PSH, this.RST,
+                                  this.SYN, this.FIN, this.window_size,
+                                  this.header_chksum, this.urg_pointer};
         endfunction
 
         // Method init_options () - Initialises the packet with options
         // The specifications define the following for the options field:
-        // To be filled with IHL-5 32-bit words of incremental data
-        // only if IHL is greater than 5
+        // To be filled with DOff-5 32-bit words of incremental data
+        // only if DOff is greater than 5
         function void init_options ();
             bit [31:0] rand_data;
             integer    loop_len;
@@ -189,17 +194,19 @@ package TCPPacket_pkg;
             integer     mtu = 1500;
             integer     i;
             // Create an instance of the Data Packet class
-            D_IP      = new ();
+            D_TCP      = new ();
             // Allocate maximum memory assuming the size
             // doesn't exceed the specified MTU
-            D_IP.data = new[data_len];
+            D_TCP.data = new[data_len];
             for (i = 0; i < data_len; i++)
             begin
                 if ((curr_len) < mtu)
                 begin
                     // Fill in the dynamic array with the data
-                    D_IP.data[i] = data[i];
-                    curr_len     = curr_len + i;
+                    D_TCP.data[i]   = data[i];
+                    // Update the current data length
+                    D_TCP.data_len  = i;
+                    curr_len        = curr_len + i;
                 end
                 else
                 begin
@@ -210,30 +217,30 @@ package TCPPacket_pkg;
         endfunction
 
         // Method print_pkt () - Prints the packet in a structured way
-        function void print_pkt ();
-            $display ("\n********************IP-Packet********************\n");
-            $display ("Version:0x%08x\n", this.version);
-            $display ("IHL:0x%08x\n", this.header_len);
-            $display ("DSCP:0x%08x\n", this.dscp);
-            $display ("Total Length:0x%08x\n", this.total_len);
-            $display ("Identification:0x%08x\n", this.identification);
-            $display ("DF:0x%08x\n", this.DF);
-            $display ("MF:0x%08x\n", this.MF);
-            $display ("Fragment Offset:0x%08x\n", this.frag_offset);
-            $display ("Checksum:0x%08x\n", this.header_chksum);
-            $display ("Source Address:0x%08x\n", this.source_addr);
-            $display ("Destination Address:0x%08x\n", this.dest_addr);
-            $display ("Options:\n");
-            for (int i = 0; i < (this.options.size()); i++)
-            begin
-                $display ("\t0x%08x\n",this.options[i]);
-            end
-            $display ("Data:\n");
-            for (int i = 0; i < (D_IP.data.size()); i++)
-            begin
-                $display ("\t0x%08x\n",D_IP.data[i]);
-            end
-        endfunction
+        //function void print_pkt ();
+        //    $display ("\n********************IP-Packet********************\n");
+        //    $display ("Version:0x%08x\n", this.version);
+        //    $display ("IHL:0x%08x\n", this.header_len);
+        //    $display ("DSCP:0x%08x\n", this.dscp);
+        //    $display ("Total Length:0x%08x\n", this.total_len);
+        //    $display ("Identification:0x%08x\n", this.identification);
+        //    $display ("DF:0x%08x\n", this.DF);
+        //    $display ("MF:0x%08x\n", this.MF);
+        //    $display ("Fragment Offset:0x%08x\n", this.frag_offset);
+        //    $display ("Checksum:0x%08x\n", this.header_chksum);
+        //    $display ("Source Address:0x%08x\n", this.source_addr);
+        //    $display ("Destination Address:0x%08x\n", this.dest_addr);
+        //    $display ("Options:\n");
+        //    for (int i = 0; i < (this.options.size()); i++)
+        //    begin
+        //        $display ("\t0x%08x\n",this.options[i]);
+        //    end
+        //    $display ("Data:\n");
+        //    for (int i = 0; i < (D_IP.data.size()); i++)
+        //    begin
+        //        $display ("\t0x%08x\n",D_IP.data[i]);
+        //    end
+        //endfunction
 
     endclass
 endpackage

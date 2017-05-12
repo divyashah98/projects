@@ -54,13 +54,13 @@ package UDPPacket_pkg;
             curr_len             = 'h8;
             this.source_port     = source_port;
             this.dest_port       = dest_port;
+            create_packet ();
+            init_data (curr_len, udp_data_len, udp_data);
             // UDP packet has a minimum length of 8
             // bytes if no data is passed. Get the 
             // actual length by looking at the current
             // data length.
-            this.udp_len         = {5'b0, udp_data_len} + {5'b0, curr_len};
-            create_packet ();
-            init_data (udp_data_len, udp_data);
+            this.udp_len         = {5'b0, D_UDP.data_len} + {5'b0, curr_len};
             // Create the IP packet for the UDP packet
             IP_UDP               = new (header_len, UDP, source_addr, dest_addr,
                                         ip_data_len, ip_data, udp_len);
@@ -110,21 +110,35 @@ package UDPPacket_pkg;
             this.udp_chksum = ~sum;
         endfunction
 
-        // Method init_data (bit[10:0] curr_len) - Adds data to
-        // the UDP packet. No need to check if it exceeds the 
-        // max MTU allowed.
-        function void init_data (bit[10:0] udp_data_len, bit[7:0] udp_data [bit[10:0]]);
+        // Method init_data (bit[10:0] curr_len) - Adds data and 
+        // verifies that the packet doesn't exceed max MTU of 1500B
+        function void init_data (bit[10:0] curr_len, bit[10:0] data_len, bit[7:0] data [bit[10:0]]);
+            // The curr_len variable gives us the current length
+            // of the Packet combining all (i.e. IP+TCP/UDP) in B
+            // Reserve 8 Bytes for UDP packet and 20 Bytes for 
+            // the corresponding IP packet
+            integer     mtu = 1472;
             integer     i;
             // Create an instance of the Data Packet class
-            D_UDP           = new ();
-            // Allocate the memory as per Data Len
-            D_UDP.data      = new[udp_data_len];
-            // Assign the data_len as udp_data_len
-            D_UDP.data_len  = udp_data_len;
-            for (i = 0; i < udp_data_len; i++)
+            D_UDP      = new ();
+            // Allocate maximum memory assuming the size
+            // doesn't exceed the specified MTU
+            D_UDP.data = new[data_len];
+            for (i = 0; i < data_len; i++)
             begin
-                // Fill in the dynamic array with the data
-                D_UDP.data[i] = udp_data[i];
+                if ((curr_len) < mtu)
+                begin
+                    // Fill in the dynamic array with the data
+                    D_UDP.data[i]   = data[i];
+                    // Update the current data length
+                    D_UDP.data_len  = i;
+                    curr_len        = curr_len + i;
+                end
+                else
+                begin
+                    $warning ("Can't fill in the packet with complete Data! Few Data bytes will be dropped\n");
+                    return;
+                end
             end
         endfunction
 
