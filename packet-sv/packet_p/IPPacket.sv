@@ -88,7 +88,7 @@ package IPPacket_pkg;
             init_options ();
             // Calculate the CheckSum and update the IP header
             cal_chksum ();
-            print_pkt ();
+            //print_pkt ();
         endfunction
 
         // Method create_packet () - Completes the packet
@@ -124,17 +124,17 @@ package IPPacket_pkg;
             // 2. Add each 16-bit value together.
             // 3. Add in any carry
             // 4. Inverse the bits and put that in the checksum field.
-            bit [16:0]  sum = 'h0;
-            this.header_chksum = 'h0;
+            bit [15:0]  sum = 'h0;
+            bit         carry = 'h0;
             for (int i = 0; i < 10; i++)
             begin
                 //$display ("0x%4x\n", this.ip_header [i*16+:16]);
-                sum = sum + this.ip_header [i*16+:16];
+                {carry, sum} = sum + this.ip_header [i*16+:16];
                 // Check if we have a carry
-                if (sum[16])
+                if (carry)
                 begin
                     // Add the carry back to sum
-                    sum = sum + {16'h0, sum[16]};
+                    sum = sum + {15'h0, carry};
                 end
             end
             // Perform bitwise negation on sum
@@ -187,11 +187,11 @@ package IPPacket_pkg;
                     D_IP.data[i]    = data[i];
                     // Update the current data length
                     D_IP.data_len   = i;
-                    curr_len        = curr_len + i;
+                    curr_len        = curr_len++;
                 end
                 else
                 begin
-                    $warning ("Can't fill in the packet with complete Data! Few Data bytes will be dropped\n");
+                    $warning ("Can't fill in the IP packet with complete Data! Few Data bytes will be dropped\n");
                     return;
                 end
             end
