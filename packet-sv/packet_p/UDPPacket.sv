@@ -15,6 +15,15 @@ package UDPPacket_pkg;
     class UDPPacket extends PacketGen;
 
         // Class Properties: 
+        // 11-bit wide array to give
+        // the total packet length. The
+        // total packet length includes
+        // UDP + IP len
+        bit [10:0] total_pkt_len;
+        // 8-bit dynamic vector to hold
+        // the Raw packet data including
+        // UDP and IP both
+        bit [7:0] raw_pkt_data [];
         // 64-bits (8 B)wide UDP-header
         // Contains the final header info
         bit [63:0] udp_header;
@@ -64,6 +73,8 @@ package UDPPacket_pkg;
             // Create the IP packet for the UDP packet
             IP_UDP               = new (header_len, UDP, source_addr, dest_addr,
                                         ip_data_len, ip_data, udp_len);
+            this.total_pkt_len   = this.total_pkt_len + IP_UDP.total_len;
+            init_raw_pkt ();
             //print_pkt ();
         endfunction
 
@@ -132,8 +143,9 @@ package UDPPacket_pkg;
                     // Fill in the dynamic array with the data
                     D_UDP.data[i]   = data[i];
                     // Update the current data length
-                    D_UDP.data_len  = i;
-                    curr_len        = curr_len++;
+                    D_UDP.data_len      = i+1;
+                    curr_len            = curr_len + 1;
+                    this.total_pkt_len  = curr_len;
                 end
                 else
                 begin
@@ -141,6 +153,51 @@ package UDPPacket_pkg;
                     return;
                 end
             end
+        endfunction
+
+        // Method init_raw_pkt () - Initialises the 8-bit dynamic vector
+        // to give the packet data in Raw form
+        function void init_raw_pkt ();
+            integer i;
+            integer dyn_arr_len;
+            // Allocate the memory to the raw_pkt_data vec
+            raw_pkt_data = new [this.total_pkt_len];
+            // Copy the 64-bit wide UDP header - byte by byte
+            for (i = 0; i < 8; i++)
+            begin
+                raw_pkt_data[i] = udp_header[i*8+:8];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = i;
+            // Copy the UDP data based on UDP data len
+            for (i = 0; i < D_UDP.data_len; i++)
+            begin
+                raw_pkt_data[dyn_arr_len + i] = D_UDP.data[i];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the 160-bit wide IP header - byte by byte
+            for (i = 0; i < 20; i++)
+            begin
+                raw_pkt_data[dyn_arr_len + i] = IP_UDP.ip_header[i*8+:8];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the IP options if any
+            for (i = 0; i < (IP_UDP.header_len-5)<<2; i++)
+            begin
+                //$display ("Options: 0x%08X\t Actual: 0x%08X\n", IP_UDP.options[i/4][i%4*8+:8], IP_UDP.options[i/4]);
+                raw_pkt_data[dyn_arr_len + i] = IP_UDP.options[i/4][i%4*8+:8];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the IP data based on IP data len
+            for (i = 0; i < IP_UDP.D_IP.data_len; i++)
+            begin
+                raw_pkt_data[dyn_arr_len + i] = IP_UDP.D_IP.data[i];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
         endfunction
 
         //// Method print_pkt () - Prints the packet in a structured way

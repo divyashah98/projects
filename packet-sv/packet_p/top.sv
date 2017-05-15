@@ -3,15 +3,22 @@ module top ();
     import IPPacket_pkg::*;
     import UDPPacket_pkg::*;
     import TCPPacket_pkg::*;
+    import MAC_pkg::*;
     import Checker_pkg::*;
 
     // Instantiate the UDP/TCP packets
     UDPPacket UDP_1;
     TCPPacket TCP_1;
+    MACPacket MAC_1;
     // Instantiate and create the checker class handle
     Checker C_1 = new();
 
     bit[7:0] data_tb[bit[10:0]];
+    // Raw packet containing the following packets
+    //      - MAC
+    //      - TCP/UDP
+    //      - IP
+    bit [7:0] raw_data [];
     // Initialise the data_tb array
     initial
     begin
@@ -19,6 +26,11 @@ module top ();
         begin
             data_tb[i] = $urandom(i);
         end
+        // Creat the MAC packet
+        MAC_1   = new (
+                    .source_mac ('h80_00_20_7A_3F_3E),
+                    .dest_mac ('h80_00_20_20_3A_AE)
+                  );
         // Create the UDP+IP Packet
         UDP_1   = new (
                     .source_port ('h8080),          // Source port for the UDP Packet
@@ -32,6 +44,8 @@ module top ();
                     .ip_data_len ('d256),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
+        // Create UDP raw pkt
+        create_udp_rawpkt (MAC_1, UDP_1);
         // Create the TCP+IP Packet
         TCP_1   = new (
                     .source_port ('h8080),          // Source port for the TCP Packet
@@ -55,6 +69,8 @@ module top ();
                     .ip_data_len ('d256),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
+        // Create UDP raw pkt
+        create_tcp_rawpkt (MAC_1, TCP_1);
         // Call the Checker methods to check the packets
         // Check the TCP packet by calling check_tcp
         C_1.check_tcp (
@@ -86,4 +102,42 @@ module top ();
 
     end
 
+    // Method to create a raw UDP packet with MAC
+    function void create_udp_rawpkt (MACPacket MAC, UDPPacket UDP);
+        integer i;
+        // Assign memory to the raw data array
+        raw_data = new [UDP.total_pkt_len + 14];
+        // Copy the MAC data into the raw data array
+        for (i = 0; i < 14; i++)
+        begin
+            raw_data[i] = MAC.mac_header [i*8+:8];
+        end
+        // Copy the UDP data into the raw data array
+        for (i = 0; i < UDP.total_pkt_len; i++)
+        begin
+            raw_data[i+14] = UDP.raw_pkt_data[i];
+        end
+    endfunction
+
+    // Method to create a raw TCP packet with MAC
+    function void create_tcp_rawpkt (MACPacket MAC, TCPPacket TCP);
+        integer i;
+        // Assign memory to the raw data array
+        raw_data = new [TCP.total_pkt_len + 14];
+        // Copy the MAC data into the raw data array
+        for (i = 0; i < 14; i++)
+        begin
+            raw_data[i] = MAC.mac_header [i*8+:8];
+        end
+        // Copy the UDP data into the raw data array
+        for (i = 0; i < TCP.total_pkt_len; i++)
+        begin
+            raw_data[i+14] = TCP.raw_pkt_data[i];
+        end
+        // Copy the UDP data into the raw data array
+        //for (i = 0; i < raw_data.size(); i++)
+        //begin
+        //    $display ("Raw pkt: 0x%02x", raw_data[i]);
+        //end
+    endfunction
 endmodule

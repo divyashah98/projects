@@ -186,8 +186,8 @@ package IPPacket_pkg;
                     // Fill in the dynamic array with the data
                     D_IP.data[i]    = data[i];
                     // Update the current data length
-                    D_IP.data_len   = i;
-                    curr_len        = curr_len++;
+                    D_IP.data_len   = i+1;
+                    curr_len        = curr_len + 1;
                 end
                 else
                 begin
