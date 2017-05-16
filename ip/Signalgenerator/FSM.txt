@@ -1,0 +1,141 @@
+timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    11:30:51 04/06/2017 
+// Design Name: 
+// Module Name:    Waveform2 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module Waveform2(
+ input wire clk,//1 MHz
+ input wire reset,//Active low Reset
+ input wire start_f,
+ input wire [11:0]  ktp,      // Weite kathodischer Puls
+ input wire [5:0]   sktp,   // Strom kathodischer puls
+ input wire [11:0]  ipd,     // Weite ipd
+ input wire [11:0]  adp,     // Weite anodischer Puls
+ input wire [5:0]   sadp,    // Strom anodischer Puls
+
+//.... 
+
+ output wire done_f,
+ output reg  [5:0] src,
+ output wire [5:0] sink
+ //...
+
+);
+
+parameter STATE_WAIT = 0;
+parameter STATE_KATH_START = 1;
+parameter STATE_KATH_CNT = 2;                                                                                                                                                                                                                                                                                                                                                                                              
+parameter STATE_IPD_START = 3;
+parameter STATE_IPD_CNT = 4;
+parameter STATE_ANO_START = 5;
+parameter STATE_ANO_CNT = 6;
+parameter STATE_DONE = 7;
+
+//...
+
+reg [11:0] count;
+reg [3:0] state,
+          next_state;
+
+
+//...
+
+
+always @ (posedge clk or negedge reset)
+if(!reset) begin
+ state = STATE_WAIT;
+ count=0;
+end else begin 
+ case(state)
+ 
+ STATE_WAIT:
+ begin
+  count=0;
+  if( start_f==1) begin
+   state = STATE_KATH_START;
+  end else begin
+   next_state = STATE_WAIT;
+  end 
+ end
+
+   STATE_KATH_START: 
+   begin
+  state = STATE_KATH_CNT;
+  count= ktp;
+ end
+ 
+ STATE_KATH_CNT:
+ begin
+  count =count-1;
+    if( count==0) begin
+   state = STATE_IPD_START;
+  end else begin
+   next_state = STATE_KATH_CNT;
+  end
+ end
+ 
+ STATE_IPD_START:
+ begin
+  state = STATE_IPD_CNT;
+  count= ipd;
+ end
+ 
+ STATE_IPD_CNT:
+ begin
+  count =count-1;
+    if( count==0) begin
+   state = STATE_ANO_START; 
+  end else begin
+   next_state = STATE_IPD_CNT;
+  end
+ end
+ 
+ STATE_ANO_START:
+ begin
+  state = STATE_ANO_CNT;
+  count = adp;
+ end
+ 
+ STATE_ANO_CNT:
+ begin
+  count =count-1;
+    if( count==0) begin
+   state = STATE_DONE;
+  end else begin
+   next_state = STATE_ANO_CNT;
+  end
+ end
+ 
+ STATE_DONE:
+ begin
+  state = STATE_WAIT;
+ end
+    
+endcase
+ 
+
+end
+
+
+
+assign done_f = (state == STATE_DONE) ? 1 : 0;
+
+//...
+
+endmodule
+
