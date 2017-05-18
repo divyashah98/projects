@@ -74,10 +74,10 @@ integer f,i,j;
         // Create UDP raw pkt
         create_tcp_rawpkt (MAC_1, TCP_1);
 		  
-        for(j=0;j<TCP_1.raw_pkt_data.size()/16;j++) begin
+        for(j=0;j<raw_data.size()/16;j++) begin
             $fwrite(f,"%04X  ",j*16);
             for (i = 0; i < 16; i++)
-                $fwrite(f," %02X",TCP_1.raw_pkt_data[i+j*16]);
+                $fwrite(f," %02X",raw_data[i+j*16]);
             $fwrite(f,"\n");
         end
 
