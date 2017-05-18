@@ -235,39 +235,17 @@ package TCPPacket_pkg;
         // Method init_raw_pkt () - Initialises the 8-bit dynamic vector
         // to give the packet data in Raw form
         function void init_raw_pkt ();
-            integer i;
+            integer i,j;
             integer dyn_arr_len = 0;
             // Allocate the memory to the raw_pkt_data vec
             raw_pkt_data = new [this.total_pkt_len];
-            // Copy the 160-bit wide TCP header - byte by byte
-            for (i = 0; i < 20; i++)
-            begin
-                raw_pkt_data[i] = tcp_header[i*8+:8];
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = i;
-            // Copy the TCP options if any
-            for (i = 0; i < (this.header_len-5)<<2; i++)
-            begin
-                //$display ("Options: 0x%08X\t Actual: 0x%08X\n", this.options[i/4][i%4*8+:8], this.options[i/4]);
-                raw_pkt_data[dyn_arr_len + i] = this.options[i/4][i%4*8+:8];
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + i;
-            // Copy the TCP data based on TCP data len
-            for (i = 0; i < D_TCP.data_len; i++)
-            begin
-                raw_pkt_data[dyn_arr_len + i] = D_TCP.data[i];
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + i;
             // Copy the 160-bit wide IP header - byte by byte
             for (i = 0; i < 20; i++)
             begin
-                raw_pkt_data[dyn_arr_len + i] = IP_TCP.ip_header[i*8+:8];
+                raw_pkt_data[i] = IP_TCP.ip_header[i*8+:8];
             end
             // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + i;
+            dyn_arr_len = i;
             // Copy the IP options if any
             for (i = 0; i < (IP_TCP.header_len-5)<<2; i++)
             begin
@@ -280,6 +258,30 @@ package TCPPacket_pkg;
             for (i = 0; i < IP_TCP.D_IP.data_len; i++)
             begin
                 raw_pkt_data[dyn_arr_len + i] = IP_TCP.D_IP.data[i];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the 160-bit wide TCP header - byte by byte
+            j = 0;
+            for (i = 19; i >= 0; i--)
+            begin
+                raw_pkt_data[dyn_arr_len + j] = tcp_header[i*8+:8];
+                j++;
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + j;
+            // Copy the TCP options if any
+            for (i = 0; i < (this.header_len-5)<<2; i++)
+            begin
+                //$display ("Options: 0x%08X\t Actual: 0x%08X\n", this.options[i/4][i%4*8+:8], this.options[i/4]);
+                raw_pkt_data[dyn_arr_len + i] = this.options[i/4][i%4*8+:8];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the TCP data based on TCP data len
+            for (i = 0; i < D_TCP.data_len; i++)
+            begin
+                raw_pkt_data[dyn_arr_len + i] = D_TCP.data[i];
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
