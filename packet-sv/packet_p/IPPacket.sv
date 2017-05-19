@@ -35,7 +35,7 @@ package IPPacket_pkg;
         bit         DF;
         // Single bit for MF flag
         // Since DF = 1 the datagram cannot be fragmented
-        // Setting the MF = 1 (to indicate last fragement)
+        // Setting the MF = 0 (to indicate last fragement)
         bit         MF;
         // 13-bit fragment offset
         // To be set to 0
@@ -100,7 +100,7 @@ package IPPacket_pkg;
             this.dscp           = 'h0;
             this.identification = 'h0;
             this.DF             = 'h1;
-            this.MF             = 'h1;
+            this.MF             = 'h0;
             this.frag_offset    = 'h0;
             this.TTL            = 'h0;
             // The header checksum will be updated
