@@ -1,6 +1,7 @@
 package MAC_pkg;
+    import Packet_pkg::*;
     // Create the MAC class
-    class MACPacket;
+    class MACPacket extends PacketGen;
 
         // Class Properties:
         // 112-bit long MAC header
@@ -21,9 +22,9 @@ package MAC_pkg;
             this.dest_mac       = dest_mac;
             this.ether_type     = 'h0800;
             // Create the MAC header
-            mac_header          = { this.ether_type,
-                                    this.dest_mac,
-                                    this.source_mac };
+            mac_header          = { htons (this.ether_type),
+                                    htonll(this.source_mac), 
+                                    htonll(this.dest_mac)};
         endfunction
 
 

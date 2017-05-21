@@ -140,12 +140,12 @@ package TCPPacket_pkg;
             this.header_chksum = 'h0;
             // Create the TCP header by concatenating
             // all the fields together
-            this.tcp_header    = {this.source_port, this.dest_port, 
-                                  this.seq_number, this.ack_number,
-                                  this.header_len, 6'h0,
-                                  this.URG, this.ACK, this.PSH, this.RST,
-                                  this.SYN, this.FIN, this.window_size,
-                                  this.header_chksum, this.urg_pointer};
+            this.tcp_header    = {({this.urg_pointer, this.header_chksum}),
+                                  ({this.window_size}), htons({this.FIN, this.SYN,
+                                         this.RST, this.PSH, this.ACK, this.URG,
+                                         6'h0, this.header_len}),
+                                  (this.ack_number), (this.seq_number), 
+                                  (this.dest_port), (this.source_port)};
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -174,12 +174,12 @@ package TCPPacket_pkg;
             // Put the value in check sum field
             this.header_chksum = ~sum;
             // Update the TCP header with the new chk_sum field
-            this.tcp_header    = {this.source_port, this.dest_port, 
-                                  this.seq_number, this.ack_number,
-                                  this.header_len, 6'h0,
-                                  this.URG, this.ACK, this.PSH, this.RST,
-                                  this.SYN, this.FIN, this.window_size,
-                                  this.header_chksum, this.urg_pointer};
+            this.tcp_header    = {htons({this.urg_pointer}), htons({this.header_chksum}),
+                                  htons({this.window_size}), htons({this.FIN, this.SYN,
+                                         this.RST, this.PSH, this.ACK, this.URG,
+                                         6'h0, this.header_len}),
+                                  htonl(this.ack_number), htonl(this.seq_number), 
+                                  htons(this.dest_port), htons(this.source_port)};
         endfunction
 
         // Method init_options () - Initialises the packet with options
@@ -255,21 +255,19 @@ package TCPPacket_pkg;
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
             // Copy the IP data based on IP data len
-            for (i = 0; i < IP_TCP.D_IP.data_len; i++)
+            //for (i = 0; i < IP_TCP.D_IP.data_len; i++)
+            //begin
+            //    raw_pkt_data[dyn_arr_len + i] = IP_TCP.D_IP.data[i];
+            //end
+            //// Update the current len of dynamic array
+            //dyn_arr_len = dyn_arr_len + i;
+            // Copy the 160-bit wide TCP header - byte by byte
+            for (i = 0; i < 20; i++)
             begin
-                raw_pkt_data[dyn_arr_len + i] = IP_TCP.D_IP.data[i];
+                raw_pkt_data[dyn_arr_len + i] = tcp_header[i*8+:8];
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
-            // Copy the 160-bit wide TCP header - byte by byte
-            j = 0;
-            for (i = 19; i >= 0; i--)
-            begin
-                raw_pkt_data[dyn_arr_len + j] = tcp_header[i*8+:8];
-                j++;
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + j;
             // Copy the TCP options if any
             for (i = 0; i < (this.header_len-5)<<2; i++)
             begin

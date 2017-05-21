@@ -87,13 +87,13 @@ package UDPPacket_pkg;
             this.udp_chksum  = 'h0;
             // Create the UDP header by concatenating
             // all the fields together
-            this.udp_header  = {this.dest_port, this.source_port, 
-                                this.udp_len, this.udp_chksum};
+            this.udp_header  = {this.udp_chksum, this.udp_len,
+                                this.dest_port, this.source_port}; 
             // Calculate the CheckSum and update the UDP header
             cal_chksum ();
             // Update the UDP header with the new chk_sum field
-            this.udp_header  = {this.dest_port, this.source_port, 
-                                this.udp_len, this.udp_chksum};
+            this.udp_header  = {htons(this.udp_chksum), htons(this.udp_len),
+                                htons(this.dest_port), htons(this.source_port)}; 
         endfunction
 
         // Method cal_chksum () - Calculates the header checksum
@@ -162,27 +162,13 @@ package UDPPacket_pkg;
             integer dyn_arr_len;
             // Allocate the memory to the raw_pkt_data vec
             raw_pkt_data = new [this.total_pkt_len];
-            // Copy the 64-bit wide UDP header - byte by byte
-            for (i = 0; i < 8; i++)
-            begin
-                raw_pkt_data[i] = udp_header[i*8+:8];
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = i;
-            // Copy the UDP data based on UDP data len
-            for (i = 0; i < D_UDP.data_len; i++)
-            begin
-                raw_pkt_data[dyn_arr_len + i] = D_UDP.data[i];
-            end
-            // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + i;
             // Copy the 160-bit wide IP header - byte by byte
             for (i = 0; i < 20; i++)
             begin
                 raw_pkt_data[dyn_arr_len + i] = IP_UDP.ip_header[i*8+:8];
             end
             // Update the current len of dynamic array
-            dyn_arr_len = dyn_arr_len + i;
+            dyn_arr_len = i;
             // Copy the IP options if any
             for (i = 0; i < (IP_UDP.header_len-5)<<2; i++)
             begin
@@ -191,10 +177,24 @@ package UDPPacket_pkg;
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
-            // Copy the IP data based on IP data len
-            for (i = 0; i < IP_UDP.D_IP.data_len; i++)
+            //// Copy the IP data based on IP data len
+            //for (i = 0; i < IP_UDP.D_IP.data_len; i++)
+            //begin
+            //    raw_pkt_data[dyn_arr_len + i] = IP_UDP.D_IP.data[i];
+            //end
+            //// Update the current len of dynamic array
+            //dyn_arr_len = dyn_arr_len + i;
+            // Copy the 64-bit wide UDP header - byte by byte
+            for (i = 0; i < 8; i++)
             begin
-                raw_pkt_data[dyn_arr_len + i] = IP_UDP.D_IP.data[i];
+                raw_pkt_data[i] = udp_header[i*8+:8];
+            end
+            // Update the current len of dynamic array
+            dyn_arr_len = dyn_arr_len + i;
+            // Copy the UDP data based on UDP data len
+            for (i = 0; i < D_UDP.data_len; i++)
+            begin
+                raw_pkt_data[dyn_arr_len + i] = D_UDP.data[i];
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
