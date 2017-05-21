@@ -78,12 +78,11 @@ package IPPacket_pkg;
             this.protocol       = protocol;
             this.source_addr    = source_addr;
             this.dest_addr      = dest_addr;
-            this.total_len      = header_len<<2;
-            curr_len            = curr_len + this.total_len;
-            init_data (curr_len, data_len, data);
+            this.total_len      = curr_len + header_len*4;
+            //init_data (curr_len, data_len, data);
             // Update the total len field depending on the 
             // data length
-            this.total_len    = this.total_len + {5'b0, D_IP.data_len};
+            //this.total_len    = this.total_len + {5'b0, D_IP.data_len};
             create_packet ();
             init_options ();
             // Calculate the CheckSum and update the IP header
@@ -171,33 +170,33 @@ package IPPacket_pkg;
 
         // Method init_data (bit[10:0] curr_len) - Adds data and 
         // verifies that the packet doesn't exceed max MTU of 1500B
-        function void init_data (bit[10:0] curr_len, bit[10:0] data_len, bit[7:0] data [bit[10:0]]);
-            // The curr_len variable gives us the current length
-            // of the Packet combining all (i.e. IP+TCP/UDP) in B
-            integer     mtu = 1500;
-            integer     i;
-            // Create an instance of the Data Packet class
-            D_IP      = new ();
-            // Allocate maximum memory assuming the size
-            // doesn't exceed the specified MTU
-            D_IP.data = new[data_len];
-            for (i = 0; i < data_len; i++)
-            begin
-                if ((curr_len) < mtu)
-                begin
-                    // Fill in the dynamic array with the data
-                    D_IP.data[i]    = data[i];
-                    // Update the current data length
-                    D_IP.data_len   = i+1;
-                    curr_len        = curr_len + 1;
-                end
-                else
-                begin
-                    $warning ("Can't fill in the IP packet with complete Data! Few Data bytes will be dropped\n");
-                    return;
-                end
-            end
-        endfunction
+        //function void init_data (bit[10:0] curr_len, bit[10:0] data_len, bit[7:0] data [bit[10:0]]);
+        //    // The curr_len variable gives us the current length
+        //    // of the Packet combining all (i.e. IP+TCP/UDP) in B
+        //    integer     mtu = 1500;
+        //    integer     i;
+        //    // Create an instance of the Data Packet class
+        //    D_IP      = new ();
+        //    // Allocate maximum memory assuming the size
+        //    // doesn't exceed the specified MTU
+        //    D_IP.data = new[data_len];
+        //    for (i = 0; i < data_len; i++)
+        //    begin
+        //        if ((curr_len) < mtu)
+        //        begin
+        //            // Fill in the dynamic array with the data
+        //            D_IP.data[i]    = data[i];
+        //            // Update the current data length
+        //            D_IP.data_len   = i+1;
+        //            curr_len        = curr_len + 1;
+        //        end
+        //        else
+        //        begin
+        //            $warning ("Can't fill in the IP packet with complete Data! Few Data bytes will be dropped\n");
+        //            return;
+        //        end
+        //    end
+        //endfunction
 
         // Method print_pkt () - Prints the packet in a structured way
         function void print_pkt ();

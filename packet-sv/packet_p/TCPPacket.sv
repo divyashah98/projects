@@ -118,13 +118,13 @@ package TCPPacket_pkg;
             this.window_size    = window_size;
             create_packet ();
             init_options ();
-            init_data (tcp_header_len<<2, ip_data_len, ip_data);
+            init_data (tcp_header_len<<2, tcp_data_len, tcp_data);
             // Calculate the CheckSum and update the TCP header                                   
             cal_chksum ();
             // Create the IP packet for the TCP packet
             IP_TCP               = new (ip_header_len, TCP, source_addr, dest_addr,
                                         ip_data_len, ip_data, this.total_pkt_len);
-            this.total_pkt_len   = this.total_pkt_len + IP_TCP.total_len;
+            this.total_pkt_len   = IP_TCP.total_len;
             init_raw_pkt ();
             //print_pkt ();
         endfunction
@@ -247,7 +247,7 @@ package TCPPacket_pkg;
             // Update the current len of dynamic array
             dyn_arr_len = i;
             // Copy the IP options if any
-            for (i = 0; i < (IP_TCP.header_len-5)<<2; i++)
+            for (i = 0; i < (IP_TCP.header_len-5)*4; i++)
             begin
                 //$display ("Options: 0x%08X\t Actual: 0x%08X\n", IP_TCP.options[i/4][i%4*8+:8], IP_TCP.options[i/4]);
                 raw_pkt_data[dyn_arr_len + i] = IP_TCP.options[i/4][i%4*8+:8];
@@ -269,7 +269,7 @@ package TCPPacket_pkg;
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
             // Copy the TCP options if any
-            for (i = 0; i < (this.header_len-5)<<2; i++)
+            for (i = 0; i < (this.header_len-5)*2; i++)
             begin
                 //$display ("Options: 0x%08X\t Actual: 0x%08X\n", this.options[i/4][i%4*8+:8], this.options[i/4]);
                 raw_pkt_data[dyn_arr_len + i] = this.options[i/4][i%4*8+:8];
