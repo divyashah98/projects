@@ -10,7 +10,7 @@ module top ();
     UDPPacket UDP_1;
     TCPPacket TCP_1;
     MACPacket MAC_1;
-integer f,i,j;
+integer f,i,j, len;
     // Instantiate and create the checker class handle
     Checker C_1 = new();
 
@@ -68,16 +68,20 @@ integer f,i,j;
                     .protocol ('h11),               // Protocol field in the IP packet
                     .source_addr ('h0a2a5aa9),          // Source address for the IP packet
                     .dest_addr ('h0a0000eb),            // Destination address for the IP packet
-                    .ip_data_len ('d16),           // IP Packet data length
+                    .ip_data_len ('d0),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
-        // Create UDP raw pkt
+        // Create TCP raw pkt
         create_tcp_rawpkt (MAC_1, TCP_1);
-		  
-        for(j=0;j<raw_data.size()/16;j++) begin
+		len = (raw_data.size()/16);
+        if (raw_data.size%16)
+            len = len + 1;
+        for(j=0;j<len;j++) begin
             $fwrite(f,"%04X  ",j*16);
-            for (i = 0; i < 16; i++)
+            for (i = 0; i < 16; i++) begin
+                if ((j*16 + i) < raw_data.size())
                 $fwrite(f," %02X",raw_data[i+j*16]);
+            end
             $fwrite(f,"\n");
         end
 
