@@ -30,8 +30,8 @@ integer f,i,j;
         end
         // Creat the MAC packet
         MAC_1   = new (
-                    .source_mac ('h00_A0_12_01_01_02),
-                    .dest_mac ('h00_A0_12_01_01_01)
+                    .dest_mac ('h00_A0_12_01_01_01),
+                    .source_mac ('h00_A0_12_01_01_02)
                   );
         // Create the UDP+IP Packet
         UDP_1   = new (
