@@ -63,17 +63,17 @@ package UDPPacket_pkg;
             curr_len             = 'h8;
             this.source_port     = source_port;
             this.dest_port       = dest_port;
-            create_packet ();
             init_data (curr_len, udp_data_len, udp_data);
             // UDP packet has a minimum length of 8
             // bytes if no data is passed. Get the 
             // actual length by looking at the current
             // data length.
             this.udp_len         = {5'b0, D_UDP.data_len} + {5'b0, curr_len};
+            create_packet ();
             // Create the IP packet for the UDP packet
             IP_UDP               = new (header_len, UDP, source_addr, dest_addr,
                                         ip_data_len, ip_data, udp_len);
-            this.total_pkt_len   = this.total_pkt_len + IP_UDP.total_len;
+            this.total_pkt_len   = IP_UDP.total_len;
             init_raw_pkt ();
             //print_pkt ();
         endfunction
@@ -165,12 +165,12 @@ package UDPPacket_pkg;
             // Copy the 160-bit wide IP header - byte by byte
             for (i = 0; i < 20; i++)
             begin
-                raw_pkt_data[dyn_arr_len + i] = IP_UDP.ip_header[i*8+:8];
+                raw_pkt_data[i] = IP_UDP.ip_header[i*8+:8];
             end
             // Update the current len of dynamic array
             dyn_arr_len = i;
             // Copy the IP options if any
-            for (i = 0; i < (IP_UDP.header_len-5)<<2; i++)
+            for (i = 0; i < (IP_UDP.header_len-5)*4; i++)
             begin
                 //$display ("Options: 0x%08X\t Actual: 0x%08X\n", IP_UDP.options[i/4][i%4*8+:8], IP_UDP.options[i/4]);
                 raw_pkt_data[dyn_arr_len + i] = IP_UDP.options[i/4][i%4*8+:8];
@@ -187,7 +187,7 @@ package UDPPacket_pkg;
             // Copy the 64-bit wide UDP header - byte by byte
             for (i = 0; i < 8; i++)
             begin
-                raw_pkt_data[i] = udp_header[i*8+:8];
+                raw_pkt_data[dyn_arr_len + i] = udp_header[i*8+:8];
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
