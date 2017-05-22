@@ -61,7 +61,7 @@ integer f,i,j, len;
                     .SYN ('h0),                     // SYN flag
                     .FIN ('h0),                     // FIN flag
                     .tcp_header_len ('h5),          // TCP header len
-                    .window_size ('d3),          // TCP window size
+                    .window_size ('d3),           // TCP window size
                     .tcp_data_len ('d16),          // TCP Packet data length
                     .tcp_data (data_tb),            // TCP Packet data
                     .ip_header_len ('h5),           // Header length for the IP packet
@@ -73,9 +73,11 @@ integer f,i,j, len;
                   );
         // Create TCP raw pkt
         create_tcp_rawpkt (MAC_1, TCP_1);
-		len = (raw_data.size()/16);
+        len = (raw_data.size()/16);
+        
         if (raw_data.size%16)
             len = len + 1;
+        
         for(j=0;j<len;j++) begin
             $fwrite(f,"%04X  ",j*16);
             for (i = 0; i < 16; i++) begin
