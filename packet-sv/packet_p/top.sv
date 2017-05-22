@@ -23,7 +23,6 @@ integer f,i,j, len;
     // Initialise the data_tb array
     initial
     begin
-			f = $fopen("output.txt","w");
         for (int i = 0; i < 16; i++)
         begin
             data_tb[i] = i;//$urandom(i);
@@ -35,19 +34,33 @@ integer f,i,j, len;
                   );
         // Create the UDP+IP Packet
         UDP_1   = new (
-                    .source_port ('h8080),          // Source port for the UDP Packet
-                    .dest_port ('h1090),            // Destination port for the UDP packet
-                    .udp_data_len ('d12),          // UDP Packet data length
+                    .source_port ('d11),          // Source port for the UDP Packet
+                    .dest_port ('d55),            // Destination port for the UDP packet
+                    .udp_data_len ('d16),          // UDP Packet data length
                     .udp_data (data_tb),            // UDP Packet data
-                    .header_len ('h8),              // Header length for the IP packet
+                    .header_len ('h5),              // Header length for the IP packet
                     .protocol ('h11),               // Protocol field in the IP packet
-                    .source_addr ('h1234),          // Source address for the IP packet
-                    .dest_addr ('h4321),            // Destination address for the IP packet
-                    .ip_data_len ('d6),           // IP Packet data length
+                    .source_addr ('h0a2a5aa9),          // Source address for the IP packet
+                    .dest_addr ('h0a0000eb),            // Destination address for the IP packet
+                    .ip_data_len ('d0),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
         // Create UDP raw pkt
         create_udp_rawpkt (MAC_1, UDP_1);
+        len = (raw_data.size()/16);
+        
+        if (raw_data.size%16)
+            len = len + 1;
+        f = $fopen("output_udp.txt","w");
+        for(j=0;j<len;j++) begin
+            $fwrite(f,"%04X  ",j*16);
+            for (i = 0; i < 16; i++) begin
+                if ((j*16 + i) < raw_data.size())
+                $fwrite(f," %02X",raw_data[i+j*16]);
+            end
+            $fwrite(f,"\n");
+        end
+        $fclose(f);
         // Create the TCP+IP Packet
         TCP_1   = new (
                     .source_port ('d11),          // Source port for the TCP Packet
@@ -78,14 +91,16 @@ integer f,i,j, len;
         if (raw_data.size%16)
             len = len + 1;
         
-        for(j=0;j<len;j++) begin
-            $fwrite(f,"%04X  ",j*16);
-            for (i = 0; i < 16; i++) begin
-                if ((j*16 + i) < raw_data.size())
-                $fwrite(f," %02X",raw_data[i+j*16]);
-            end
-            $fwrite(f,"\n");
-        end
+        //f = $fopen("output.txt","w");
+        //for(j=0;j<len;j++) begin
+        //    $fwrite(f,"%04X  ",j*16);
+        //    for (i = 0; i < 16; i++) begin
+        //        if ((j*16 + i) < raw_data.size())
+        //        $fwrite(f," %02X",raw_data[i+j*16]);
+        //    end
+        //    $fwrite(f,"\n");
+        //end
+        //$fclose(f);  
 
         // Call the Checker methods to check the packets
         // Check the TCP packet by calling check_tcp
@@ -113,7 +128,6 @@ integer f,i,j, len;
                     .source_addr ('h1234),          // Expected Source address for the IP packet
                     .dest_addr ('h4321)             // Expected Destination address for the IP packet
         );
-		  $fclose(f);  
 		  #10
         // End the simulation now
         $finish ("Simulation completed\n");
