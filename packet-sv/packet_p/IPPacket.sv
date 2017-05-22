@@ -101,20 +101,20 @@ package IPPacket_pkg;
             this.DF             = 'h1;
             this.MF             = 'h0;
             this.frag_offset    = 'h0;
-            this.TTL            = 'h0;
+            this.TTL            = 'h1;
             // The header checksum will be updated
             // by the cal_chksum method
             this.header_chksum  = 'h0;
             // Create the IP header by concatenating
             // all the fields together
-            this.ip_header      = {htonl(this.dest_addr), htonl(this.source_addr), 
-                                   htons(this.header_chksum), 
-                                   htons({this.protocol, this.TTL}), 
-                                   htons({this.frag_offset, this.MF, 
-                                   this.DF, 1'h0}), htons(this.identification), 
-                                   htons(this.total_len), htons({this.dscp, 
-                                   this.header_len, this.version})};
-        endfunction
+            this.ip_header      = {(this.dest_addr), (this.source_addr), 
+                                   (this.header_chksum), 
+                                   ({this.protocol, this.TTL}), 
+                                   ({this.frag_offset, this.MF, 
+                                   this.DF, 1'h0}), (this.identification), 
+                                   (this.total_len), ({this.dscp, 
+                                   this.version, this.header_len})};
+        endfunction                                   
 
         // Method cal_chksum () - Calculates the header checksum
         // Puts the calculated checksum into the header_chksum field
@@ -143,11 +143,11 @@ package IPPacket_pkg;
             // Update the IP header with the new chk_sum field
             this.ip_header      = {htonl(this.dest_addr), htonl(this.source_addr), 
                                    htons(this.header_chksum), 
-                                   htons({this.protocol, this.TTL}), 
-                                   htons({this.frag_offset, this.MF, 
-                                   this.DF, 1'h0}), htons(this.identification), 
-                                   htons(this.total_len), htons({this.dscp, 
-                                   this.header_len, this.version})};
+                                   ({this.protocol, this.TTL}), 
+                                   htons({1'h0, this.DF, 
+                                   this.MF,this.frag_offset}), htons(this.identification), 
+                                   htons(this.total_len), ({this.dscp, 
+                                   this.version, this.header_len})};
         endfunction
 
         // Method init_options () - Initialises the packet with options

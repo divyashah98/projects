@@ -141,9 +141,9 @@ package TCPPacket_pkg;
             // Create the TCP header by concatenating
             // all the fields together
             this.tcp_header    = {({this.urg_pointer, this.header_chksum}),
-                                  ({this.window_size}), htons({this.FIN, this.SYN,
-                                         this.RST, this.PSH, this.ACK, this.URG,
-                                         6'h0, this.header_len}),
+                                  ({this.window_size}), ({this.header_len, 6'h0, 
+                                                          this.URG, this.ACK, this.PSH, 
+                                                          this.RST,this.SYN, this.FIN}),
                                   (this.ack_number), (this.seq_number), 
                                   (this.dest_port), (this.source_port)};
         endfunction
@@ -175,9 +175,9 @@ package TCPPacket_pkg;
             this.header_chksum = ~sum;
             // Update the TCP header with the new chk_sum field
             this.tcp_header    = {htons({this.urg_pointer}), htons({this.header_chksum}),
-                                  htons({this.window_size}), htons({this.FIN, this.SYN,
-                                         this.RST, this.PSH, this.ACK, this.URG,
-                                         6'h0, this.header_len}),
+                                  htons({this.window_size}), htons({this.header_len, 6'h0, 
+                                                          this.URG, this.ACK, this.PSH, 
+                                                          this.RST,this.SYN, this.FIN}),
                                   htonl(this.ack_number), htonl(this.seq_number), 
                                   htons(this.dest_port), htons(this.source_port)};
         endfunction
@@ -269,7 +269,7 @@ package TCPPacket_pkg;
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
             // Copy the TCP options if any
-            for (i = 0; i < (this.header_len-5)*2; i++)
+            for (i = 0; i < (this.header_len-5)*4; i++)
             begin
                 //$display ("Options: 0x%08X\t Actual: 0x%08X\n", this.options[i/4][i%4*8+:8], this.options[i/4]);
                 raw_pkt_data[dyn_arr_len + i] = this.options[i/4][i%4*8+:8];
