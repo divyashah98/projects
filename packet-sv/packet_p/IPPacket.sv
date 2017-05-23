@@ -146,10 +146,29 @@ package IPPacket_pkg;
                     sum = sum + {15'h0, carry};
                 end
             end
+            // Calculate the sum over the options field
+            for (int i = 0; i <(this.header_len - 5) ; i++)
+            begin
+                //$display ("0x%4x\n", htons(this.options[i][15:0]));
+                {carry, sum} = sum + htons(this.options[i][15:0]);
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+                //$display ("0x%4x\n", htons(this.options[i][31:16]));
+                {carry, sum} = sum + htons(this.options[i][31:16]);
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
-            //$display ("IP:%X", this.header_chksum);
             // Update the IP header with the new chk_sum field
             this.ip_header      = {htonl(this.dest_addr), htonl(this.source_addr), 
                                    htons(this.header_chksum), 

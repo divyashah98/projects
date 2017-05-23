@@ -168,7 +168,7 @@ package TCPPacket_pkg;
             // Calculate the sum over the pseudo header
             for (int i = 0; i < 6; i++)
             begin
-                $display ("0x%4x\n", this.tcp_pseudo_header [i*16+:16]);
+                //$display ("0x%4x\n", this.tcp_pseudo_header [i*16+:16]);
                 {carry, sum} = sum + this.tcp_pseudo_header [i*16+:16];
                 // Check if we have a carry
                 if (carry)
@@ -180,8 +180,28 @@ package TCPPacket_pkg;
             // Calculate the sum over the TCP header
             for (int i = 0; i < 10; i++)
             begin
-                $display ("0x%4x\n", this.tcp_header [i*16+:16]);
+                //$display ("0x%4x\n", this.tcp_header [i*16+:16]);
                 {carry, sum} = sum + this.tcp_header [i*16+:16];
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
+            // Calculate the sum over the options field
+            for (int i = 0; i <(this.header_len - 5) ; i++)
+            begin
+                //$display ("0x%4x\n", this.tcp_header [i*16+:16]);
+                {carry, sum} = sum + htons(this.options[i][15:0]);
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+                //$display ("0x%4x\n", this.tcp_header [i*16+:16]);
+                {carry, sum} = sum + htons(this.options[i][31:16]);
                 // Check if we have a carry
                 if (carry)
                 begin
@@ -192,7 +212,7 @@ package TCPPacket_pkg;
             // Calculate the sum over the Data payload
             for (int i = 0; i < D_TCP.data_len; i = i+2)
             begin
-                $display ("0x%4x\n", htons({D_TCP.data[i+1], D_TCP.data[i]}));
+                //$display ("0x%4x\n", htons({D_TCP.data[i+1], D_TCP.data[i]}));
                 {carry, sum} = sum + htons({D_TCP.data[i+1], D_TCP.data[i]});
                 // Check if we have a carry
                 if (carry)
