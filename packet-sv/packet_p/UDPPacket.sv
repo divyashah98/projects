@@ -27,6 +27,9 @@ package UDPPacket_pkg;
         // 64-bits (8 B)wide UDP-header
         // Contains the final header info
         bit [63:0] udp_header;
+        // 96-bits long UDP Pseudo header
+        // Required for checksum calculation
+        bit [95:0] udp_pseudo_header;
         // 16-bit Source Port number
         // Value set as per the given input 
         bit [15:0]  source_port;
@@ -69,6 +72,10 @@ package UDPPacket_pkg;
             // actual length by looking at the current
             // data length.
             this.udp_len         = {5'b0, D_UDP.data_len} + {5'b0, curr_len};
+            // Create the TCP Pseudo header by concatenating
+            // all the required fields together
+            this.udp_pseudo_header = {{5'h0, this.udp_len}, 8'h0, UDP,
+                                      dest_addr, source_addr};
             create_packet ();
             // Create the IP packet for the UDP packet
             IP_UDP               = new (header_len, UDP, source_addr, dest_addr,
@@ -106,10 +113,34 @@ package UDPPacket_pkg;
             // 4. Inverse the bits and put that in the checksum field.
             bit [15:0]  sum = 'h0;
             bit         carry = 'h0;
+            // Calculate the sum over the pseudo header
+            for (int i = 0; i < 6; i++)
+            begin
+                //$display ("0x%4x\n", this.udp_pseudo_header [i*16+:16]);
+                {carry, sum} = sum + this.udp_pseudo_header [i*16+:16];
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
             for (int i = 0; i < 4; i++)
             begin
-                //$display ("0x%4x\n", this.ip_header [i*16+:16]);
+                //$display ("0x%4x\n", this.udp_header [i*16+:16]);
                 {carry, sum} = sum + this.udp_header [i*16+:16];
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
+            // Calculate the sum over the Data payload
+            for (int i = 0; i < D_UDP.data_len; i = i+2)
+            begin
+                //$display ("0x%4x\n", htons({D_UDP.data[i+1], D_UDP.data[i]}));
+                {carry, sum} = sum + htons({D_UDP.data[i+1], D_UDP.data[i]});
                 // Check if we have a carry
                 if (carry)
                 begin
