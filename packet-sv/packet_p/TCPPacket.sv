@@ -27,6 +27,9 @@ package TCPPacket_pkg;
         // 160-bits (20 B)wide TCP-header
         // Contains the final header info
         bit [159:0] tcp_header;
+        // 96-bits long TCP Pseudo header
+        // Required for checksum calculation
+        bit [95:0] tcp_pseudo_header;
         // 16-bit Source Port number
         // Value set as per the given input 
         bit [15:0]  source_port;
@@ -118,7 +121,11 @@ package TCPPacket_pkg;
             this.window_size    = window_size;
             create_packet ();
             init_options ();
-            init_data (tcp_header_len<<2, tcp_data_len, tcp_data);
+            init_data (tcp_header_len*4, tcp_data_len, tcp_data);
+            // Create the TCP Pseudo header by concatenating
+            // all the required fields together
+            this.tcp_pseudo_header = {{5'h0, this.total_pkt_len}, 8'h0, TCP,
+                                      dest_addr, source_addr};
             // Calculate the CheckSum and update the TCP header                                   
             cal_chksum ();
             // Create the IP packet for the TCP packet
@@ -156,13 +163,37 @@ package TCPPacket_pkg;
             // 2. Add each 16-bit value together.
             // 3. Add in any carry
             // 4. Inverse the bits and put that in the checksum field.
-            bit [15:0]  sum = 'h0;
+            bit [15:0]  sum   = 'h0;
             bit         carry = 'h0;
-            this.header_chksum = 'h0;
+            // Calculate the sum over the pseudo header
+            for (int i = 0; i < 6; i++)
+            begin
+                $display ("0x%4x\n", this.tcp_pseudo_header [i*16+:16]);
+                {carry, sum} = sum + this.tcp_pseudo_header [i*16+:16];
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
+            // Calculate the sum over the TCP header
             for (int i = 0; i < 10; i++)
             begin
-                //$display ("0x%4x\n", this.ip_header [i*16+:16]);
+                $display ("0x%4x\n", this.tcp_header [i*16+:16]);
                 {carry, sum} = sum + this.tcp_header [i*16+:16];
+                // Check if we have a carry
+                if (carry)
+                begin
+                    // Add the carry back to sum
+                    sum = sum + {15'h0, carry};
+                end
+            end
+            // Calculate the sum over the Data payload
+            for (int i = 0; i < D_TCP.data_len; i = i+2)
+            begin
+                $display ("0x%4x\n", htons({D_TCP.data[i+1], D_TCP.data[i]}));
+                {carry, sum} = sum + htons({D_TCP.data[i+1], D_TCP.data[i]});
                 // Check if we have a carry
                 if (carry)
                 begin
@@ -173,6 +204,7 @@ package TCPPacket_pkg;
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
+            //$display ("TCP:%X", this.header_chksum);
             // Update the TCP header with the new chk_sum field
             this.tcp_header    = {htons({this.urg_pointer}), htons({this.header_chksum}),
                                   htons({this.window_size}), htons({this.header_len, 6'h0, 

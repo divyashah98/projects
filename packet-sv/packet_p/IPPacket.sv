@@ -14,6 +14,8 @@ package IPPacket_pkg;
         // 160-bits (20 B)wide IP-header
         // Contains the final header info
         bit [159:0] ip_header;
+        // 160-bits IP header for checksum cal
+        bit [159:0] ip_header_chksum;
         // 4-bit Version field
         // As per the internal specifications - it should be always 4
         bit [3:0]   version;
@@ -109,11 +111,18 @@ package IPPacket_pkg;
             // all the fields together
             this.ip_header      = {(this.dest_addr), (this.source_addr), 
                                    (this.header_chksum), 
-                                   ({this.protocol, this.TTL}), 
-                                   ({this.frag_offset, this.MF, 
-                                   this.DF, 1'h0}), (this.identification), 
-                                   (this.total_len), ({this.dscp, 
+                                   htons({this.protocol, this.TTL}), 
+                                   ({1'h0, this.DF, 
+                                   this.MF,this.frag_offset}), (this.identification), 
+                                   (this.total_len), htons({this.dscp, 
                                    this.version, this.header_len})};
+            //this.ip_header        = {(this.dest_addr), (this.source_addr), 
+            //                         (this.header_chksum), 
+            //                         ({this.protocol, this.TTL}), 
+            //                         ({this.frag_offset, this.MF, 
+            //                         this.DF, 1'h0}), (this.identification), 
+            //                         (this.total_len), ({this.dscp, 
+            //                         this.version, this.header_len})};
         endfunction                                   
 
         // Method cal_chksum () - Calculates the header checksum
@@ -140,6 +149,7 @@ package IPPacket_pkg;
             // Perform bitwise negation on sum
             // Put the value in check sum field
             this.header_chksum = ~sum;
+            //$display ("IP:%X", this.header_chksum);
             // Update the IP header with the new chk_sum field
             this.ip_header      = {htonl(this.dest_addr), htonl(this.source_addr), 
                                    htons(this.header_chksum), 
