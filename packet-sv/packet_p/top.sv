@@ -45,7 +45,7 @@ integer f,i,j, len;
                     .ip_data_len ('d0),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
-         Create UDP raw pkt
+        // Create UDP raw pkt
         create_udp_rawpkt (MAC_1, UDP_1);
         len = (raw_data.size()/16);
         
@@ -105,7 +105,8 @@ integer f,i,j, len;
         // Call the Checker methods to check the packets
         // Check the TCP packet by calling check_tcp
         C_1.check_tcp (
-                    .TCP (TCP_1),                   // Pass the created TCP packet
+                    //.TCP (TCP_1),                   // Pass the created TCP packet
+                    .raw_data (raw_data),
                     .source_port ('h8080),          // Expected source port
                     .dest_port ('h1090),            // Expected destination port
                     .seq_number ('h1eadbeef),       // Expected Sequence number for the TCP packet
