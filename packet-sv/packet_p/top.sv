@@ -45,7 +45,7 @@ integer f,i,j, len;
                     .ip_data_len ('d0),           // IP Packet data length
                     .ip_data (data_tb)              // IP packet data
                   );
-        // Create UDP raw pkt
+         Create UDP raw pkt
         create_udp_rawpkt (MAC_1, UDP_1);
         len = (raw_data.size()/16);
         
@@ -91,16 +91,16 @@ integer f,i,j, len;
         if (raw_data.size%16)
             len = len + 1;
         
-        //f = $fopen("output.txt","w");
-        //for(j=0;j<len;j++) begin
-        //    $fwrite(f,"%04X  ",j*16);
-        //    for (i = 0; i < 16; i++) begin
-        //        if ((j*16 + i) < raw_data.size())
-        //        $fwrite(f," %02X",raw_data[i+j*16]);
-        //    end
-        //    $fwrite(f,"\n");
-        //end
-        //$fclose(f);  
+        f = $fopen("output.txt","w");
+        for(j=0;j<len;j++) begin
+            $fwrite(f,"%04X  ",j*16);
+            for (i = 0; i < 16; i++) begin
+                if ((j*16 + i) < raw_data.size())
+                $fwrite(f," %02X",raw_data[i+j*16]);
+            end
+            $fwrite(f,"\n");
+        end
+        $fclose(f);  
 
         // Call the Checker methods to check the packets
         // Check the TCP packet by calling check_tcp
@@ -161,15 +161,10 @@ integer f,i,j, len;
         begin
             raw_data[i] = MAC.mac_header [i*8+:8];
         end
-        // Copy the UDP data into the raw data array
+        // Copy the TCP data into the raw data array
         for (i = 0; i < TCP.total_pkt_len; i++)
         begin
             raw_data[i+14] = TCP.raw_pkt_data[i];
         end
-        // Copy the UDP data into the raw data array
-        //for (i = 0; i < raw_data.size(); i++)
-        //begin
-        //    $display ("Raw pkt: 0x%02x", raw_data[i]);
-        //end
     endfunction
 endmodule
