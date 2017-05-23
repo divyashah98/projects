@@ -61,6 +61,14 @@ integer f,i,j, len;
             $fwrite(f,"\n");
         end
         $fclose(f);
+        // Check the UDP packet by calling check_udp
+        C_1.check_udp (
+                    .raw_data (raw_data),
+                    .source_port ('d11),          // Expected source port
+                    .dest_port ('d55),            // Expected destination port
+                    .source_addr ('h0a2a5aa9),    // Expected Source address for the IP packet
+                    .dest_addr ('h0a0000eb)       // Expected Destination address for the IP packet
+        );
         // Create the TCP+IP Packet
         TCP_1   = new (
                     .source_port ('d11),          // Source port for the TCP Packet
@@ -105,29 +113,20 @@ integer f,i,j, len;
         // Call the Checker methods to check the packets
         // Check the TCP packet by calling check_tcp
         C_1.check_tcp (
-                    //.TCP (TCP_1),                   // Pass the created TCP packet
                     .raw_data (raw_data),
-                    .source_port ('h8080),          // Expected source port
-                    .dest_port ('h1090),            // Expected destination port
-                    .seq_number ('h1eadbeef),       // Expected Sequence number for the TCP packet
-                    .ack_number ('h9009),           // Expected Acknowledge number for the TCP packet
+                    .source_port ('d11),          // Expected source port
+                    .dest_port ('d55),            // Expected destination port
+                    .seq_number ('d1),       // Expected Sequence number for the TCP packet
+                    .ack_number ('d2),           // Expected Acknowledge number for the TCP packet
                     .URG ('h0),                     // Expected URG flag
                     .ACK ('h0),                     // Expected ACK flag
-                    .PSH ('h0),                     // Expected PSH flag
+                    .PSH ('h1),                     // Expected PSH flag
                     .RST ('h0),                     // Expected RST flag
                     .SYN ('h0),                     // Expected SYN flag
                     .FIN ('h0),                     // Expected FIN flag
-                    .window_size ('hdeaf),          // Expected TCP window size
-                    .source_addr ('h1234),          // Expected Source address for the IP packet
-                    .dest_addr ('h4321)             // Expected Destination address for the IP packet
-        );
-        // Check the UDP packet by calling check_udp
-        C_1.check_udp (
-                    .UDP (UDP_1),                   // Pass the created UDP packet
-                    .source_port ('h8080),          // Expected source port
-                    .dest_port ('h1090),            // Expected destination port
-                    .source_addr ('h1234),          // Expected Source address for the IP packet
-                    .dest_addr ('h4321)             // Expected Destination address for the IP packet
+                    .window_size ('h3),          // Expected TCP window size
+                    .source_addr ('h0a2a5aa9),          // Expected Source address for the IP packet
+                    .dest_addr ('h0a0000eb)             // Expected Destination address for the IP packet
         );
 		  #10
         // End the simulation now
