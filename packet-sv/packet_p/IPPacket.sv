@@ -14,8 +14,6 @@ package IPPacket_pkg;
         // 160-bits (20 B)wide IP-header
         // Contains the final header info
         bit [159:0] ip_header;
-        // 160-bits IP header for checksum cal
-        bit [159:0] ip_header_chksum;
         // 4-bit Version field
         // As per the internal specifications - it should be always 4
         bit [3:0]   version;
