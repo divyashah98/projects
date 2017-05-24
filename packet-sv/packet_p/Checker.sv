@@ -6,13 +6,15 @@ package Checker_pkg;
         // Class Properties:
         // Class Methods:
         // Method to test the TCP packet
-        function void check_tcp (bit[7:0] raw_data[],     bit[15:0] source_port,
-                                bit[15:0] dest_port,    bit[31:0] seq_number,
-                                bit[31:0] ack_number,
-                                bit URG,  bit ACK,      bit       PSH, 
-                                bit RST,  bit SYN,      bit       FIN,
-                                bit[15:0] window_size,
-                                bit[31:0] source_addr,  bit[31:0] dest_addr
+        function void check_tcp (bit[7:0] raw_data[],    bit[47:0] source_mac,
+                                 bit[47:0] dest_mac,     bit[15:0] ether_type,
+                                 bit[15:0] source_port,
+                                 bit[15:0] dest_port,    bit[31:0] seq_number,
+                                 bit[31:0] ack_number,
+                                 bit URG,  bit ACK,      bit       PSH, 
+                                 bit RST,  bit SYN,      bit       FIN,
+                                 bit[15:0] window_size,
+                                 bit[31:0] source_addr,  bit[31:0] dest_addr
         );
             bit[47:0]  raw_dest_mac;
             bit[47:0]  raw_source_mac;
@@ -70,7 +72,7 @@ package Checker_pkg;
             // Update len to 12
             len = 12;
             // Copy the ether type field
-            raw_ether_type      = {raw_data[len+1], raw_data[len+0]};
+            raw_ether_type      = {raw_data[len+0], raw_data[len+1]};
             //$display ("[MAC] Ether Type: %X", raw_ether_type);                               
             // Update len to 14
             len = 14;
@@ -234,6 +236,18 @@ package Checker_pkg;
                                    (raw_total_len), htons({8'h0, 
                                    raw_version, raw_ip_header_len})};
 
+            if (raw_source_mac != source_mac)
+            begin
+                $fatal (1, "[MAC]: Source Addr mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", source_mac, raw_source_mac);
+            end
+            if (raw_dest_mac != dest_mac)
+            begin
+                $fatal (1, "[MAC]: Dest Addr mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", dest_mac, raw_dest_mac);
+            end
+            if (raw_ether_type != ether_type)
+            begin
+                $fatal (1, "[MAC]: Ether Type mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", ether_type, raw_ether_type);
+            end
             if (raw_source_port != source_port)
             begin
                 $fatal (1, "[TCP]: Source port mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", source_port, raw_source_port);
@@ -394,7 +408,8 @@ package Checker_pkg;
         endfunction
 
         // Method to test the UDP packet
-        function void check_udp (bit[7:0] raw_data[], 
+        function void check_udp (bit[7:0]  raw_data[],  bit[47:0] source_mac,
+                                 bit[47:0] dest_mac,    bit[15:0] ether_type,
                                  bit[15:0] source_port, bit[15:0] dest_port,
                                  bit[31:0] source_addr, bit[31:0] dest_addr
         );
@@ -443,7 +458,7 @@ package Checker_pkg;
             // Update len to 12
             len = 12;
             // Copy the ether type field
-            raw_ether_type      = {raw_data[len+1], raw_data[len+0]};
+            raw_ether_type      = {raw_data[len+0], raw_data[len+1]};
             //$display ("[MAC] Ether Type: %X", raw_ether_type);                               
             // Update len to 14
             len = 14;
@@ -550,6 +565,19 @@ package Checker_pkg;
                                    raw_MF,13'h0}), (16'h0), 
                                    (raw_total_len), htons({8'h0, 
                                    raw_version, raw_ip_header_len})};
+            
+            if (raw_source_mac != source_mac)
+            begin
+                $fatal (1, "[MAC]: Source Addr mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", source_mac, raw_source_mac);
+            end
+            if (raw_dest_mac != dest_mac)
+            begin
+                $fatal (1, "[MAC]: Dest Addr mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", dest_mac, raw_dest_mac);
+            end
+            if (raw_ether_type != ether_type)
+            begin
+                $fatal (1, "[MAC]: Ether Type mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", ether_type, raw_ether_type);
+            end
             if (raw_source_port != source_port)    
             begin
                 $fatal (1, "[UDP]: Source Port mismatch! Expected: 0x%08x\t Actual: 0x%08x\n", source_port, raw_source_port);

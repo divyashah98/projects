@@ -64,6 +64,9 @@ integer f,i,j, len;
         // Check the UDP packet by calling check_udp
         C_1.check_udp (
                     .raw_data (raw_data),
+                    .source_mac ('h00_A0_12_01_01_02),
+                    .dest_mac('h00_A0_12_01_01_01),
+                    .ether_type('h0800),
                     .source_port ('d11),          // Expected source port
                     .dest_port ('d55),            // Expected destination port
                     .source_addr ('h0a2a5aa9),    // Expected Source address for the IP packet
@@ -81,11 +84,11 @@ integer f,i,j, len;
                     .RST ('h0),                     // RST flag
                     .SYN ('h0),                     // SYN flag
                     .FIN ('h0),                     // FIN flag
-                    .tcp_header_len ('h5),          // TCP header len
+                    .tcp_header_len ('h7),          // TCP header len
                     .window_size ('d3),           // TCP window size
                     .tcp_data_len ('d16),          // TCP Packet data length
                     .tcp_data (data_tb),            // TCP Packet data
-                    .ip_header_len ('h5),           // Header length for the IP packet
+                    .ip_header_len ('h7),           // Header length for the IP packet
                     .protocol ('h11),               // Protocol field in the IP packet
                     .source_addr ('h0a2a5aa9),          // Source address for the IP packet
                     .dest_addr ('h0a0000eb),            // Destination address for the IP packet
@@ -114,6 +117,9 @@ integer f,i,j, len;
         // Check the TCP packet by calling check_tcp
         C_1.check_tcp (
                     .raw_data (raw_data),
+                    .source_mac ('h00_A0_12_01_01_02),
+                    .dest_mac('h00_A0_12_01_01_01),
+                    .ether_type('h0800),
                     .source_port ('d11),          // Expected source port
                     .dest_port ('d55),            // Expected destination port
                     .seq_number ('d1),       // Expected Sequence number for the TCP packet
