@@ -47,22 +47,22 @@ package TCPPacket_pkg;
         // Should be between 5 and 15
         bit [3:0]   header_len;
         // 1-bit URG Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         URG;
         // 1-bit ACK Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         ACK;
         // 1-bit PSH Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         PSH;
         // 1-bit RST Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         RST;
         // 1-bit SYN Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         SYN;
         // 1-bit FIN Flag
-        // Fixed to 0
+        // Value as per the function input
         bit         FIN;
         // 16-bit Window Size
         // Value set as per the given input during instantiation
@@ -74,23 +74,23 @@ package TCPPacket_pkg;
         // Fixed to 0
         bit [15:0]  urg_pointer;
         // 32-bit options field - Implemented as a
-        // dynamic array indexed with bit[3:0] as
-        // the maximum value could be max(DOff)-5
-        // where:
+        // dynamic array.
+        // The maximum value could be max(DOff)-5
+        // where: (DOff - data offset)
         // max(DOff) = 15
         // Hence max length of array would be
         // 15 -5 = 10
         // To be filled with DOff-5 32-bit words of 
         // incremental data only if DOff is greater than 5
         bit [31:0]  options [];
-        // Instantiate an instance of the Data Payload 
+        // Create an instance of the Data Payload 
         // class to hold the Data related information
         DataPayload D_TCP;
         // Create an instance of the IP-Packet 
         // class to hold the IP related info
         IPPacket IP_TCP;
-        // Define the TCP Protocol used for creating
-        // the IP packet
+        // Define the TCP Protocol field value
+        // It is part of the IP packet
         bit [7:0] TCP = 'h06;
 
         // Class Methods:
@@ -101,10 +101,10 @@ package TCPPacket_pkg;
                       bit URG,  bit ACK,        bit       PSH, 
                       bit RST,  bit SYN,        bit       FIN,
                       bit[3:0]  tcp_header_len, bit[15:0] window_size,
-                      bit[10:0] tcp_data_len,   bit[7:0]  tcp_data [bit [10:0]], 
+                      bit[10:0] tcp_data_len,   bit[7:0]  tcp_data [], 
                       bit[3:0]  ip_header_len,  bit[7:0]  protocol, 
                       bit[31:0] source_addr,    bit[31:0] dest_addr, 
-                      bit[10:0] ip_data_len,    bit[7:0]  ip_data [bit [10:0]]
+                      bit[10:0] ip_data_len,    bit[7:0]  ip_data []
         );
             super.new();
             this.source_port    = source_port;
@@ -306,13 +306,6 @@ package TCPPacket_pkg;
             end
             // Update the current len of dynamic array
             dyn_arr_len = dyn_arr_len + i;
-            // Copy the IP data based on IP data len
-            //for (i = 0; i < IP_TCP.D_IP.data_len; i++)
-            //begin
-            //    raw_pkt_data[dyn_arr_len + i] = IP_TCP.D_IP.data[i];
-            //end
-            //// Update the current len of dynamic array
-            //dyn_arr_len = dyn_arr_len + i;
             // Copy the 160-bit wide TCP header - byte by byte
             for (i = 0; i < 20; i++)
             begin
