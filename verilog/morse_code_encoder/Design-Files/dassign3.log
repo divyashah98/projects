@@ -1,0 +1,108 @@
+Reading /home/rahul/altera/14.0/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1e
+
+# vsim -do {run -all} -c dassign3_tb 
+# Loading work.dassign3_tb
+# Loading work.clkgen
+# Loading work.dassign3
+# Loading work.code_reg
+# Loading work.led_fsm
+# run -all 
+# Blank detected (may be a fault)
+# DASH detected
+# DASH detected
+# Character Found:
+# 	Match code: 11000000
+# 	Match length: 00000000000000000000000000000010
+# M, 110000000010, 0010, 11000000
+# Blank detected (may be a fault)
+# DOT detected
+# DASH detected
+# DASH detected
+# DASH detected
+# DASH detected
+# Character Found:
+# 	Match code: 01111000
+# 	Match length: 00000000000000000000000000000101
+# 1, 011110000101, 0101, 01111000
+# Blank detected (may be a fault)
+# DASH detected
+# DOT detected
+# DOT detected
+# DOT detected
+# DOT detected
+# Character Found:
+# 	Match code: 10000000
+# 	Match length: 00000000000000000000000000000101
+# 6, 100000000101, 0101, 10000000
+# Blank detected (may be a fault)
+# Character Found:
+# 	Match code: 00000000
+# 	Match length: 00000000000000000000000000000000
+#  , 000000000000, 0000, 00000000
+# Blank detected (may be a fault)
+# Blank detected (may be a fault)
+# DASH detected
+# Character Found:
+# 	Match code: 10000000
+# 	Match length: 00000000000000000000000000000001
+# T, 100000000001, 0001, 10000000
+# Blank detected (may be a fault)
+# DOT detected
+# DASH detected
+# Character Found:
+# 	Match code: 01000000
+# 	Match length: 00000000000000000000000000000010
+# A, 010000000010, 0010, 01000000
+# Blank detected (may be a fault)
+# Character Found:
+# 	Match code: 00000000
+# 	Match length: 00000000000000000000000000000000
+#  , 000000000000, 0000, 00000000
+# Blank detected (may be a fault)
+# Blank detected (may be a fault)
+# DOT detected
+# DOT detected
+# DASH detected
+# DOT detected
+# Character Found:
+# 	Match code: 00100000
+# 	Match length: 00000000000000000000000000000100
+# F, 001000000100, 0100, 00100000
+# Blank detected (may be a fault)
+# DOT detected
+# DASH detected
+# Character Found:
+# 	Match code: 01000000
+# 	Match length: 00000000000000000000000000000010
+# A, 010000000010, 0010, 01000000
+# Blank detected (may be a fault)
+# DASH detected
+# Character Found:
+# 	Match code: 10000000
+# 	Match length: 00000000000000000000000000000001
+# T, 100000000001, 0001, 10000000
+# Blank detected (may be a fault)
+# DOT detected
+# DOT detected
+# Character Found:
+# 	Match code: 00000000
+# 	Match length: 00000000000000000000000000000010
+# I, 000000000010, 0010, 00000000
+# Blank detected (may be a fault)
+# DASH detected
+# DASH detected
+# Character Found:
+# 	Match code: 11000000
+# 	Match length: 00000000000000000000000000000010
+# M, 110000000010, 0010, 11000000
+# Blank detected (may be a fault)
+# DOT detected
+# DASH detected
+# Character Found:
+# 	Match code: 01000000
+# 	Match length: 00000000000000000000000000000010
+# A, 010000000010, 0010, 01000000
+# ** Note: $finish    : dassign3_tb.v(116)
+#    Time: 4800 ns  Iteration: 0  Instance: /dassign3_tb

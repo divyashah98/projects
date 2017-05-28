@@ -1,0 +1,83 @@
+Reading /home/rahul/altera/14.0/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1e
+
+# vsim -do {run -all} -c code_reg_tb 
+# Loading work.code_reg_tb
+# Loading work.clkgen
+# Loading work.code_reg
+# run -all 
+# H, 01001000, 000000000100, 0100
+# Correct length of data loaded
+# Char: H Test #00000000000000000000000000000000: match ok with 0
+# Char: H Test #00000000000000000000000000000001: match ok with 0
+# Char: H Test #00000000000000000000000000000010: match ok with 0
+# Char: H Test #00000000000000000000000000000011: match ok with 0
+# Correct final cntr data
+# E, 01000101, 000000000001, 0001
+# Correct length of data loaded
+# Char: E Test #00000000000000000000000000000000: match ok with 0
+# Correct final cntr data
+# L, 01001100, 010000000100, 0100
+# Correct length of data loaded
+# Char: L Test #00000000000000000000000000000000: match ok with 0
+# Char: L Test #00000000000000000000000000000001: match ok with 1
+# Char: L Test #00000000000000000000000000000010: match ok with 0
+# Char: L Test #00000000000000000000000000000011: match ok with 0
+# Correct final cntr data
+# L, 01001100, 010000000100, 0100
+# Correct length of data loaded
+# Char: L Test #00000000000000000000000000000000: match ok with 0
+# Char: L Test #00000000000000000000000000000001: match ok with 1
+# Char: L Test #00000000000000000000000000000010: match ok with 0
+# Char: L Test #00000000000000000000000000000011: match ok with 0
+# Correct final cntr data
+# O, 01001111, 111000000011, 0011
+# Correct length of data loaded
+# Char: O Test #00000000000000000000000000000000: match ok with 1
+# Char: O Test #00000000000000000000000000000001: match ok with 1
+# Char: O Test #00000000000000000000000000000010: match ok with 1
+# Correct final cntr data
+#  , 00100000, 000000000000, 0111
+# Correct length of data loaded
+# Char:   Test #00000000000000000000000000000000: match ok with 0
+# Char:   Test #00000000000000000000000000000001: match ok with 0
+# Char:   Test #00000000000000000000000000000010: match ok with 0
+# Char:   Test #00000000000000000000000000000011: match ok with 0
+# Char:   Test #00000000000000000000000000000100: match ok with 0
+# Char:   Test #00000000000000000000000000000101: match ok with 0
+# Char:   Test #00000000000000000000000000000110: match ok with 0
+# Correct final cntr data
+# W, 01010111, 011000000011, 0011
+# Correct length of data loaded
+# Char: W Test #00000000000000000000000000000000: match ok with 0
+# Char: W Test #00000000000000000000000000000001: match ok with 1
+# Char: W Test #00000000000000000000000000000010: match ok with 1
+# Correct final cntr data
+# O, 01001111, 111000000011, 0011
+# Correct length of data loaded
+# Char: O Test #00000000000000000000000000000000: match ok with 1
+# Char: O Test #00000000000000000000000000000001: match ok with 1
+# Char: O Test #00000000000000000000000000000010: match ok with 1
+# Correct final cntr data
+# R, 01010010, 010000000011, 0011
+# Correct length of data loaded
+# Char: R Test #00000000000000000000000000000000: match ok with 0
+# Char: R Test #00000000000000000000000000000001: match ok with 1
+# Char: R Test #00000000000000000000000000000010: match ok with 0
+# Correct final cntr data
+# L, 01001100, 010000000100, 0100
+# Correct length of data loaded
+# Char: L Test #00000000000000000000000000000000: match ok with 0
+# Char: L Test #00000000000000000000000000000001: match ok with 1
+# Char: L Test #00000000000000000000000000000010: match ok with 0
+# Char: L Test #00000000000000000000000000000011: match ok with 0
+# Correct final cntr data
+# D, 01000100, 100000000011, 0011
+# Correct length of data loaded
+# Char: D Test #00000000000000000000000000000000: match ok with 1
+# Char: D Test #00000000000000000000000000000001: match ok with 0
+# Char: D Test #00000000000000000000000000000010: match ok with 0
+# Correct final cntr data
+# ** Note: $finish    : code_reg_tb.v(134)
+#    Time: 2150 ns  Iteration: 0  Instance: /code_reg_tb

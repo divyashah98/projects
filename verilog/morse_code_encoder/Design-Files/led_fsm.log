@@ -1,0 +1,28 @@
+Reading /home/rahul/altera/14.0/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1e
+
+# vsim -do {run -all} -c led_fsm_tb 
+# Loading work.led_fsm_tb
+# Loading work.clkgen
+# Loading work.led_fsm
+# run -all 
+# L, 010000000100, 0100, 01000000
+# k:00000000000000000000000000000000 01000000, 0
+# sym:0, led_cnt:00000000000000000000000000000001
+# Correct - DOT
+# finished symbol: 0 
+# k:00000000000000000000000000000001 01000000, 1
+# finished symbol: 1 
+# k:00000000000000000000000000000010 01000000, 0
+# sym:1, led_cnt:00000000000000000000000000000011
+# Correct - DASH
+# sym:0, led_cnt:00000000000000000000000000000001
+# Correct - DOT
+# finished symbol: 0 
+# k:00000000000000000000000000000011 01000000, 0
+# sym:0, led_cnt:00000000000000000000000000000001
+# Correct - DOT
+# finished symbol: 0 
+# ** Note: $finish    : led_fsm_tb.v(117)
+#    Time: 542 ns  Iteration: 0  Instance: /led_fsm_tb
