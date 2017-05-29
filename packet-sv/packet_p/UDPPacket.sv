@@ -74,7 +74,7 @@ package UDPPacket_pkg;
             this.udp_len         = {5'b0, D_UDP.data_len} + {5'b0, curr_len};
             // Create the TCP Pseudo header by concatenating
             // all the required fields together
-            this.udp_pseudo_header = {{5'h0, this.udp_len}, 8'h0, UDP,
+            this.udp_pseudo_header = {this.udp_len, 8'h0, UDP,
                                       dest_addr, source_addr};
             create_packet ();
             // Create the IP packet for the UDP packet
