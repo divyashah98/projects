@@ -1,0 +1,393 @@
+1)
+>> n = 1000;
+>> A = floor (10*rand(n));
+>> b = sum(A')';
+>> z = ones(n, 1);
+
+1-i)
+>> tic, x = A\b; toc
+Elapsed time is 1.262923 seconds.
+>> tic, y = inv(A)*b; toc
+Elapsed time is 0.339177 seconds.
+
+ii)
+>> sum(abs(x-z))
+
+ans =
+
+   4.5254e-10
+
+>> sum(abs(y-z))
+
+ans =
+
+   2.4576e-09
+
+b)
+>> n = 2000;
+>> A = floor(10*rand(n));
+>> b = sum(A')';
+>> z = ones(n, 1)   
+
+i)
+>> tic, x = A\b; toc
+Elapsed time is 0.301666 seconds.
+>> tic, y = inv(A)*b; toc
+Elapsed time is 0.983034 seconds.
+
+ii)
+>> sum(abs(x-z))
+
+ans =
+
+   2.5069e-09
+
+>> sum(abs(y-z))
+
+ans =
+
+   7.1586e-09
+>> n = 5000;
+>> A = floor(10*rand(n));
+>> b = sum(A')';
+>> z = ones(n, 1);
+>> tic, x = A\b; toc
+Elapsed time is 5.696667 seconds.
+>> tic, y = inv(A)*b; toc
+Elapsed time is 9.509634 seconds.
+>> sum(abs(x-z))
+
+ans =
+
+   9.1753e-09
+
+>> sum(abs(y-z))
+
+ans =
+
+   7.7954e-08
+   
+c) 
+Let A be the following matrix
+A = [ 7, 2; 1, 0]
+As per the definition of z, it would be equal to the following matrix
+z = [ 1; 1]
+Computing Az, we get the following matrix
+Az = [9; 1]
+
+now, b = sum(A')'
+where, A' = [7, 1; 2, 0]
+therefore sum of A' would be the following matrix
+sum(A') = [9, 1]
+As sum works on rows
+Taking the transpose would give the following matrix
+sum(A')' = [9; 1] = Az
+
+2)
+>> n = 100; 
+>> A = eye(n) - triu (ones(n), 1);
+>> b = sum(A')';
+>> z = ones (n, 1);
+>> x = A\b;
+>> y = inv(A)*b;
+Warning: Matrix is close to singular or badly scaled. Results may be inaccurate. RCOND =  1.577722e-32. 
+>> sum(abs(x-z))
+
+ans =
+
+     0
+
+>> sum(abs(y-z))
+
+ans =
+
+    45
+
+3)
+>> A = floor(10*rand(6));
+>> b = floor(20*rand(6,1))-10;
+a)
+>> x = A\b
+
+x =
+
+   -0.2165
+    4.3172
+   -2.8815
+    0.6579
+   -1.2692
+   -0.9875
+
+b)
+
+>> U = rref([A, b])
+
+U =
+
+    1.0000         0         0         0         0         0   -0.2165
+         0    1.0000         0         0         0         0    4.3172
+         0         0    1.0000         0         0         0   -2.8815
+         0         0         0    1.0000         0         0    0.6579
+         0         0         0         0    1.0000         0   -1.2692
+         0         0         0         0         0    1.0000   -0.9876
+
+c) 
+>> sum(abs(U(:, 7)-x))
+
+ans =
+
+   3.4335e-05
+
+>> format long
+>> U(:, 7)
+
+ans =
+
+  -0.216450216450216
+   4.317164179104478
+  -2.881516587677725
+   0.657894736842105
+  -1.269208549971115
+  -0.987551867219917
+
+>> x
+
+x =
+
+  -0.216451894196299
+   4.317168878984594
+  -2.881503730258696
+   0.657881988179440
+  -1.269208410037787
+  -0.987549656041081
+
+d)  
+>> A(:, 3) = 4*A(:, 1) + 5*A(:, 2)
+
+A =
+
+     2     8    48     4     6     4
+     4     6    46     7     6     2
+     7     1    33     5     8     5
+     9     0    36     0     4     2
+     2     5    33     0     1     4
+     7     4    48     0     7     1
+
+>> rref([A, b])
+
+ans =
+
+     1     0     4     0     0     0     0
+     0     1     5     0     0     0     0
+     0     0     0     1     0     0     0
+     0     0     0     0     1     0     0
+     0     0     0     0     0     1     0
+     0     0     0     0     0     0     1
+
+Infinite solutions
+
+e) 
+
+>> y = floor(20*rand(6, 1)) - 10;
+>> c = A*y;
+
+Ax = c;
+
+f)
+>> U = rref([A, c])
+
+U =
+
+     1     0     4     0     0     0   -30
+     0     1     5     0     0     0   -46
+     0     0     0     1     0     0    -3
+     0     0     0     0     1     0    -9
+     0     0     0     0     0     1     5
+     0     0     0     0     0     0     0
+
+4)
+function y = myrowproduct(A,x)
+    % The command myrowproduct(A,x) computes the product
+    % of the matrix A and the vector x by row.
+    [m,n] = size(A); % determine the dimension of A
+    [p,q] = size(x); % determine the dimension of x
+    if (q==1&&p==n)
+        % check the dimensions
+        y = zeros(m,1); % initialize the vector y
+        for i = 1:m
+            y(i) = [A(i,:)*x];
+        end
+    else
+        disp('Error: Dimensions do not match')
+        y = [];
+    end
+end
+
+>> A = rand(2, 3);
+>> x = rand(3, 1);
+>> myrowproduct(A, x)
+
+ans =
+
+    0.7845
+    0.6245
+
+>> A*x
+
+ans =
+
+    0.7845
+    0.6245
+
+>> A = rand(3, 4);
+>> x = rand(4, 1);
+>> myrowproduct(A, x)
+
+ans =
+
+    1.1593
+    0.9935
+    1.2996
+
+>> A*x
+
+ans =
+
+    1.1593
+    0.9935
+    1.2996
+
+   >> A = rand(3, 4);
+>> x = rand(1, 4);
+>> myrowproduct(A, x)
+Error: Dimensions do not match
+
+ans =
+
+     []
+
+
+5
+a)
+function C = columnproduct(A,B)
+    % The command columnproduct(A,x) computes the product
+    % of the matrix A and the matrix B by column.
+    [m,n] = size(A); % determine the dimension of A
+    [p,q] = size(B); % determine the dimension of B
+    if (p==n)
+        % check the dimensions
+        C = zeros(m,q); % initialize the matrix C
+        for i = 1:q
+            C(:, i) = A*B(:, i);
+        end
+    else
+        disp('Error: Dimensions do not match')
+        C = [];
+    end
+end
+
+>> A = rand(2, 3);
+>> B = rand(3, 2);
+>> columnproduct(A, B)
+
+ans =
+
+    0.3774    0.7700
+    0.6201    0.9211
+
+>> A*B
+
+ans =
+
+    0.3774    0.7700
+    0.6201    0.9211
+
+>> A = rand(3, 4);
+>> B = rand(4, 5);
+>> columnproduct(A, B)
+
+ans =
+
+    0.5376    0.7041    1.6038    0.8613    1.2448
+    1.0154    0.7945    1.2770    1.1403    0.9459
+    0.4959    0.6765    1.0671    0.8770    0.9726
+
+>> A*B
+
+ans =
+
+    0.5376    0.7041    1.6038    0.8613    1.2448
+    1.0154    0.7945    1.2770    1.1403    0.9459
+    0.4959    0.6765    1.0671    0.8770    0.9726
+
+>> A = rand(3, 4);
+>> B = rand(2, 4);
+>> columnproduct(A, B)
+Error: Dimensions do not match
+
+ans =
+
+     []
+
+b)
+function C = rowproduct(A,B)
+    % The command rowproduct(A,x) computes the product
+    % of the matrix A and the matrix B by row.
+    [m,n] = size(A); % determine the dimension of A
+    [p,q] = size(B); % determine the dimension of B
+    if (p==n)
+        % check the dimensions
+        C = zeros(m,q); % initialize the matrix C
+        for i = 1:m
+            C(i, :) = A(i, :)*B;
+        end
+    else
+        disp('Error: Dimensions do not match')
+        C = [];
+    end
+end
+
+>> A = rand(2, 3);
+>> B = rand(3, 2);
+>> rowproduct(A, B)
+
+ans =
+
+    0.8029    0.6370
+    1.0562    0.8787
+
+>> A*B
+
+ans =
+
+    0.8029    0.6370
+    1.0562    0.8787
+
+
+>> A = rand(3, 4);
+>> B = rand(4, 5);
+>> rowproduct(A, B)
+
+ans =
+
+    0.6094    0.9860    0.9064    0.9243    1.0937
+    0.1692    0.6152    0.5963    0.2819    0.4336
+    0.2723    0.9474    0.4391    0.8820    0.5590
+
+>> A*B
+
+ans =
+
+    0.6094    0.9860    0.9064    0.9243    1.0937
+    0.1692    0.6152    0.5963    0.2819    0.4336
+    0.2723    0.9474    0.4391    0.8820    0.5590
+
+>> A = rand(3, 4);
+>> B = rand(2, 4);
+>> columnproduct(A, B)
+Error: Dimensions do not match
+
+ans =
+
+     []
+
