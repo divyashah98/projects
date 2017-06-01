@@ -30,9 +30,8 @@ module shift_reg(
 	 wire posedge_cs;
 	 reg [23:0] shiftreg;
 	 
-	  flip-flop f1 (.posedgesig_f(posedge_cs), .clk(clk), .reset(reset_n), .sig(pad_cs), .negedgesig_f ());
+	  flip_flop f1 (.posedgesig_f(posedge_cs), .clk(clk), .reset(reset_n), .sig(pad_cs), .negedgesig_f ());
 
-//Schieberegister	 
 	 always @ (posedge pad_sck or negedge reset_n)
 	 if (!reset_n) begin
 		shiftreg = 24'h000000;

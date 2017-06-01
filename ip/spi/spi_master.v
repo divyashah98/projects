@@ -14,7 +14,7 @@ module SPI_master (
     wire    miso_s2;
     wire    miso_s3;
     // Instantiate the shift register at the master port
-    bezugszugriff S_M (
+    shift_reg S_M (
         .clk (clk),
         .reset_n (reset_n),
         .pad_din (miso),

@@ -9,7 +9,7 @@ module SPI_slave (
     input   wire        chip_sel
 );
     // Instantiate the shift register at the slave port
-    bezugszugriff S_S (
+    shift_reg S_S (
         .clk (clk),
         .reset_n (reset_n),
         .pad_din (mosi),

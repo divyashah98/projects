@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module flip-flop(clk, reset, sig, posedgesig_f, negedgesig_f
+module flip_flop(clk, reset, sig, posedgesig_f, negedgesig_f
     );
 	 
 	 input clk, sig, reset;
