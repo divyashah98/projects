@@ -5,7 +5,7 @@
 // 
 // Create Date:    12:07:29 04/27/2017 
 // Design Name: 
-// Module Name:    bezugszugriff 
+// Module Name:    shift_reg 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module bezugszugriff(
+module shift_reg(
 	 input wire clk,
 	 input wire reset_n,
 	 input wire pad_din,
@@ -30,7 +30,7 @@ module bezugszugriff(
 	 wire posedge_cs;
 	 reg [23:0] shiftreg;
 	 
-	  flanken f1 (.posedgesig_f(posedge_cs), .clk(clk), .reset(reset_n), .sig(pad_cs), .negedgesig_f ());
+	  flip-flop f1 (.posedgesig_f(posedge_cs), .clk(clk), .reset(reset_n), .sig(pad_cs), .negedgesig_f ());
 
 //Schieberegister	 
 	 always @ (posedge pad_sck or negedge reset_n)
