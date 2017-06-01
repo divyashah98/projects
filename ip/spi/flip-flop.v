@@ -5,7 +5,7 @@
 // 
 // Create Date:    16:25:02 04/27/2017 
 // Design Name: 
-// Module Name:    flanken 
+// Module Name:    flip-flop 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module flanken(clk, reset, sig, posedgesig_f, negedgesig_f
+module flip-flop(clk, reset, sig, posedgesig_f, negedgesig_f
     );
 	 
 	 input clk, sig, reset;
