@@ -1,8 +1,8 @@
-module edge_detector_mealy
-    ( input wire  clk, reset, 
-      input wire sig,
-      output reg tick
-    );
+module edge_detector_mealy (
+    input wire  clk, reset, 
+    input wire sig,
+    output reg tick
+);
 
     reg state_q, state_next;
     localparam     S0 = 1'b0,
@@ -16,6 +16,7 @@ module edge_detector_mealy
 
     always @ *
     begin
+        // Drive the default values
         state_next = state_q;
         tick = 1'b0;
         case (state_q)
