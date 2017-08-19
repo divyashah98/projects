@@ -13,7 +13,7 @@ module prog_sqr_wav_gen
       //It is assumed that this program
       //is run on an FPGA board with
       //oscillator period as 20 ns
-      localparam DESIRED_CYCLE = 0;
+      localparam DESIRED_CYCLE = 5;
       reg   [2:0] hundred_ns_q; 
       wire  [2:0] hundred_ns_next;
       reg   [N-1:0] on_time_q, off_time_q;
@@ -41,7 +41,7 @@ module prog_sqr_wav_gen
       end
 
       assign hundred_ns_next = (hundred_ns_q == DESIRED_CYCLE) ? 0: hundred_ns_q + 1;
-      assign hundred_ns_tick = (hundred_ns_q == DESIRED_CYCLE) ? 1'b1 : 1'b0;
+      assign hundred_ns_tick = (hundred_ns_q == DESIRED_CYCLE);
 
       always @ *
       if (hundred_ns_tick)
@@ -80,5 +80,5 @@ module prog_sqr_wav_gen
         off_time_next = off_time_q;
       end
 
-     assign sqr_wav_o = (~on_time_comp_q)? 1'b1 : 1'b0;
+     assign sqr_wav_o = ~on_time_comp_q;
 endmodule
