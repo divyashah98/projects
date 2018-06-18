@@ -58,8 +58,17 @@ module alarm_clocks_tb ();
 
     initial begin
         SW0 = 1; SW1 = 0; SW2 = 0; SW3 = 0; SW4 = 0;
+        KEY0 = 0; KEY1 = 0; KEY2 = 0; KEY3 = 0;
         @(posedge CLK);
         SW0 = 0;
+        repeat (200) @(posedge CLK);
+        SW1 = 1;
+        repeat (10) @(posedge CLK);
+        KEY1 = 1;
+        repeat (10) @(posedge CLK);
+        KEY1 = 0; KEY3 = 1;
+        repeat (10) @(posedge CLK);
+        SW1 = 0;
         repeat (200) @(posedge CLK);
         $finish();
     end
