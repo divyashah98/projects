@@ -1,0 +1,46 @@
+The MIPS CPU is written entirely in SystemVerilog and supports the 
+following MIPS instructions - 
+
+Non R type      R Type
+LW               ADD 
+SW               SUB 
+ADDI             AND 
+SLTI             OR  
+ORI              XOR 
+BEQ              NOR 
+BNE              SLT 
+J                SLTU
+JAL              SLL 
+LUI              SRL 
+                 SRA 
+                 JR  
+
+The MIPS game should make use of only the above instructions. All the other
+MIPS instructions aren't allowed. 
+
+Also, to display graphics and get input from the user, we use a Memory Mapped
+I/O. The MIPS CPU has a VGA controller and a Keyboard interface as well.
+
+The keyboard is mapped to the following address - 0x0000_6000
+Any reads from this address would return the value of the key pressed. 
+
+The VGA is mapped to the following address range - 0x0000_4000 to 0x0000_4FFF
+It supports both read and write access to the CPU
+Writing to this address would mean updating the character code 
+Reading from this address would give you the character code
+There are two memories - 
+i) Screen memory - The screen mem contains the character codes. So, your CPU
+basically reads/writes to the screen mem. The screen mem contains the 
+character code for every character implemented. You can look at smem.txt
+to know what exactly is a character code.
+ii) Bitmap memory - The bitmap mem contains the color value for a bit map
+address. This would return a 12-bit signal (3 bits for each RGB value). This
+all is handled by the VGA displaydriver itself so the software doesn't need
+to care about this. 
+
+This should give you an idea about the program required. Please look into
+bitmapmem.sv and screenmem.sv files. This would be required to update
+the bmem.txt and smem.txt as per the game implementation.
+
+Thank you
+raulbehl

@@ -1,0 +1,34 @@
+Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+-- Compiling module hexto7seg
+-- Compiling module adder
+-- Compiling module addsub
+-- Compiling module ALU
+-- Compiling module bitmapmem
+-- Compiling module clockdivider_Nexys4
+-- Compiling module comparator
+-- Compiling module controller
+-- Compiling module datapath
+-- Compiling module pc_register
+-- Compiling module dmem
+-- Compiling module fulladder
+-- Compiling module imem
+-- Compiling module logical
+-- Compiling module memIO
+-- Compiling module mips
+-- Compiling module register_file
+-- Compiling module screenmem
+-- Compiling module shifter
+-- Compiling module project_screentest
+-- Compiling module selfcheck
+-- Compiling module top
+-- Compiling module vgadisplaydriver
+-- Compiling module vgatimer
+-- Compiling module xycounter
+-- Compiling module keyboard
+-- Compiling module keyboard_test
+-- Compiling module display8digit
+
+Top level modules:
+	clockdivider_Nexys4
+	project_screentest
+	keyboard_test
