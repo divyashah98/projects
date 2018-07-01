@@ -12,6 +12,7 @@ module alu (
   always_comb begin
     case (alu_opc)
       LDI:  begin
+            alu_out = alu_a;
          end
       ADD:  begin
             alu_out = alu_a + alu_b;

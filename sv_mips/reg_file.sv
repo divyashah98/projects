@@ -1,4 +1,4 @@
-module reg_file (input clk, input [3:0] RA, input [3:0] RB, input [3:0] RD, input [3:0]
+module reg_file (input clk, input reset, input [3:0] RA, input [3:0] RB, input [3:0] RD, input [3:0]
                  OPCODE, input opcode, input [2:0] current_state, input [7:0] RF_data_in,
                  output logic [7:0] RF_data_out0, output logic [7:0] RF_data_out1);
 
