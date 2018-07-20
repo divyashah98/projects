@@ -3,6 +3,7 @@ module reg_file (input clk, input reset, input [3:0] RA, input [3:0] RB, input [
                  output logic [7:0] RF_data_out0, output logic [7:0] RF_data_out1);
 
   localparam One = 8'd1, Zero = 8'd0, one = 1'b1, zero = 1'b0;
+  `include "alu_params.sv"
 
   logic [4:0] i;
   logic [7:0] RF [15:0];
@@ -19,8 +20,8 @@ module reg_file (input clk, input reset, input [3:0] RA, input [3:0] RB, input [
     else begin
       RF_data_out0 <= RF[RA];
       RF_data_out1 <= RF[RB];
-      if ((current_state == RWB) && ~((OPCODE == 4'd11) || ((OPCODE == 4'd12) ||
-          ((OPCODE == 4'd15)) )) begin
+      if ((current_state == RWB) && ~((OPCODE == JMP) || ((OPCODE == CMPJ) ||
+          ((OPCODE == HALT)) || (OPCODE == NOP)))) begin
         RF[RD] <= RF_data_in;
       end
     end

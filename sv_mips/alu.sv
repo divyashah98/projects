@@ -9,10 +9,12 @@ module alu (
 
 `include "alu_params.sv"
 
+  logic [7:0] div_out;
+
   always_comb begin
     case (alu_opc)
       LDI:  begin
-            alu_out = alu_a;
+            alu_out = {alu_a, alu_b};
          end
       ADD:  begin
             alu_out = alu_a + alu_b;
@@ -62,5 +64,7 @@ module alu (
       default: alu_out = alu_a;
     endcase
   end
+
+  div D0 (alu_a, alu_b, div_out);
 
 endmodule

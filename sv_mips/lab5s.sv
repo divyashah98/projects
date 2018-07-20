@@ -1,6 +1,7 @@
 //Top level module
 
 module lab5s (
+  input   logic       clk,
   input   logic       SW0,
   input   logic       SW1,
   input   logic       KEY0,
@@ -26,5 +27,18 @@ module lab5s (
   output  logic       LED6,
   output  logic       LED7
 );
+
+  // instantiate the controller here
+  control C0 (clk, SW0, OPCODE, PC, alu_out, W_REG);
+
+  assign {LED7,
+          LED6,
+          LED5,
+          LED4,
+          LED3,
+          LED2,
+          LED1,
+          LED0} = PC;
+  
 
 endmodule
