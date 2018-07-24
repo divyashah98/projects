@@ -27,4 +27,51 @@ module vga_640x480 (
   parameter LINE = 800;             // Complete Horizontal line
   parameter SCREEN = 524;           // Complete Vertical screen
 
+  reg [9:0] hp_count;               // Horizontal pixel count
+  reg [9:0] vp_count;               // Vertical pixel count
+
+  reg [9:0] x;
+  reg [9:0] y;
+
+  always @ (posedge clk or posedge reset)
+  if (reset) begin
+    x <= 10'h0;
+    y <= 10'h0;
+  end
+  else begin
+    x <= hp_count;
+    y <= vp_count;
+  end
+
+  always @(*) begin
+    hp_count = x;
+    vp_count = y;
+    if (pix_strb_i) begin
+      if (x == LINE) begin
+        hp_count = 10'h0;
+        vp_count = y + 1'b1;
+      end
+      else
+        hp_count = x + 1'b1;
+      if (y == SCREEN)
+        vp_count = 10'h0;
+    end
+  end
+
+  // Assign the outputs based on the current pixel positions
+  assign x_o = (x < HP_STA) ? 10'h0 : (x - HP_STA);
+  assign y_o = (y >= VP_END) ? (VP_END - 1) : vp_count;
+
+  assign hs_o = (hp_count >= HS_STA) && (hp_count < HS_END);
+  assign vs_o = (vp_count >= VS_STA) && (vp_count < VS_END);
+
+  assign blanking_o = (hp_count < HP_STA) || (vp_count < VP_END);
+
+  assign active_o = ~blanking_o;
+
+  // High when we reach the end of the screen
+  assign screenend_o = (vp_count == SCREEN-1) & (hp_count == LINE);
+  // High for a cycle once the active pixel area ends
+  assign animate_o = (vp_count == VP_END - 1) & (hp_count == LINE);
+
 endmodule
